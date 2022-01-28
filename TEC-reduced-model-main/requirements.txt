@@ -1,0 +1,6 @@
+pybamm == 0.4.0
+matplotlib
+prettytable
+jax
+jaxlib
+SciencePlots
