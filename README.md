@@ -19,6 +19,7 @@ crate = 1         # valid values: 0.5, 1, 2
 cell_selected = ["789"]   # select the cell to optimize
 model=create_model.model_build(temperature,crate,cell_selected) # building the PyBaMM model
 ```
+## Defining Initial values and Bounds
 Then, Initial values and bounds can be defined for optimization as below.
 ```python3
 # Initial values of parameters
@@ -29,9 +30,24 @@ bounds = [(2.06e-16,2.06e-12),(2.18589831e-9,2.18589831e-5),(0.1,1000),(2.85, 2.
 
 model.fitness(x0) #initial value of the cost function
 ```
+## Optimization of Parameters
 A suitable optimizer can be used to minimize the cost function. SciPy differential_evolution is used below.
 ```python3
 %time # time the solver
 from scipy import optimize
 minimum = optimize.differential_evolution(model.fitness, bounds, x0=x0)
+```
+## Plotting the Discharge Cycle of selected cell
+In the last step,create_model function has built in plot function to show the discharge cycle for TSPME, Chen2020 and optimized values in 
+a same plot for comparison.
+```python3
+print("Initial cost function value: %s" %model.fitness(x0)) # Initial cost function value
+
+print("Optimized cost function value: %s" %model.fitness(minimum.x)) # Optimized cost function value
+
+print("Optimized parameter values are: %s" %minimum.x) # Print optimized values
+
+model.define_model(minimum.x) # Building the model again with new parameters
+
+model.model_plot() #model_plot funtion to show TSPME, Chen2020 and optimized curves
 ```
