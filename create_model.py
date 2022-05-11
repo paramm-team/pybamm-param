@@ -8,6 +8,7 @@ from tec_reduced_model.set_parameters import (
     set_experiment_parameters,
     set_ambient_temperature,
 )
+#Import all the required packages
 #from tec_reduced_model.process_experimental_data import import_thermal_data, get_idxs
 #from __future__ import print_function
 plt.style.use(['science','vibrant'])
@@ -19,17 +20,18 @@ plt.rcParams.update({
     "axes.labelsize": 10,
 })
 
-class model_build:
+class model_build:  #build class first for PyBamm model
     
-    def __init__(self, temperature, crate, cell_selected):  
+    def __init__(self, temperature, crate, cell_selected):  #In the model_build temperature, crate and selected cell should be defined
     
         self.globals = {'temperature':temperature, 'crate':crate, 'cell_selected':cell_selected}
         
    # def define_model(self):
-        global simulation, data_conc, param
+        global simulation, data_conc, param     #make simulation, data_conc and param glabal to use pybamm model in init
         temperature=self.globals["temperature"]
         crate = self.globals["crate"]
         cell_selected = self.globals["cell_selected"]
+        
             # Define the TSPMe model
         model = pybamm.lithium_ion.SPMe(
             options={
@@ -41,9 +43,10 @@ class model_build:
              name="TSPMe",
         )
     
-        dataset = import_thermal_data(crate, temperature)
+        dataset = import_thermal_data(crate, temperature) #Import test data 
         data_conc = {"time": [], "voltage": [], "temperature": []}
-
+        
+        #store real-world test data in data_conc with time, temeperature and voltage
         for cell, data in dataset.items():
             if cell in cell_selected:
 #                continue
@@ -80,7 +83,7 @@ class model_build:
             ],
             period="30 seconds",
         )
-        
+        #Define the parameters to be optimized
         param.update({
             "Negative electrode exchange-current density [A.m-2]": j0_neg,
             "Negative electrode reaction coefficient": "[input]",
@@ -101,13 +104,15 @@ class model_build:
             )
         
         #return (simulation, data_conc)
+        
+        #Define the optimization function. This function will be minimized by an external algorithm.
     def fitness(self,x):
         #model=model_build(self.globals["temperature"],self.globals["crate"],self.globals["cell"])
         #simulation, data_conc = model.define_model()
 
-
-        simulation.solve(inputs={"Negative electrode reaction coefficient": x[1],
-                                 "Negative electrode diffusivity [m2.s-1]" : x[0],
+        #Define the parameters with x[k]
+        simulation.solve(inputs={"Negative electrode diffusivity [m2.s-1]" : x[0],
+                                 "Negative electrode reaction coefficient": x[1],
                                  "Total heat transfer coefficient [W.m-2.K-1]":x[2],
                                  "Positive current collector specific heat capacity [J.kg-1.K-1]":x[3],
                                  "Negative current collector specific heat capacity [J.kg-1.K-1]":x[3],
@@ -116,6 +121,9 @@ class model_build:
                                  "Positive electrode specific heat capacity [J.kg-1.K-1]":x[3]
                                 })
         solution = simulation.solution
+        
+        #temperature and voltage cost functions defined here. R_squared function in the auxiliary functions is used.
+        # Then they are normalized to get equal effect on the cost function. Sum of normalized functions returned. This sum could be minimized.
         temp_r_squared=1-R_squared(solution["X-averaged cell temperature [K]"], data_conc["time"], (data_conc["temperature"] + 273.15))
         volt_r_squared=1-R_squared(solution["Terminal voltage [V]"], data_conc["time"], data_conc["voltage"])
         temp_normalized=temp_r_squared/(np.average(data_conc["temperature"]+273.15))
@@ -123,7 +131,7 @@ class model_build:
                       
         return np.array(temp_normalized+volt_normalized) 
     
-
+        # Defining the new PyBamm model with optimized parameters
     def define_model(self, minimum):
          #self.globals = {'minimum':minimum}
             # Define the TSPMe model
