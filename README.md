@@ -51,3 +51,51 @@ model.define_model(minimum.x) # Building the model again with new parameters
 
 model.model_plot() #model_plot funtion to show TSPME, Chen2020 and optimized curves
 ```
+
+## How to install?
+These installation instructions assume you have Python installed (versions 3.7, 3.8 or 3.9) and that you have also installed the `virtualenv` package which can be done by running
+```bash
+pip install virtualenv
+```
+
+### Linux & MacOS
+1. Create a virtual environment (this is strongly recommended to avoid clashes with the dependencies)
+```bash
+virtualenv env
+```
+
+2. Activate the virtual environment
+```bash
+source env/bin/activate
+```
+The virtual environment can later be deactivated (if needed) by running
+```bash
+deactivate
+```
+
+3. Install requirements
+```bash
+pip install -r requirements.txt
+```
+
+4. (Optional) Install `scikits.odes` following the instruction in [PyBaMM docs](https://pybamm.readthedocs.io/en/latest/install/GNU-linux.html#optional-scikits-odes-solver)
+
+### Windows
+1. Create a virtual environment (this is strongly recommended to avoid clashes with the dependencies)
+```bash
+python -m virtualenv env
+```
+
+2. Activate the virtual environment
+```bash
+env\Scripts\activate.bat
+```
+The virtual environment can later be deactivated (if needed) by running
+```bash
+deactivate
+```
+
+3. Install requirements
+```bash
+pip install -r requirements.txt
+```
