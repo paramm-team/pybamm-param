@@ -1,11 +1,10 @@
 import pybamm
 import numpy as np
 import matplotlib.pyplot as plt
-import os
 import pandas as pd
 import time
+import os
 from scipy import optimize
-import pyswarms as ps
 from pyswarms.utils.functions import single_obj as fx
 from tec_reduced_model.set_parameters import (
     set_thermal_parameters,
@@ -32,19 +31,19 @@ class model_build(object):
     crate : float
         Crate value of the experiment data.
     cell_selected : list
-        List of battery cells that will be used.
-    param_optimised : list, optional
-        List of PyBamm parameters that will be optimized. 
-        Default is :
-        {"Negative electrode diffusivity [m2.s-1]",
-         "Negative electrode reaction coefficient",
-         "Total heat transfer coefficient [W.m-2.K-1]",
-         "Positive current collector specific heat capacity [J.kg-1.K-1]",
-         "Negative current collector specific heat capacity [J.kg-1.K-1]",
-         "Negative electrode specific heat capacity [J.kg-1.K-1]",
-         "Separator specific heat capacity [J.kg-1.K-1]",
-         "Positive electrode specific heat capacity [J.kg-1.K-1]"
-         }
+        List of battery cell that will be used.
+    param_optimised : dict
+        Dictionary of PyBamm parameters that will be optimized with their inital values and bounds. 
+        For example :
+                {"Negative electrode diffusivity [m2.s-1]":(5e-14,(2.06e-16,2.06e-12)),
+                 "Negative electrode reaction coefficient":(6.48e-7,(2.18589831e-9,2.18589831e-5)),
+                 "Total heat transfer coefficient [W.m-2.K-1]":(20,(0.1,1000)),
+                 ("Positive current collector specific heat capacity [J.kg-1.K-1]",
+                  "Negative current collector specific heat capacity [J.kg-1.K-1]",
+                  "Negative electrode specific heat capacity [J.kg-1.K-1]",
+                  "Separator specific heat capacity [J.kg-1.K-1]",
+                  "Positive electrode specific heat capacity [J.kg-1.K-1]"):(2.85e3,(2.85, 2.85e6))
+                 }
     model : Pybamm model, optional
         Pybamm model to be used.
         Default is :
@@ -61,8 +60,8 @@ class model_build(object):
         h value to calculate h_factor in thermal parameters. Default is 16.
     cp : float, optional
         cp value to calculate cp_factor in thermal parameters. Default is 2.32e6.
-    param : list or pybamm.ParameterValues, optional
-        This is the reference parameter set, which we then update for the adjusted thermal parameters.
+    param_default : list or pybamm.ParameterValues, optional
+        This is the default reference parameter set, which we then update for the adjusted thermal parameters.
         Default is Chen2020 (see PyBaMM documentation for details).
     experiment : pybamm.Experiment class, optional
         Pybamm experiment details. Default is set experiment to be a CC discharge at the defined C-rate followed by a 2-hour relaxation
@@ -85,7 +84,7 @@ class model_build(object):
         ),
         h = 16,
         cp = 2.32e6,
-        param_compare = pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Chen2020)
+        param_default = pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Chen2020)
             
     ):
         
@@ -96,7 +95,9 @@ class model_build(object):
         self.h = h
         self.cp = cp
         self.param_optimised = param_optimised
-        self.param_compare = param_compare
+        #self.param_default = param_default
+        
+        pybamm.set_logging_level("ERROR") #Supress the errors from PyBamm
    
         #Import test data 
         dataset = import_thermal_data(crate, temperature)
@@ -145,9 +146,9 @@ class model_build(object):
                     
         # Define parameter set Chen 2020 (see PyBaMM documentation for details)
         # This is the reference parameter set, which we then update for the adjusted thermal parameters
-        param = pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Chen2020)
+        
         # We now update the parameter set for the adjusted parameters
-        param = set_thermal_parameters(param, h, cp, temperature)
+        param = set_thermal_parameters(param_default, h, cp, temperature)
         param = set_experiment_parameters(param, crate, temperature)
         param = set_ambient_temperature(param, crate, temperature)
                     
@@ -203,11 +204,19 @@ class model_build(object):
                       
         return np.array(temp_normalized+volt_normalized)
 
-    def differential_evolution(self):
+    def optimiser(self, method='differential_evolution'):
+        if method=='differential_evolution':
+            result = self.differential_evolution()
+            self.result=result
+        elif method=='fmin':
+            result = self.fmin()
+            self.result=result
+    
+    def differential_evolution(self, workers=-1):
         print("start optimization")
         start = time.process_time()
         print(start)
-        result = optimize.differential_evolution(self.model_build.fitness, self.bounds, x0=self.x0, workers=-1)
+        result = optimize.differential_evolution(self.fitness, self.bounds, x0=self.x0, workers=workers)
         end = time.process_time()
         print(end)
         print(end - start)
@@ -226,10 +235,11 @@ class model_build(object):
         return result
     
         # Defining the new PyBamm model with optimized parameters
-    def define_model(self, minimum):
-
+    def model_plot(self, param_compare=pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Chen2020)):
+        
+        
         # We now update the parameter set for the adjusted parameters
-        param_compare = set_thermal_parameters(self.param_compare, self.h, self.cp, self.temperature)
+        param_compare = set_thermal_parameters(param_compare, self.h, self.cp, self.temperature)
         param_compare = set_experiment_parameters(param_compare, self.crate, self.temperature)
         param_compare = set_ambient_temperature(param_compare, self.crate, self.temperature)
 
@@ -245,11 +255,11 @@ class model_build(object):
         prm_min={}
         for index,item in enumerate(self.param_optimised):
             if type(item)==str:
-                prm_min[item]=minimum[index]
+                prm_min[item]=self.result[index]
             elif type(item)==tuple:
                 i=0 
                 for i in range(len(item)):
-                    prm_min[item[i]]=minimum[index]
+                    prm_min[item[i]]=self.result[index]
         
         # Solve the model
         
@@ -258,10 +268,10 @@ class model_build(object):
             parameter_values=self.param,
             experiment=self.experiment,
         )
-        simulation.solve( inputs=prm_min)
+        simulation.solve(inputs=prm_min)
         self.solution = simulation.solution
         
-    def model_plot(self):
+    
         fig, axes = plt.subplots(1, 2, figsize=(11, 4.5))
         dataset = import_thermal_data(self.crate, self.temperature)
         data_conc = {"time": [], "voltage": [], "temperature": []}
