@@ -1,15 +1,13 @@
 #
 # SciPy Minimize optimiser
 #
-
+import pbparam
 from scipy.optimize import minimize
-from base_optimiser import BaseOptimiser
-from optimisation_result import OptimisationResult
 import pybamm
 import copy
 
 
-class ScipyMinimize(BaseOptimiser):
+class ScipyMinimize(pbparam.BaseOptimiser):
     """
     TODO: write
     """
@@ -36,7 +34,7 @@ class ScipyMinimize(BaseOptimiser):
         )
         solve_time = timer.time()
 
-        result = OptimisationResult(
+        result = pbparam.OptimisationResult(
             raw_result.x,
             raw_result.success,
             raw_result.message,

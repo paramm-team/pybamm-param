@@ -1,14 +1,12 @@
 #
 # SciPy Differential Evolution optimiser
 #
-
+import pbparam
 from scipy.optimize import differential_evolution
-from base_optimiser import BaseOptimiser
-from optimisation_result import OptimisationResult
 import pybamm
 
 
-class ScipyDifferentialEvolution(BaseOptimiser):
+class ScipyDifferentialEvolution(pbparam.BaseOptimiser):
     """
     TODO: write
     """
@@ -32,7 +30,7 @@ class ScipyDifferentialEvolution(BaseOptimiser):
         )
         solve_time = timer.time()
 
-        result = OptimisationResult(
+        result = pbparam.OptimisationResult(
             raw_result.x,
             raw_result.success,
             raw_result.message,
