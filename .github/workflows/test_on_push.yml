@@ -61,8 +61,8 @@ jobs:
         python -m pip install --upgrade pip wheel setuptools
         python -m pip install tox
 
-    - name: Run unit tests for GNU/Linux with Python 3.7 and 3.8
-      if: matrix.os != 'ubuntu-latest' && matrix.python-version != 3.9
+    - name: Run unit tests (except GNU/Linux with Python 3.9)
+      if: matrix.os != 'ubuntu-latest' || matrix.python-version != 3.9
       run: python -m tox -e unit
 
     - name: Run unit tests for GNU/Linux with Python 3.9 and generate coverage report
@@ -85,9 +85,9 @@ jobs:
     #   if: matrix.os != 'ubuntu-latest'
     #   run: python -m tox -e mac-windows-integration
 
-    - name: Install docs dependencies and run doctests
-      if: matrix.os == 'ubuntu-latest'
-      run: tox -e doctests
+    # - name: Install docs dependencies and run doctests
+    #   if: matrix.os == 'ubuntu-latest'
+    #   run: tox -e doctests
 
     - name: Install dev dependencies and run example tests
       if: matrix.os == 'ubuntu-latest'
