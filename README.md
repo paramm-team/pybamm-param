@@ -1,61 +1,22 @@
-# Pybamm Parameter Optimization Tool
-This package is provides parameter optimization for PyBaMM (Python Battery Mathematical Modelling) using different optimization techniques. Currently;
-Negative electrode reaction coefficient, Negative electrode diffusivity [m2.s-1], Total heat transfer coefficient [W.m-2.K-1], 
-Positive current collector specific heat capacity [J.kg-1.K-1], Negative current collector specific heat capacity [J.kg-1.K-1], 
-Negative electrode specific heat capacity [J.kg-1.K-1], Separator specific heat capacity [J.kg-1.K-1],
-Positive electrode specific heat capacity [J.kg-1.K-1] are optimized. This can be extended but these 5 parameters has the most significant effect on discharge voltage
-and temperature characteristics. 
+# pybamm-param: PyBaMM Parameter Optimization Tool
 
-# Usage of create_model.py
-A python function is created for loading files, defining optimization parameters, creating optimization function and plotting comparison graph with Chen2020 values.
-After the create_model.py is imported, the model needs to be build as below.
-```python3
-import create_model
-import numpy as np
-import os
-# Change simulation parameters here
-temperature = 25  # in degC, valid values: 0, 10, 25
-crate = 1         # valid values: 0.5, 1, 2
-cell_selected = ["789"]   # select the cell to optimize
-model=create_model.model_build(temperature,crate,cell_selected) # building the PyBaMM model
-```
-## Defining Initial values and Bounds
-Then, Initial values and bounds can be defined for optimization as below.
-```python3
-# Initial values of parameters
-x0 =np.array([5e-14,6.48e-7,20,2.85e3])  
+**WARNING:** this package is still under development.
 
-# bounds of the variables as (min,max) {This might need adjustment according to the optimization method.}
-bounds = [(2.06e-16,2.06e-12),(2.18589831e-9,2.18589831e-5),(0.1,1000),(2.85, 2.85e6)] 
-
-model.fitness(x0) #initial value of the cost function
-```
-## Optimization of Parameters
-A suitable optimizer can be used to minimize the cost function. SciPy differential_evolution is used below.
-```python3
-%time # time the solver
-from scipy import optimize
-minimum = optimize.differential_evolution(model.fitness, bounds, x0=x0)
-```
-## Plotting the Discharge Cycle of selected cell
-In the last step,create_model function has built in plot function to show the discharge cycle for TSPME, Chen2020 and optimized values in 
-a same plot for comparison.
-```python3
-print("Initial cost function value: %s" %model.fitness(x0)) # Initial cost function value
-
-print("Optimized cost function value: %s" %model.fitness(minimum.x)) # Optimized cost function value
-
-print("Optimized parameter values are: %s" %minimum.x) # Print optimized values
-
-model.define_model(minimum.x) # Building the model again with new parameters
-
-model.model_plot() #model_plot funtion to show TSPME, Chen2020 and optimized curves
-```
+This package is provides parameter optimization for PyBaMM (Python Battery Mathematical Modelling) using different optimization techniques. Examples on how to run this package can be found in the [examples folder](./examples)
 
 ## How to install?
 These installation instructions assume you have Python installed (versions 3.7, 3.8 or 3.9) and that you have also installed the `virtualenv` package which can be done by running
 ```bash
 pip install virtualenv
+```
+
+The first step, common across operating systems, is to clone this repository
+```bash
+git clone git@github.com:muhammedsogut/Pybamm.git
+```
+and then go into the cloned folder
+```bash
+cd Pybamm
 ```
 
 ### Linux & MacOS
@@ -75,10 +36,8 @@ deactivate
 
 3. Install requirements
 ```bash
-pip install -r requirements.txt
+pip install -e .[dev]
 ```
-
-4. (Optional) Install `scikits.odes` following the instruction in [PyBaMM docs](https://pybamm.readthedocs.io/en/latest/install/GNU-linux.html#optional-scikits-odes-solver)
 
 ### Windows
 1. Create a virtual environment (this is strongly recommended to avoid clashes with the dependencies)
@@ -97,5 +56,5 @@ deactivate
 
 3. Install requirements
 ```bash
-pip install -r requirements.txt
+pip install -e .[dev]
 ```
