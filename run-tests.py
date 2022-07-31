@@ -312,7 +312,7 @@ def export_notebook(ipath, opath):
 if __name__ == "__main__":
     # Set up argument parsing
     parser = argparse.ArgumentParser(
-        description="Run unit tests for PyBaMM.",
+        description="Run unit tests for pybamm-param.",
         epilog="To run individual unit tests, use e.g. '$ tests/unit/test_timer.py'",
     )
     # Unit tests
