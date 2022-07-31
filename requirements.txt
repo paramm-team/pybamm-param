@@ -1,4 +1,2 @@
 pybamm
 matplotlib
-flake8
-black
