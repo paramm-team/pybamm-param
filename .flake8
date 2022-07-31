@@ -7,6 +7,7 @@ exclude=
     env,
     old_files,
     .vscode
+    .tox
 ignore=
     # False positive for white space before ':' on list slice
     # black should format these correctly
