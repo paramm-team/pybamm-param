@@ -86,7 +86,7 @@ class OptimisationResult(object):
         Plot the optimisation result.
         """
         import matplotlib.pyplot as plt
-        
+
         if not self.initial_solution:
             self.initial_solution = self.calculate_solution(parameters="initial")
         if not self.optimised_solution:
