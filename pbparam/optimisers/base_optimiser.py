@@ -1,12 +1,13 @@
 #
 # Base optimiser class
 #
+
 import pybamm
 
 
 class BaseOptimiser(object):
     """
-    Optimise and OptimisationProblem object.
+    Optimise an optimisation problem.
 
     Parameters
     ----------
