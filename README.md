@@ -8,7 +8,8 @@
 
 This package is provides parameter optimization for PyBaMM (Python Battery Mathematical Modelling) using different optimization techniques. Examples on how to run this package can be found in the [examples folder](./examples)
 
-## How to install?
+## 🚀 Installing pybamm-param
+
 These installation instructions assume you have Python installed (versions 3.7, 3.8 or 3.9) and that you have also installed the `virtualenv` package which can be done by running
 ```bash
 pip install virtualenv
@@ -62,3 +63,7 @@ deactivate
 ```bash
 pip install -e .[dev]
 ```
+
+## 🛠️ Contributing to pybamm-param
+
+If you'd like to help us develop pybamm-param by adding new methods, writing documentation, or fixing embarrassing bugs, please have a look at these [guidelines](https://github.com/paramm-team/pybamm-param/blob/main/CONTRIBUTING.md) first.
