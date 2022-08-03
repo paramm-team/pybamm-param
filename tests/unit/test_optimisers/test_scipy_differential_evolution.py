@@ -26,6 +26,18 @@ class TestScipyDifferentialEvolution(unittest.TestCase):
         result = optimiser.optimise(opt)
         self.assertAlmostEqual(result.x[0], 0, places=6)
 
+    def test_optimiser_multiple_workers(self):
+        opt = DummyOptimisationProblem()
+        opt.cost_function = lambda x: x[0] ** 2
+        opt.x0 = 2
+        opt.bounds = [[-10, 10]]
+
+        optimiser = pbparam.ScipyDifferentialEvolution(
+            extra_options={"workers": -1, "polish": True, "updating": "deferred"}
+        )
+        result = optimiser.optimise(opt)
+        self.assertAlmostEqual(result.x[0], 0, places=6)
+
 
 if __name__ == "__main__":
     print("Add -v for more debug output")
