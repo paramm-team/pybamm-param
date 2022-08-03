@@ -13,6 +13,7 @@ Welcome to pybamm-param's documentation!
    :caption: Contents:
 
    source/optimisers/index
+   source/optimisation_result
 
 
 

@@ -28,7 +28,21 @@ author = 'The pybamm-param Team'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.doctest",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.napoleon",
 ]
+
+
+napoleon_use_rtype = True
+napoleon_google_docstring = False
+
+doctest_global_setup = """
+from docs import *
+"""
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
