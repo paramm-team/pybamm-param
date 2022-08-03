@@ -17,7 +17,7 @@ data = pd.DataFrame(
 
 sim = pybamm.Simulation(model, parameter_values=parameter_values)
 
-opt = pbparam.OptimisationProblem(
+opt = pbparam.DataFit(
     sim,
     data,
     {
@@ -33,9 +33,7 @@ opt = pbparam.OptimisationProblem(
     },
 )
 
-solver = pbparam.ScipyDifferentialEvolution(
-    extra_options={"workers": -1, "polish": True, "updating": "deferred"}
-)
+solver = pbparam.ScipyMinimize(method="Nelder-Mead", extra_options={"tol": 1e-6})
 
 result = solver.optimise(opt)
 
