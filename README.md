@@ -17,11 +17,11 @@ pip install virtualenv
 
 The first step, common across operating systems, is to clone this repository
 ```bash
-git clone git@github.com:muhammedsogut/Pybamm.git
+git clone git@github.com:paramm-team/pybamm-param.git
 ```
 and then go into the cloned folder
 ```bash
-cd Pybamm
+cd pybamm-param
 ```
 
 ### Linux & MacOS
