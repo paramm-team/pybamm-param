@@ -1,7 +1,8 @@
 #
-# Optimisation problem class
+# Data fit class
 #
 
+import pbparam
 import pybamm
 import numpy as np
 import copy
@@ -48,7 +49,7 @@ def cost_function_full(simulation, map_inputs, data, x):
     return np.array(NRMSE)
 
 
-class OptimisationProblem(object):
+class DataFit(pbparam.BaseOptimisationProblem):
     """A class to define an optimisation problem.
 
     Parameters
