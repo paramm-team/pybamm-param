@@ -1,10 +1,15 @@
 # pybamm-param: PyBaMM Parameter Optimization Tool
 
+[![pybamm-param](https://github.com/paramm-team/pybamm-param/actions/workflows/test_on_push.yml/badge.svg?branch=main)](https://github.com/paramm-team/pybamm-param/actions/workflows/test_on_push.yml)
+[![codecov](https://codecov.io/gh/paramm-team/pybamm-param/branch/main/graph/badge.svg?token=CMFXMUU1SJ)](https://codecov.io/gh/paramm-team/pybamm-param)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 **WARNING:** this package is still under development.
 
 This package is provides parameter optimization for PyBaMM (Python Battery Mathematical Modelling) using different optimization techniques. Examples on how to run this package can be found in the [examples folder](./examples)
 
-## How to install?
+## 🚀 Installing pybamm-param
+
 These installation instructions assume you have Python installed (versions 3.7, 3.8 or 3.9) and that you have also installed the `virtualenv` package which can be done by running
 ```bash
 pip install virtualenv
@@ -12,11 +17,11 @@ pip install virtualenv
 
 The first step, common across operating systems, is to clone this repository
 ```bash
-git clone git@github.com:muhammedsogut/Pybamm.git
+git clone git@github.com:paramm-team/pybamm-param.git
 ```
 and then go into the cloned folder
 ```bash
-cd Pybamm
+cd pybamm-param
 ```
 
 ### Linux & MacOS
@@ -58,3 +63,7 @@ deactivate
 ```bash
 pip install -e .[dev]
 ```
+
+## 🛠️ Contributing to pybamm-param
+
+If you'd like to help us develop pybamm-param by adding new methods, writing documentation, or fixing embarrassing bugs, please have a look at these [guidelines](https://github.com/paramm-team/pybamm-param/blob/main/CONTRIBUTING.md) first.
