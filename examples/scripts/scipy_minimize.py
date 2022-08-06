@@ -33,9 +33,9 @@ opt = pbparam.DataFit(
     },
 )
 
-solver = pbparam.ScipyMinimize(method="Nelder-Mead", extra_options={"tol": 1e-6})
+optimiser = pbparam.ScipyMinimize(method="Nelder-Mead", extra_options={"tol": 1e-6})
 
-result = solver.optimise(opt)
+result = optimiser.optimise(opt)
 
 print(result.x, result.fun, result.solve_time)
 

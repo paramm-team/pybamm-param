@@ -33,11 +33,11 @@ opt = pbparam.DataFit(
     },
 )
 
-solver = pbparam.ScipyDifferentialEvolution(
+optimiser = pbparam.ScipyDifferentialEvolution(
     extra_options={"workers": -1, "polish": True, "updating": "deferred"}
 )
 
-result = solver.optimise(opt)
+result = optimiser.optimise(opt)
 
 print(result.x, result.fun, result.solve_time)
 

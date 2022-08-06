@@ -69,6 +69,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
     variables_to_optimise : str or list of str (optional)
         The variable or variables to optimise in the cost function. The default is
         "Terminal voltage [V]". It can be a string or a list of strings.
+        TODO: implement this
     """
 
     def __init__(
