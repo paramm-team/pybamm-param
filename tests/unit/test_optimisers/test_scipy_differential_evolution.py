@@ -26,7 +26,7 @@ class TestScipyDifferentialEvolution(unittest.TestCase):
 
         optimiser = pbparam.ScipyDifferentialEvolution()
         result = optimiser.optimise(opt)
-        self.assertAlmostEqual(result.x[0], 0, places=6)
+        self.assertAlmostEqual(result.x[0], 0, places=4)
 
     def test_optimiser_multiple_workers(self):
         opt = pbparam.BaseOptimisationProblem()
@@ -38,7 +38,7 @@ class TestScipyDifferentialEvolution(unittest.TestCase):
             extra_options={"workers": -1, "polish": True, "updating": "deferred"}
         )
         result = optimiser.optimise(opt)
-        self.assertAlmostEqual(result.x[0], 0, places=6)
+        self.assertAlmostEqual(result.x[0], 0, places=4)
 
 
 if __name__ == "__main__":
