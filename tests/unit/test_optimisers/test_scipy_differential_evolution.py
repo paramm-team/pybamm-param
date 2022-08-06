@@ -5,8 +5,10 @@ import pbparam
 
 import unittest
 
+
 def parabola(x):
     return x[0] ** 2
+
 
 class TestScipyDifferentialEvolution(unittest.TestCase):
     def test_scipy_differential_evolution_init(self):
