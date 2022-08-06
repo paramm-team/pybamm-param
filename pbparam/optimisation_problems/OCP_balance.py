@@ -28,12 +28,14 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         self.data_ref = data_ref
 
     def cost_function(self, x):
-        err_ch = self.data_fit_ch[1] / self.data_ref_ch(
-            x[0] + self.data_fit_ch[0] / x[1]
-        ) - 1
-        err_dch = self.data_fit_dch[1] / self.data_ref_dch(
-            x[0] + self.data_fit_dch[0] / x[1]
-        ) - 1
+        err_ch = (
+            self.data_fit_ch[1] / self.data_ref_ch(x[0] + self.data_fit_ch[0] / x[1])
+            - 1
+        )
+        err_dch = (
+            self.data_fit_dch[1] / self.data_ref_dch(x[0] + self.data_fit_dch[0] / x[1])
+            - 1
+        )
 
         err_ch = err_ch[~np.isnan(err_ch)]
         err_dch = err_dch[~np.isnan(err_dch)]
@@ -64,19 +66,15 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             )
         # Process experimental data
         idx_max = self.data_fit[0].idxmax()
-        idx_min = self.data_fit[0].idxmin()
         Q_V_max = self.data_fit[0].loc[self.data_fit[1].idxmax()]
         Q_V_min = self.data_fit[0].loc[self.data_fit[1].idxmin()]
 
         # Determine initial guesses and bounds
-        # TODO: Improve initial guesses by setting the max and min to match the stoichiometry. 
         self.x0 = [
             (Q_V_max * x_max - Q_V_min * x_min) / (Q_V_max - Q_V_min),
-            (Q_V_min - Q_V_max) / (x_max - x_min)
+            (Q_V_min - Q_V_max) / (x_max - x_min),
         ]
         self.bounds = None
 
-        self.data_fit_ch = self.data_fit[:idx_max + 1]
+        self.data_fit_ch = self.data_fit[: idx_max + 1]
         self.data_fit_dch = self.data_fit[idx_max:]
-
-
