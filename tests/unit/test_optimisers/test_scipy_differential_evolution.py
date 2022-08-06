@@ -5,6 +5,8 @@ import pbparam
 
 import unittest
 
+def parabola(x):
+    return x[0] ** 2
 
 class TestScipyDifferentialEvolution(unittest.TestCase):
     def test_scipy_differential_evolution_init(self):
@@ -16,7 +18,7 @@ class TestScipyDifferentialEvolution(unittest.TestCase):
 
     def test_optimiser(self):
         opt = pbparam.BaseOptimisationProblem()
-        opt.cost_function = lambda x: x[0] ** 2
+        opt.cost_function = parabola
         opt.x0 = 2
         opt.bounds = [[-10, 10]]
 
@@ -26,7 +28,7 @@ class TestScipyDifferentialEvolution(unittest.TestCase):
 
     def test_optimiser_multiple_workers(self):
         opt = pbparam.BaseOptimisationProblem()
-        opt.cost_function = lambda x: x[0] ** 2
+        opt.cost_function = parabola
         opt.x0 = 2
         opt.bounds = [[-10, 10]]
 
