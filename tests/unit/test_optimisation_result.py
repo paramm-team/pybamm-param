@@ -7,42 +7,26 @@ import unittest
 
 
 class TestOptimisationResult(unittest.TestCase):
-    def test_base_optimiser_init(self):
-        optimiser = pbparam.BaseOptimiser()
-        self.assertEqual(optimiser.name, "Base optimiser")
-        self.assertFalse(optimiser.single_variable)
-        self.assertFalse(optimiser.global_optimiser)
-
-    def test_optimise(self):
-        optimiser = pbparam.BaseOptimiser()
-        optimisation_problem = pbparam.BaseOptimisationProblem()
-
-        _ = optimiser.optimise(optimisation_problem, x0=-1, bounds=-1)
-
-        self.assertEqual(optimiser.x0, -1)
-        self.assertEqual(optimiser.bounds, -1)
-
-    def test_pybamm_logging_level(self):
-        optimiser = pbparam.BaseOptimiser()
-        optimisation_problem = pbparam.BaseOptimisationProblem()
-
-        # Hack _run_optimiser to test internal logging level
-        def hack_optimiser(optimisation_problem, x0, bounds):
-            return pybamm.logger.level
-
-        optimiser._run_optimiser = hack_optimiser
-
-        # Test default logging level
-        internal_logging_level = optimiser.optimise(optimisation_problem)
-        self.assertEqual(pybamm.logger.level, 30)
-        self.assertEqual(internal_logging_level, 40)
-
-        # Test custom logging level
-        internal_logging_level = optimiser.optimise(
-            optimisation_problem, pybamm_logging_level="DEBUG"
+    def test_optimisation_result_init(self):
+        optimisation_result = pbparam.OptimisationResult(
+            "x",
+            "success",
+            "message",
+            "fun",
+            "raw_result",
+            "optimisation_problem",
         )
-        self.assertEqual(pybamm.logger.level, 30)
-        self.assertEqual(internal_logging_level, 10)
+        self.assertEqual(optimisation_result.x, "x")
+        self.assertEqual(optimisation_result.success, "success")
+        self.assertEqual(optimisation_result.message, "message")
+        self.assertEqual(optimisation_result.fun, "fun")
+        self.assertEqual(optimisation_result.raw_result, "raw_result")
+        self.assertEqual(
+            optimisation_result.optimisation_problem, "optimisation_problem"
+        )
+        self.assertIsNone(optimisation_result.solve_time)
+        self.assertIsNone(optimisation_result.initial_solution)
+        self.assertIsNone(optimisation_result.optimised_solution)
 
 
 if __name__ == "__main__":
