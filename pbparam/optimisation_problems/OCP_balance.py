@@ -52,10 +52,10 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             x_min, x_max = 0, 1
         elif all([isinstance(x, pd.DataFrame) for x in self.data_ref]):
             self.data_ref_dch = interpolate.interp1d(
-                self.data_ref[0][0], self.data_ref[0][1], bounds_error=False
+                self.data_ref[0][0], self.data_ref[0][1], fill_value="extrapolate"
             )
             self.data_ref_ch = interpolate.interp1d(
-                self.data_ref[1][0], self.data_ref[1][1], bounds_error=False
+                self.data_ref[1][0], self.data_ref[1][1], fill_value="extrapolate"
             )
             x_min = min([data[0].min() for data in self.data_ref])
             x_max = max([data[0].max() for data in self.data_ref])
@@ -74,7 +74,10 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             (Q_V_max * x_max - Q_V_min * x_min) / (Q_V_max - Q_V_min),
             (Q_V_min - Q_V_max) / (x_max - x_min),
         ]
-        self.bounds = None
+        self.bounds = [
+            (-10 * abs(self.x0[0]), 10 * abs(self.x0[0])),
+            (-10 * abs(self.x0[1]), 10 * abs(self.x0[1])),
+        ]
 
         self.data_fit_ch = self.data_fit[: idx_max + 1]
         self.data_fit_dch = self.data_fit[idx_max:]
