@@ -22,6 +22,9 @@ class ScipyMinimize(pbparam.BaseOptimiser):
         self.global_optimiser = False
 
     def _run_optimiser(self, optimisation_problem, x0, bounds):
+        """
+        Run the optimiser.
+        """
         self.optimisation_problem = copy.deepcopy(optimisation_problem)
         # Initialise timer
         timer = pybamm.Timer()
