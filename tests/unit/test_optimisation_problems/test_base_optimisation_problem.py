@@ -14,11 +14,11 @@ class TestBaseOptimisationProblem(unittest.TestCase):
 
     def test_cost_function(self):
         optimisation_problem = pbparam.BaseOptimisationProblem()
-        self.assertTrue(hasattr(optimisation_problem, "cost_function"))
+        self.assertIsNone(optimisation_problem.cost_function(None))
 
     def test_setup_cost_function(self):
         optimisation_problem = pbparam.BaseOptimisationProblem()
-        self.assertTrue(hasattr(optimisation_problem, "setup_cost_function"))
+        self.assertIsNone(optimisation_problem.setup_cost_function())
 
 
 if __name__ == "__main__":
