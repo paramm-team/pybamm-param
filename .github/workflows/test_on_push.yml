@@ -84,9 +84,9 @@ jobs:
     #   if: matrix.os != 'ubuntu-latest'
     #   run: python -m tox -e mac-windows-integration
 
-    # - name: Install docs dependencies and run doctests
-    #   if: matrix.os == 'ubuntu-latest'
-    #   run: tox -e doctests
+    - name: Install docs dependencies and run doctests
+      if: matrix.os == 'ubuntu-latest'
+      run: tox -e doctests
 
     - name: Install dev dependencies and run example tests
       run: tox -e examples

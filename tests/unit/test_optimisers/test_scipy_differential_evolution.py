@@ -35,7 +35,7 @@ class TestScipyDifferentialEvolution(unittest.TestCase):
         opt.bounds = [[-10, 10]]
 
         optimiser = pbparam.ScipyDifferentialEvolution(
-            extra_options={"workers": -1, "polish": True, "updating": "deferred"}
+            extra_options={"workers": 2, "polish": True, "updating": "deferred"}
         )
         result = optimiser.optimise(opt)
         self.assertAlmostEqual(result.x[0], 0, places=4)
