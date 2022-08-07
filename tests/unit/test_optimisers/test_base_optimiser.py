@@ -21,7 +21,7 @@ class TestBaseOptimiser(unittest.TestCase):
         _ = optimiser.optimise(optimisation_problem, x0=-1, bounds=-1)
 
         self.assertEqual(optimiser.x0, -1)
-        self.assertEqual(optimiser.bounds, -1)        
+        self.assertEqual(optimiser.bounds, -1)
 
     def test_pybamm_logging_level(self):
         optimiser = pbparam.BaseOptimiser()
