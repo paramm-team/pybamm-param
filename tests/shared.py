@@ -2,10 +2,12 @@
 # Shared methods and classes for testing
 #
 
-class DummyOptimisationProblem():
+
+class DummyOptimisationProblem:
     """
     Dummy optimisation problem for testing
     """
+
     def __init__(self):
         self.x0 = None
         self.bounds = None
@@ -15,4 +17,3 @@ class DummyOptimisationProblem():
 
     def setup_cost_function(self):
         pass
-
