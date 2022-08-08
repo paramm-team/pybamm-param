@@ -73,7 +73,7 @@ jobs:
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.9
       uses: codecov/codecov-action@v2.1.0
 
-    - name: Run integration tests for GNU/Linux
+    - name: Run integration tests
       run: python -m tox -e integration
 
     # - name: Run unit tests for Windows and MacOS
@@ -84,9 +84,9 @@ jobs:
     #   if: matrix.os != 'ubuntu-latest'
     #   run: python -m tox -e mac-windows-integration
 
-    # - name: Install docs dependencies and run doctests
-    #   if: matrix.os == 'ubuntu-latest'
-    #   run: tox -e doctests
+    - name: Install docs dependencies and run doctests
+      if: matrix.os == 'ubuntu-latest'
+      run: tox -e doctests
 
     - name: Install dev dependencies and run example tests
       if: matrix.os == 'ubuntu-latest'
