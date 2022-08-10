@@ -26,7 +26,7 @@ class TestBaseOptimisationProblem(unittest.TestCase):
 
     def test_plot(self):
         optimisation_problem = pbparam.BaseOptimisationProblem()
-        self.assertIsNone(optimisation_problem._plot())
+        self.assertIsNone(optimisation_problem._plot(None))
 
 
 if __name__ == "__main__":
