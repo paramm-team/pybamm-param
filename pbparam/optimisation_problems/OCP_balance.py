@@ -92,12 +92,15 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         fig, ax = plt.subplots(1, 1)
         ax.plot(self.data_ref[0][0], self.data_ref[0][1], "k-", label="Reference")
         ax.plot(self.data_ref[1][0], self.data_ref[1][1], "k-")
-        ax.plot(x_optimal[0] + self.data_fit[0] / x_optimal[1], self.data_fit[1], "--", label="Fit")
+        ax.plot(
+            x_optimal[0] + self.data_fit[0] / x_optimal[1],
+            self.data_fit[1],
+            "--",
+            label="Fit",
+        )
         ax.set_xlabel("Stoichiometry")
         ax.set_ylabel("OCP [V]")
         ax.legend()
         fig.tight_layout()
 
         return fig
-
-

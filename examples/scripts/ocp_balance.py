@@ -1,7 +1,6 @@
 import pbparam
 import pandas as pd
 import os
-import matplotlib.pyplot as plt
 
 anode_half = pd.read_csv(os.path.join("data", "anode_OCP_2.csv"), header=None)
 cathode_half = pd.read_csv(os.path.join("data", "cathode_OCP_2.csv"), header=None)
