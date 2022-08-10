@@ -4,6 +4,7 @@
 
 import copy
 
+
 class OptimisationResult(object):
     """
     Optimisation result class
