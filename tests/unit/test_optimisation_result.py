@@ -25,8 +25,6 @@ class TestOptimisationResult(unittest.TestCase):
             optimisation_result.optimisation_problem, "optimisation_problem"
         )
         self.assertIsNone(optimisation_result.solve_time)
-        self.assertIsNone(optimisation_result.initial_solution)
-        self.assertIsNone(optimisation_result.optimised_solution)
 
 
 if __name__ == "__main__":

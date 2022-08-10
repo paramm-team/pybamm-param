@@ -89,6 +89,10 @@ class DataFit(pbparam.BaseOptimisationProblem):
         self.original_parameters = copy.deepcopy(simulation.parameter_values)
         self.parameter_values = simulation.parameter_values.copy()
 
+        # Initialise solutions
+        self.initial_solution = None
+        self.optimised_solution = None
+
         # Initialise the dictionary to map each parameter to optimise to the index of x
         # it corresponds to
         self.map_inputs = {}
@@ -139,3 +143,60 @@ class DataFit(pbparam.BaseOptimisationProblem):
             cost_function_full, simulation, self.map_inputs, self.data
         )
         self.cost_function = cost_function
+
+    def calculate_solution(self, parameters=None):
+        """
+        Calculate solution of model.
+
+        Parameters
+        ----------
+        parameters : array-like (optional)
+            Parameters to calcualte the solution for. If not provided, it uses the
+            original parameters.
+
+        Returns
+        -------
+        solution : pybamm.Solution
+            The solution for the given inputs.
+        """
+        if parameters:
+            inputs = {param: parameters[i] for param, i in self.map_inputs.items()}
+        else:
+            inputs = {
+                param: self.original_parameters[param]
+                for param in self.map_inputs.keys()
+            }
+
+        if getattr(self.simulation, "experiment", None):
+            t_eval = None
+        else:
+            t_eval = [0, self.data["Time [s]"].iloc[-1]]
+
+        solution = self.simulation.solve(t_eval=t_eval, inputs=inputs)
+
+        return solution
+
+    def _plot(self, x_optimal):
+        """
+        Plot the optimisation result. Should be accessed through the OptimisationResult
+        plot method.
+        """
+
+        if not self.initial_solution:
+            self.initial_solution = self.calculate_solution()
+        if not self.optimised_solution:
+            self.optimised_solution = self.calculate_solution(x_optimal)
+
+        plot = pybamm.QuickPlot(
+            [self.initial_solution, self.optimised_solution],
+            output_variables=self.variables_optimise,
+            labels=["Initial values", "Optimised values"],
+        )
+
+        plot.plot(0)
+
+        for ax, var in zip(plot.axes, self.variables_optimise):
+            data = self.data
+            ax.plot(data["Time [s]"], data[var], "k:", label="Data")
+
+        return plot

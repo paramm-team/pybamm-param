@@ -20,6 +20,14 @@ class TestBaseOptimisationProblem(unittest.TestCase):
         optimisation_problem = pbparam.BaseOptimisationProblem()
         self.assertIsNone(optimisation_problem.setup_cost_function())
 
+    def test_calculate_solution(self):
+        optimisation_problem = pbparam.BaseOptimisationProblem()
+        self.assertIsNone(optimisation_problem.calculate_solution())
+
+    def test_plot(self):
+        optimisation_problem = pbparam.BaseOptimisationProblem()
+        self.assertIsNone(optimisation_problem._plot())
+
 
 if __name__ == "__main__":
     print("Add -v for more debug output")

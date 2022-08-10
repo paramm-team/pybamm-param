@@ -15,3 +15,9 @@ class BaseOptimisationProblem():
 
     def setup_cost_function(self):
         pass
+
+    def calculate_solution(self):
+        pass
+
+    def _plot(self):
+        pass
