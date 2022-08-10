@@ -66,7 +66,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         will take the same value.
         TODO: allow it to be a list of variables and pass the bounds and initial
         guesses when running the optimiser.
-    variables_to_optimise : str or list of str (optional)
+    variables_optimise : str or list of str (optional)
         The variable or variables to optimise in the cost function. The default is
         "Terminal voltage [V]". It can be a string or a list of strings.
         TODO: implement this
