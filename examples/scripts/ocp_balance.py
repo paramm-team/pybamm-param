@@ -22,15 +22,7 @@ optimiser = pbparam.ScipyMinimize(
 result = optimiser.optimise(ocp_balance)
 print(result.x, result.fun)
 
-plt.plot(anode_half[0], anode_half[1], label="anode_half")
-plt.plot(
-    result.x[0] + anode_three[0] / result.x[1],
-    anode_three[1],
-    linestyle="--",
-    label="anode_three",
-)
-plt.legend()
-plt.show()
+result.plot()
 
 idx_max = cathode_half[0].idxmin()
 
@@ -44,12 +36,4 @@ optimiser = pbparam.ScipyMinimize(method="Nelder-Mead", extra_options={"tol": 1e
 result = optimiser.optimise(ocp_balance)
 print(result.x, result.fun)
 
-plt.plot(cathode_half[0], cathode_half[1], label="cathode_half")
-plt.plot(
-    result.x[0] + cathode_three[0] / result.x[1],
-    cathode_three[1],
-    linestyle="--",
-    label="cathode_three",
-)
-plt.legend()
-plt.show()
+result.plot()

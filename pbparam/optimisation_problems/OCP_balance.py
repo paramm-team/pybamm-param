@@ -81,3 +81,23 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
 
         self.data_fit_ch = self.data_fit[: idx_max + 1]
         self.data_fit_dch = self.data_fit[idx_max:]
+
+    def _plot(self, x_optimal):
+        import matplotlib.pyplot as plt
+
+        if all([callable(x) for x in self.data_ref]):
+            # TODO: need to think how we pass the limits of the reference function
+            raise NotImplementedError
+
+        fig, ax = plt.subplots(1, 1)
+        ax.plot(self.data_ref[0][0], self.data_ref[0][1], "k-", label="Reference")
+        ax.plot(self.data_ref[1][0], self.data_ref[1][1], "k-")
+        ax.plot(x_optimal[0] + self.data_fit[0] / x_optimal[1], self.data_fit[1], "--", label="Fit")
+        ax.set_xlabel("Stoichiometry")
+        ax.set_ylabel("OCP [V]")
+        ax.legend()
+        fig.tight_layout()
+
+        return fig
+
+
