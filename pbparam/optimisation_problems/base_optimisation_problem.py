@@ -19,5 +19,5 @@ class BaseOptimisationProblem():
     def calculate_solution(self):
         pass
 
-    def _plot(self):
+    def _plot(self, x):
         pass

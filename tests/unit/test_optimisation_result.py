@@ -26,6 +26,19 @@ class TestOptimisationResult(unittest.TestCase):
         )
         self.assertIsNone(optimisation_result.solve_time)
 
+    def test_plot(self):
+        optimisation_result = pbparam.OptimisationResult(
+            "x",
+            "success",
+            "message",
+            "fun",
+            "raw_result",
+            pbparam.BaseOptimisationProblem(),
+        )
+
+        plot = optimisation_result.plot(testing=True)
+        self.assertIsNone(plot)
+
 
 if __name__ == "__main__":
     print("Add -v for more debug output")
