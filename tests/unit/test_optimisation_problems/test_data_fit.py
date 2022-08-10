@@ -67,6 +67,44 @@ class TestDataFit(unittest.TestCase):
             ["Terminal voltage [V]", "Cell temperature [K]"],
         )
 
+        # Test multiple parameters_optimise with same value
+        parameter_names = (
+            "Negative electrode diffusivity [m2.s-1]",
+            "Positive electrode diffusivity [m2.s-1]",
+        )
+        parameters_optimise = {
+            parameter_names: (5e-15, (2.06e-16, 2.06e-12))
+        }
+        optimisation_problem = pbparam.DataFit(
+            sim,
+            data,
+            parameters_optimise,
+        )
+        for name in parameter_names:
+            self.assertIsInstance(
+                optimisation_problem.simulation.parameter_values[name],
+                pybamm.InputParameter,
+            )
+        self.assertEqual(
+            optimisation_problem.map_inputs,
+            {
+                "Negative electrode diffusivity [m2.s-1]": 0,
+                "Positive electrode diffusivity [m2.s-1]": 0,                
+            }
+        )
+
+        # Test bad parameters_optimise
+        parameters_optimise = {
+            2: (5e-15, (2.06e-16, 2.06e-12))
+        }
+
+        with self.assertRaisesRegex(TypeError, "parameters_optimise must be a"):
+            optimisation_problem = pbparam.DataFit(
+                sim,
+                data,
+                parameters_optimise,
+            )        
+
 
 if __name__ == "__main__":
     print("Add -v for more debug output")
