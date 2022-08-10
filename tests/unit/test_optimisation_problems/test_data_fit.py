@@ -72,9 +72,7 @@ class TestDataFit(unittest.TestCase):
             "Negative electrode diffusivity [m2.s-1]",
             "Positive electrode diffusivity [m2.s-1]",
         )
-        parameters_optimise = {
-            parameter_names: (5e-15, (2.06e-16, 2.06e-12))
-        }
+        parameters_optimise = {parameter_names: (5e-15, (2.06e-16, 2.06e-12))}
         optimisation_problem = pbparam.DataFit(
             sim,
             data,
@@ -89,21 +87,19 @@ class TestDataFit(unittest.TestCase):
             optimisation_problem.map_inputs,
             {
                 "Negative electrode diffusivity [m2.s-1]": 0,
-                "Positive electrode diffusivity [m2.s-1]": 0,                
-            }
+                "Positive electrode diffusivity [m2.s-1]": 0,
+            },
         )
 
         # Test bad parameters_optimise
-        parameters_optimise = {
-            2: (5e-15, (2.06e-16, 2.06e-12))
-        }
+        parameters_optimise = {2: (5e-15, (2.06e-16, 2.06e-12))}
 
         with self.assertRaisesRegex(TypeError, "parameters_optimise must be a"):
             optimisation_problem = pbparam.DataFit(
                 sim,
                 data,
                 parameters_optimise,
-            )        
+            )
 
 
 if __name__ == "__main__":
