@@ -197,6 +197,11 @@ class DataFit(pbparam.BaseOptimisationProblem):
 
         for ax, var in zip(plot.axes, self.variables_optimise):
             data = self.data
-            ax.plot(data["Time [s]"], data[var], "k:", label="Data")
+            ax.plot(
+                data["Time [s]"] / plot.time_scaling_factor,
+                data[var],
+                "k:",
+                label="Data"
+            )
 
         return plot
