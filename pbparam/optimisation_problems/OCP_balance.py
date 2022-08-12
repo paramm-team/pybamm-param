@@ -70,6 +70,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         Q_V_min = self.data_fit[0].loc[self.data_fit[1].idxmin()]
 
         # Determine initial guesses and bounds
+        # TODO: determine it from the ref data, don't assume data decreases!
         self.x0 = [
             (Q_V_max * x_max - Q_V_min * x_min) / (Q_V_max - Q_V_min),
             (Q_V_min - Q_V_max) / (x_max - x_min),
