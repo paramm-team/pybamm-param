@@ -5,8 +5,6 @@ import pbparam
 
 import unittest
 
-from tests.shared import DummyOptimisationProblem
-
 
 class TestScipyMinimize(unittest.TestCase):
     def test_scipy_minimize_init(self):
@@ -25,7 +23,7 @@ class TestScipyMinimize(unittest.TestCase):
             "BFGS",
         ]
 
-        opt = DummyOptimisationProblem()
+        opt = pbparam.BaseOptimisationProblem()
         opt.cost_function = lambda x: x[0] ** 2
         opt.x0 = 2
         opt.bounds = [[-10, 10]]

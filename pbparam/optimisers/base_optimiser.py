@@ -1,12 +1,13 @@
 #
 # Base optimiser class
 #
+
 import pybamm
 
 
 class BaseOptimiser(object):
     """
-    Optimise and OptimisationProblem object.
+    Optimise an optimisation problem.
 
     Parameters
     ----------
@@ -64,3 +65,9 @@ class BaseOptimiser(object):
         pybamm.set_logging_level(old_logging_level)
 
         return result
+
+    def _run_optimiser(self, optimisation_problem, x0, bounds):
+        """
+        Run the optimiser. It is implemented in subclasses.
+        """
+        pass

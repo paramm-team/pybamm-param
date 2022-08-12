@@ -1,0 +1,10 @@
+# Requirements for readthedocs.io
+pybamm
+jupyter  # For example notebooks
+# Note: Matplotlib is loaded for debug plots but to ensure pybamm runs
+# on systems without an attached display it should never be imported
+# outside of plot() methods.
+# Should not be imported
+matplotlib >= 2.0
+#
+sphinx>4.0

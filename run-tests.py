@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Runs all unit tests included in PyBaMM.
+# Runs all unit tests included in pybamm-param.
 #
 # The code in this file is adapted from Pints
 # (see https://github.com/pints-team/pints)

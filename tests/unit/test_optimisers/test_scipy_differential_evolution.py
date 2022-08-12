@@ -5,7 +5,9 @@ import pbparam
 
 import unittest
 
-from tests.shared import DummyOptimisationProblem
+
+def parabola(x):
+    return x[0] ** 2
 
 
 class TestScipyDifferentialEvolution(unittest.TestCase):
@@ -17,14 +19,26 @@ class TestScipyDifferentialEvolution(unittest.TestCase):
         self.assertEqual(optimiser.extra_options, {})
 
     def test_optimiser(self):
-        opt = DummyOptimisationProblem()
-        opt.cost_function = lambda x: x[0] ** 2
+        opt = pbparam.BaseOptimisationProblem()
+        opt.cost_function = parabola
         opt.x0 = 2
         opt.bounds = [[-10, 10]]
 
         optimiser = pbparam.ScipyDifferentialEvolution()
         result = optimiser.optimise(opt)
-        self.assertAlmostEqual(result.x[0], 0, places=6)
+        self.assertAlmostEqual(result.x[0], 0, places=4)
+
+    def test_optimiser_multiple_workers(self):
+        opt = pbparam.BaseOptimisationProblem()
+        opt.cost_function = parabola
+        opt.x0 = 2
+        opt.bounds = [[-10, 10]]
+
+        optimiser = pbparam.ScipyDifferentialEvolution(
+            extra_options={"workers": 2, "polish": True, "updating": "deferred"}
+        )
+        result = optimiser.optimise(opt)
+        self.assertAlmostEqual(result.x[0], 0, places=4)
 
 
 if __name__ == "__main__":
