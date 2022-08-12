@@ -89,10 +89,6 @@ class DataFit(pbparam.BaseOptimisationProblem):
         self.original_parameters = copy.deepcopy(simulation.parameter_values)
         self.parameter_values = simulation.parameter_values.copy()
 
-        # Initialise solutions
-        self.initial_solution = None
-        self.optimised_solution = None
-
         # Initialise the dictionary to map each parameter to optimise to the index of x
         # it corresponds to
         self.map_inputs = {}
@@ -182,15 +178,13 @@ class DataFit(pbparam.BaseOptimisationProblem):
         plot method.
         """
 
-        if not self.initial_solution:
-            self.initial_solution = self.calculate_solution()
-        if not self.optimised_solution:
-            self.optimised_solution = self.calculate_solution(x_optimal)
+        initial_solution = self.calculate_solution()
+        optimal_solution = self.calculate_solution(x_optimal)
 
         plot = pybamm.QuickPlot(
-            [self.initial_solution, self.optimised_solution],
+            [initial_solution, optimal_solution],
             output_variables=self.variables_optimise,
-            labels=["Initial values", "Optimised values"],
+            labels=["Initial values", "Optimal values"],
         )
 
         plot.plot(0)
