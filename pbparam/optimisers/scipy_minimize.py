@@ -12,15 +12,19 @@ class ScipyMinimize(pbparam.BaseOptimiser):
     TODO: write
     """
 
-    def __init__(self, method=None, extra_options=None):
+    def __init__(self, method=None, extra_options=None, solver_options=None):
         super().__init__()
         self.method = method
         self.extra_options = extra_options or {}
+        self.solver_options = solver_options or {}
         self.name = "SciPy Minimize optimiser with {} method".format(method)
         self.single_variable = False
         self.global_optimiser = False
 
     def _run_optimiser(self, optimisation_problem, x0, bounds):
+        """
+        Run the optimiser.
+        """
         self.optimisation_problem = copy.deepcopy(optimisation_problem)
         # Initialise timer
         timer = pybamm.Timer()
@@ -30,7 +34,8 @@ class ScipyMinimize(pbparam.BaseOptimiser):
             x0,
             method=self.method,
             bounds=bounds,
-            **self.extra_options
+            **self.extra_options,
+            options=self.solver_options,
         )
         solve_time = timer.time()
 

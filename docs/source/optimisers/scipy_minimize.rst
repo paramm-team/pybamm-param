@@ -1,5 +1,5 @@
 Scipy Minimize Optimiser
 ========================
 
-.. autoclass:: pbparam.ScipyMinimizeOptimiser
+.. autoclass:: pbparam.ScipyMinimize
   :members:

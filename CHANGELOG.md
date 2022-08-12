@@ -4,7 +4,8 @@
 
 ### Optimisation problems
 
-* Fit PyBaMM simulation to data
+* Fit PyBaMM simulation to data (`DataFit`)
+* Balance OCP for half cells (`OCPBalance`)
 
 ### Optimisers
 
