@@ -1,0 +1,39 @@
+[build-system]
+requires = [
+    "hatchling>=1.6.0",
+]
+build-backend = "hatchling.build"
+
+[project]
+name = "pbparam"
+description = "A package for optimising parameters in PyBaMM. Under development."
+readme = "README.md"
+license = "BSD-3-Clause"
+authors = [
+    { name = "WMG", email = "Ferran.Brosa-Planella@warwick.ac.uk" },
+]
+dependencies = [
+    "matplotlib",
+    "pybamm",
+]
+dynamic = [
+    "version",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "flake8>=3",
+]
+docs = [
+    "guzzle-sphinx-theme",
+    "sphinx>=1.5",
+]
+
+[tool.hatch.version]
+path = "pbparam/version.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/pbparam",
+]
