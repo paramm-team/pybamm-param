@@ -4,7 +4,7 @@
 
 import pybamm
 import numpy as np
-from tec_reduced_model.process_experimental_data import import_thermal_data, get_idxs
+from process_experimental_data import import_thermal_data, get_idxs
 
 
 def set_thermal_parameters(param, h, cp, T):
