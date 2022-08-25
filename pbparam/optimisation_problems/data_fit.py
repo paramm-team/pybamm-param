@@ -35,7 +35,7 @@ def cost_function_full(simulation, map_inputs, data, variables_optimise, x):
     input_dict = {param: x[i] for param, i in map_inputs.items()}
     t_end = data["Time [s]"].iloc[-1]
     solution = simulation.solve([0, t_end], inputs=input_dict)
-    TNRMSE = 0 
+    TNRMSE = 0
     for variable in variables_optimise:
         y_sim = solution[variable](data["Time [s]"])
         y_data = data[variable]
