@@ -36,9 +36,7 @@ def cost_function_full(simulation, map_inputs, data, variables_optimise, x):
     t_end = data["Time [s]"].iloc[-1]
     solution = simulation.solve([0, t_end], inputs=input_dict)
     TNRMSE = 0 
-    
     for variable in variables_optimise:
-        
         y_sim = solution[variable](data["Time [s]"])
         y_data = data[variable]
 
@@ -140,7 +138,11 @@ class DataFit(pbparam.BaseOptimisationProblem):
         """
         simulation = copy.deepcopy(self.simulation)
         cost_function = partial(
-            cost_function_full, simulation, self.map_inputs, self.data, self.variables_optimise
+            cost_function_full,
+            simulation,
+            self.map_inputs,
+            self.data,
+            self.variables_optimise
         )
         self.cost_function = cost_function
 
