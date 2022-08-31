@@ -161,13 +161,13 @@ class DataFit(pbparam.BaseOptimisationProblem):
         solution : pybamm.Solution
             The solution for the given inputs.
         """
-        if parameters:
-            inputs = {param: parameters[i] for param, i in self.map_inputs.items()}
-        else:
+        if parameters is None:
             inputs = {
-                param: self.original_parameters[param]
-                for param in self.map_inputs.keys()
+                param: self.x0[i]
+                for param, i in self.map_inputs.items()
             }
+        else:
+            inputs = {param: parameters[i] for param, i in self.map_inputs.items()}
 
         if getattr(self.simulation, "experiment", None):
             t_eval = None
