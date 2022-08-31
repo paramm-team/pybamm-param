@@ -65,7 +65,7 @@ def import_thermal_data(Crate, T):
     skiprows = list(range(15))
     skiprows.append(16)
 
-    root = os.path.dirname(os.path.dirname(__file__))
+    root = os.path.dirname(os.path.realpath(__file__))
     folder = "{}degC".format(T)
 
     for cell in cells:
