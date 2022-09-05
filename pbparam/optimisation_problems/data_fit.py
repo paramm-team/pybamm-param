@@ -142,7 +142,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
             simulation,
             self.map_inputs,
             self.data,
-            self.variables_optimise
+            self.variables_optimise,
         )
         self.cost_function = cost_function
 
@@ -162,10 +162,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
             The solution for the given inputs.
         """
         if parameters is None:
-            inputs = {
-                param: self.x0[i]
-                for param, i in self.map_inputs.items()
-            }
+            inputs = {param: self.x0[i] for param, i in self.map_inputs.items()}
         else:
             inputs = {param: parameters[i] for param, i in self.map_inputs.items()}
 
@@ -201,7 +198,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
                 data["Time [s]"] / plot.time_scaling_factor,
                 data[var],
                 "k:",
-                label="Data"
+                label="Data",
             )
 
         return plot
