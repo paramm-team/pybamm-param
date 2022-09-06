@@ -35,8 +35,8 @@ class TestDataFit(unittest.TestCase):
             pybamm.InputParameter,
         )
 
-        self.assertEqual(optimisation_problem.x0, [5e-15])
-        self.assertEqual(optimisation_problem.bounds, [(2.06e-16, 2.06e-12)])
+        self.assertEqual(optimisation_problem.x0, [1.])
+        self.assertEqual(optimisation_problem.bounds, [(0.0412, 412)])
 
         self.assertEqual(
             optimisation_problem.map_inputs,
