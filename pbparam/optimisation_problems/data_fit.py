@@ -173,7 +173,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
                 for param, i in self.map_inputs.items()
             }
         else:
-            inputs = {param: parameters[i] * self.scalings[i] for param, i in self.map_inputs.items()}
+            inputs = {param: parameters[i] for param, i in self.map_inputs.items()}
 
         if getattr(self.simulation, "experiment", None):
             t_eval = None

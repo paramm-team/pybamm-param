@@ -9,6 +9,7 @@ class BaseOptimisationProblem():
     def __init__(self):
         self.x0 = None
         self.bounds = None
+        self.scalings = None
 
     def cost_function(self, x):
         pass

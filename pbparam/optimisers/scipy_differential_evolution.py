@@ -30,8 +30,13 @@ class ScipyDifferentialEvolution(pbparam.BaseOptimiser):
         )
         solve_time = timer.time()
 
+        if self.optimisation_problem.scalings:
+            scaled_result = np.multiply(raw_result.x, optimisation_problem.scalings)
+        else:
+            scaled_result = raw_result.x
+
         result = pbparam.OptimisationResult(
-            raw_result.x,
+            scaled_result,
             raw_result.success,
             raw_result.message,
             raw_result.fun,
