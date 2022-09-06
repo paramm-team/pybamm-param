@@ -40,10 +40,10 @@ class ScipyMinimize(pbparam.BaseOptimiser):
         )
         solve_time = timer.time()
 
-        if optimisation_problem.scalings:
-            scaled_result = np.multiply(raw_result.x, optimisation_problem.scalings)
-        else:
+        if optimisation_problem.scalings is None:
             scaled_result = raw_result.x
+        else:
+            scaled_result = np.multiply(raw_result.x, optimisation_problem.scalings)
 
         result = pbparam.OptimisationResult(
             scaled_result,
