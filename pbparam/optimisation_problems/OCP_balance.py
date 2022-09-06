@@ -23,6 +23,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
     """
 
     def __init__(self, data_fit, data_ref):
+        super().__init__()
         # Allocate init variables
         self.data_fit = data_fit
         self.data_ref = data_ref
