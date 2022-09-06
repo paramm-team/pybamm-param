@@ -34,7 +34,7 @@ opt = pbparam.DataFit(
 )
 
 optimiser = pbparam.ScipyDifferentialEvolution(
-    extra_options={"workers": -1, "polish": True, "updating": "deferred"}
+    extra_options={"workers": 4, "polish": True, "updating": "deferred", "disp": True}
 )
 
 result = optimiser.optimise(opt)
