@@ -30,23 +30,25 @@ def update_simulation_parameters(simulation, parameter_values):
     return new_simulation
 
 
-def cost_function_full(simulation, map_inputs, data, x):
+def cost_function_full(simulation, map_inputs, data, variables_optimise, x):
     # TODO: allow for multifunction optimisation, and for various cost functions
     input_dict = {param: x[i] for param, i in map_inputs.items()}
     t_end = data["Time [s]"].iloc[-1]
     solution = simulation.solve([0, t_end], inputs=input_dict)
+    TNRMSE = 0
+    for variable in variables_optimise:
+        y_sim = solution[variable](data["Time [s]"])
+        y_data = data[variable]
 
-    y_sim = solution["Terminal voltage [V]"](data["Time [s]"])
-    y_data = data["Terminal voltage [V]"]
+        err = y_sim - y_data
+        err = err[~np.isnan(err)]
 
-    err = y_sim - y_data
-    err = err[~np.isnan(err)]
+        MSE = np.sum(err**2) / len(err)
+        RMSE = np.sqrt(MSE)
+        NRMSE = RMSE / np.mean(y_data)
+        TNRMSE = TNRMSE + NRMSE
 
-    MSE = np.sum(err**2) / len(err)
-    RMSE = np.sqrt(MSE)
-    NRMSE = RMSE / np.mean(y_data)
-
-    return np.array(NRMSE)
+    return np.array(TNRMSE)
 
 
 class DataFit(pbparam.BaseOptimisationProblem):
@@ -136,7 +138,11 @@ class DataFit(pbparam.BaseOptimisationProblem):
         """
         simulation = copy.deepcopy(self.simulation)
         cost_function = partial(
-            cost_function_full, simulation, self.map_inputs, self.data
+            cost_function_full,
+            simulation,
+            self.map_inputs,
+            self.data,
+            self.variables_optimise,
         )
         self.cost_function = cost_function
 
@@ -156,10 +162,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
             The solution for the given inputs.
         """
         if parameters is None:
-            inputs = {
-                param: self.x0[i]
-                for param, i in self.map_inputs.items()
-            }
+            inputs = {param: self.x0[i] for param, i in self.map_inputs.items()}
         else:
             inputs = {param: parameters[i] for param, i in self.map_inputs.items()}
 
@@ -195,7 +198,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
                 data["Time [s]"] / plot.time_scaling_factor,
                 data[var],
                 "k:",
-                label="Data"
+                label="Data",
             )
 
         return plot
