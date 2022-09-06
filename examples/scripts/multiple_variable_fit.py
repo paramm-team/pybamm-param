@@ -47,7 +47,7 @@ data_conc = data_conc.rename(
 )
 
 
-def j0_neg(c_e, c_s_surf, T):
+def j0_neg(c_e, c_s_surf, c_s_max, T):
     """
     This function has been copied from the Chen2020 parameter set:
     pybamm/input/parameters/lithium_ion/negative_electrodes/graphite_Chen2020
@@ -57,9 +57,8 @@ def j0_neg(c_e, c_s_surf, T):
     m_ref = pybamm.Parameter("Negative electrode reaction coefficient")
     E_r = 3500
     arrhenius = pybamm.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
-    c_n_max = pybamm.Parameter("Maximum concentration in negative electrode [mol.m-3]")
     return (
-        m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_n_max - c_s_surf) ** 0.5
+        m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
     )
 
 
@@ -81,13 +80,6 @@ param.update(
     {
         "Negative electrode exchange-current density [A.m-2]": j0_neg,
         "Negative electrode reaction coefficient": 6.48e-7
-        # "Negative electrode diffusivity [m2.s-1]" : "[input]",
-        # "Total heat transfer coefficient [W.m-2.K-1]" : "[input]",
-        # "Positive current collector specific heat capacity [J.kg-1.K-1]" : "[input]",
-        # "Negative current collector specific heat capacity [J.kg-1.K-1]" : "[input]",
-        # "Negative electrode specific heat capacity [J.kg-1.K-1]" : "[input]",
-        # "Separator specific heat capacity [J.kg-1.K-1]" : "[input]",
-        # "Positive electrode specific heat capacity [J.kg-1.K-1]" : "[input]"
     },
     check_already_exists=False,
 )
@@ -121,7 +113,7 @@ param_optimised = {
 variables_optimised = ["Terminal voltage [V]", "X-averaged cell temperature [K]"]
 opt = pbparam.DataFit(simulation, data_conc, param_optimised, variables_optimised)
 optimiser = pbparam.ScipyDifferentialEvolution(
-    extra_options={"workers": 1, "polish": True, "updating": "deferred", "disp": True}
+    extra_options={"workers": 4, "polish": True, "updating": "deferred", "disp": True}
 )
 result = optimiser.optimise(opt)
 result.plot()
