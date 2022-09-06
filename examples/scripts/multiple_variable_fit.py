@@ -97,18 +97,18 @@ simulation = pybamm.Simulation(
 )
 param_optimised = {
     "Negative electrode diffusivity [m2.s-1]": (5e-14, (2.06e-16, 2.06e-12)),
-    "Negative electrode reaction coefficient": (
-        6.48e-7,
-        (2.18589831e-9, 2.18589831e-5),
-    ),
+    # "Negative electrode reaction coefficient": (
+    #     6.48e-7,
+    #     (2.18589831e-9, 2.18589831e-5),
+    # ),
     "Total heat transfer coefficient [W.m-2.K-1]": (20, (0.1, 1000)),
-    (
-        "Positive current collector specific heat capacity [J.kg-1.K-1]",
-        "Negative current collector specific heat capacity [J.kg-1.K-1]",
-        "Negative electrode specific heat capacity [J.kg-1.K-1]",
-        "Separator specific heat capacity [J.kg-1.K-1]",
-        "Positive electrode specific heat capacity [J.kg-1.K-1]",
-    ): (2.85e3, (2.85, 2.85e6)),
+    # (
+    #     "Positive current collector specific heat capacity [J.kg-1.K-1]",
+    #     "Negative current collector specific heat capacity [J.kg-1.K-1]",
+    #     "Negative electrode specific heat capacity [J.kg-1.K-1]",
+    #     "Separator specific heat capacity [J.kg-1.K-1]",
+    #     "Positive electrode specific heat capacity [J.kg-1.K-1]",
+    # ): (2.85e3, (2.85, 2.85e6)),
 }
 variables_optimised = ["Terminal voltage [V]", "X-averaged cell temperature [K]"]
 opt = pbparam.DataFit(simulation, data_conc, param_optimised, variables_optimised)
