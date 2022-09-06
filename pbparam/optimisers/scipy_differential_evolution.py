@@ -2,6 +2,7 @@
 # SciPy Differential Evolution optimiser
 #
 import pbparam
+import numpy as np
 from scipy.optimize import differential_evolution
 import pybamm
 
