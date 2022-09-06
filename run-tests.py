@@ -167,29 +167,30 @@ def test_notebook(path, executable="python"):
 
     # Make sure the notebook has a "%pip install pybamm -q" command, for using Google
     # Colab
-    with open(path, "r") as f:
-        if "%pip install pybamm -q" not in f.read():
-            # print error and exit
-            print("\n" + "-" * 70)
-            print("ERROR")
-            print("-" * 70)
-            print("Installation command '%pip install pybamm -q' not found in notebook")
-            print("-" * 70)
-            return False
+    # with open(path, "r") as f:
+    #     if "%pip install pybamm -q" not in f.read():
+    #         # print error and exit
+    #         print("\n" + "-" * 70)
+    #         print("ERROR")
+    #         print("-" * 70)
+    #         print(
+    #            "Installation command '%pip install pybamm -q' not found in notebook")
+    #         print("-" * 70)
+    #         return False
 
     # Make sure the notebook has "pybamm.print_citations()" to print the relevant papers
-    with open(path, "r") as f:
-        if "pybamm.print_citations()" not in f.read():
-            # print error and exit
-            print("\n" + "-" * 70)
-            print("ERROR")
-            print("-" * 70)
-            print(
-                "Print citations command 'pybamm.print_citations()' not found in "
-                "notebook"
-            )
-            print("-" * 70)
-            return False
+    # with open(path, "r") as f:
+    #     if "pybamm.print_citations()" not in f.read():
+    #         # print error and exit
+    #         print("\n" + "-" * 70)
+    #         print("ERROR")
+    #         print("-" * 70)
+    #         print(
+    #             "Print citations command 'pybamm.print_citations()' not found in "
+    #             "notebook"
+    #         )
+    #         print("-" * 70)
+    #         return False
 
     # Load notebook, convert to python
     e = nbconvert.exporters.PythonExporter()
