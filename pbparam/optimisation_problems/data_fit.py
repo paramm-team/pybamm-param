@@ -30,9 +30,9 @@ def update_simulation_parameters(simulation, parameter_values):
     return new_simulation
 
 
-def cost_function_full(simulation, map_inputs, data, variables_optimise, x):
+def cost_function_full(simulation, map_inputs, scalings, data, variables_optimise, x):
     # TODO: allow for multifunction optimisation, and for various cost functions
-    input_dict = {param: x[i] for param, i in map_inputs.items()}
+    input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
     t_end = data["Time [s]"].iloc[-1]
     solution = simulation.solve([0, t_end], inputs=input_dict)
     TNRMSE = 0
@@ -95,10 +95,11 @@ class DataFit(pbparam.BaseOptimisationProblem):
         # it corresponds to
         self.map_inputs = {}
 
-        # Initialise the initial guesses and bounds for the optimisation
+        # Initialise the initial guesses, bounds and scalings for the optimisation
         # TODO: allow these to not be passed at this stage
         self.x0 = np.empty([len(self.parameters_optimise)])
         self.bounds = [None] * len(self.parameters_optimise)
+        self.scalings = np.empty([len(self.parameters_optimise)])
 
         for i, (param, value) in enumerate(self.parameters_optimise.items()):
             if isinstance(param, str):
@@ -114,8 +115,12 @@ class DataFit(pbparam.BaseOptimisationProblem):
                     "strings or tuples/lists of strings."
                 )
 
-            self.x0[i] = value[0]
-            self.bounds[i] = value[1]
+            if value[0]:
+                scaling = value[0]
+
+            self.scalings[i] = scaling
+            self.x0[i] = value[0] / scaling
+            self.bounds[i] = tuple(v / scaling for v in value[1])
 
         self.simulation = update_simulation_parameters(
             simulation, self.parameter_values
@@ -141,6 +146,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
             cost_function_full,
             simulation,
             self.map_inputs,
+            self.scalings,
             self.data,
             self.variables_optimise,
         )
@@ -162,7 +168,10 @@ class DataFit(pbparam.BaseOptimisationProblem):
             The solution for the given inputs.
         """
         if parameters is None:
-            inputs = {param: self.x0[i] for param, i in self.map_inputs.items()}
+            inputs = {
+                param: self.x0[i] * self.scalings[i]
+                for param, i in self.map_inputs.items()
+            }
         else:
             inputs = {param: parameters[i] for param, i in self.map_inputs.items()}
 

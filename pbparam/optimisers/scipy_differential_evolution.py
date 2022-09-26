@@ -2,6 +2,7 @@
 # SciPy Differential Evolution optimiser
 #
 import pbparam
+import numpy as np
 from scipy.optimize import differential_evolution
 import pybamm
 
@@ -30,8 +31,13 @@ class ScipyDifferentialEvolution(pbparam.BaseOptimiser):
         )
         solve_time = timer.time()
 
+        if optimisation_problem.scalings is None:
+            scaled_result = raw_result.x
+        else:
+            scaled_result = np.multiply(raw_result.x, optimisation_problem.scalings)
+
         result = pbparam.OptimisationResult(
-            raw_result.x,
+            scaled_result,
             raw_result.success,
             raw_result.message,
             raw_result.fun,
