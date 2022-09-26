@@ -76,13 +76,13 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
 
         if Q_V_min - Q_V_max > 0:
             self.bounds = [
-                (- (1 + eps) * Q_V_max / (Q_V_min - Q_V_max), 1 + eps),
-                (-eps, (1 + eps) / (Q_V_min - Q_V_max))
+                (-(1 + eps) * Q_V_max / (Q_V_min - Q_V_max), 1 + eps),
+                (-eps, (1 + eps) / (Q_V_min - Q_V_max)),
             ]
         else:
             self.bounds = [
                 (-eps, (1 + eps) * Q_V_max / (Q_V_max - Q_V_min)),
-                (- (1 + eps) / (Q_V_max - Q_V_min), eps)
+                (-(1 + eps) / (Q_V_max - Q_V_min), eps),
             ]
 
         self.data_fit_ch = self.data_fit[: idx_max + 1]

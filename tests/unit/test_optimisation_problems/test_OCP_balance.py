@@ -18,7 +18,7 @@ class TestOCPBalance(unittest.TestCase):
         data_fit = pd.DataFrame(
             {
                 0: [7, 5, 3, 1, 3, 5, 7],
-                1: [3.9, 2.9, 1.9, 1, 2, 3, 4] + np.random.normal(0, 1e-2, 7)
+                1: [3.9, 2.9, 1.9, 1, 2, 3, 4] + np.random.normal(0, 1e-2, 7),
             }
         )
         data_ref = (

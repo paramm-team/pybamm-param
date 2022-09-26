@@ -9,6 +9,7 @@ import pybamm
 import numpy as np
 import pbparam
 import pandas as pd
+
 os.chdir("../..")
 
 temperature = 25  # in degC, valid values: 0, 10, 25
@@ -79,7 +80,7 @@ param = set_ambient_temperature(param, crate, temperature)
 param.update(
     {
         "Negative electrode exchange-current density [A.m-2]": j0_neg,
-        "Negative electrode reaction coefficient": 6.48e-7
+        "Negative electrode reaction coefficient": 6.48e-7,
     },
     check_already_exists=False,
 )
