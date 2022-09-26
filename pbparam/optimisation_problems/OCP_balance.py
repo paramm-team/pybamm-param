@@ -30,11 +30,11 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
 
     def cost_function(self, x):
         err_ch = (
-            self.data_fit_ch[1] / self.data_ref_ch(x[0] + self.data_fit_ch[0] / x[1])
+            self.data_fit_ch[1] / self.data_ref_ch(x[0] + x[1] * self.data_fit_ch[0])
             - 1
         )
         err_dch = (
-            self.data_fit_dch[1] / self.data_ref_dch(x[0] + self.data_fit_dch[0] / x[1])
+            self.data_fit_dch[1] / self.data_ref_dch(x[0] + x[1] * self.data_fit_dch[0])
             - 1
         )
 
@@ -50,7 +50,6 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         if all([callable(x) for x in self.data_ref]):
             self.data_ref_dch = self.data_ref[0]
             self.data_ref_ch = self.data_ref[1]
-            x_min, x_max = 0, 1
         elif all([isinstance(x, pd.DataFrame) for x in self.data_ref]):
             self.data_ref_dch = interpolate.interp1d(
                 self.data_ref[0][0], self.data_ref[0][1], fill_value="extrapolate"
@@ -58,8 +57,6 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             self.data_ref_ch = interpolate.interp1d(
                 self.data_ref[1][0], self.data_ref[1][1], fill_value="extrapolate"
             )
-            x_min = min([data[0].min() for data in self.data_ref])
-            x_max = max([data[0].max() for data in self.data_ref])
         else:
             raise TypeError(
                 "data_ref elements must be same type, and either functions or"
@@ -71,15 +68,22 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         Q_V_min = self.data_fit[0].loc[self.data_fit[1].idxmin()]
 
         # Determine initial guesses and bounds
-        # TODO: determine it from the ref data, don't assume data decreases!
+        eps = 0.1  # tolerance
         self.x0 = [
-            (Q_V_max * x_max - Q_V_min * x_min) / (Q_V_max - Q_V_min),
-            (Q_V_min - Q_V_max) / (x_max - x_min),
+            -Q_V_max / (Q_V_min - Q_V_max),
+            1 / (Q_V_min - Q_V_max),
         ]
-        self.bounds = [
-            (-10 * abs(self.x0[0]), 10 * abs(self.x0[0])),
-            (-10 * abs(self.x0[1]), 10 * abs(self.x0[1])),
-        ]
+
+        if Q_V_min - Q_V_max > 0:
+            self.bounds = [
+                (- (1 + eps) * Q_V_max / (Q_V_min - Q_V_max), 1 + eps),
+                (-eps, (1 + eps) / (Q_V_min - Q_V_max))
+            ]
+        else:
+            self.bounds = [
+                (-eps, (1 + eps) * Q_V_max / (Q_V_max - Q_V_min)),
+                (- (1 + eps) / (Q_V_max - Q_V_min), eps)
+            ]
 
         self.data_fit_ch = self.data_fit[: idx_max + 1]
         self.data_fit_dch = self.data_fit[idx_max:]
@@ -95,7 +99,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         ax.plot(self.data_ref[0][0], self.data_ref[0][1], "k-", label="Reference")
         ax.plot(self.data_ref[1][0], self.data_ref[1][1], "k-")
         ax.plot(
-            x_optimal[0] + self.data_fit[0] / x_optimal[1],
+            x_optimal[0] + x_optimal[1] * self.data_fit[0],
             self.data_fit[1],
             "--",
             label="Fit",
