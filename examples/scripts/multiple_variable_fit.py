@@ -73,7 +73,7 @@ model = pybamm.lithium_ion.SPMe(
     name="TSPMe",
 )
 
-param_default = pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Chen2020)
+param_default = pybamm.ParameterValues("Chen2020")
 param = set_thermal_parameters(param_default, 16, 2.32e6, temperature)
 param = set_experiment_parameters(param, crate, temperature)
 param = set_ambient_temperature(param, crate, temperature)
