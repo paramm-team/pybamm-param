@@ -59,9 +59,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
                 )
                 self.data_ref_fun.append(interp)
         else:
-            raise TypeError(
-                "data_ref elements must be all array-like objects"
-            )
+            raise TypeError("data_ref elements must be all array-like objects")
 
         # Determine initial guesses and bounds
         concat_data_fit = pd.concat(self.data_fit, axis=0, ignore_index=True)
@@ -89,7 +87,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         import matplotlib.pyplot as plt
 
         fig, ax = plt.subplots(1, 1)
-        
+
         label = "Reference"
         for ref in self.data_ref:
             ax.plot(ref.iloc[:, 0], ref.iloc[:, 1], "k-", label=label)
