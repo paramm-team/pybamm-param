@@ -17,6 +17,11 @@ class TestOCPBalance(unittest.TestCase):
         self.assertEqual(optimisation_problem.data_fit, ["data_fit"])
         self.assertEqual(optimisation_problem.data_ref, ["data_ref"])
 
+        with self.assertRaisesRegex(ValueError, "The number of fit"):
+            optimisation_problem = pbparam.OCPBalance(
+                ["data_fit"], ["data_ref1", "data_ref2"]
+            )
+
     def test_OCP_balance(self):
         data_ref = [
             pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [5, 4, 3, 2, 1]}),

@@ -36,7 +36,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         # Check both lists have same length
         if len(self.data_fit) != len(self.data_ref):
             raise ValueError(
-                "The number of fit and reference datasets must be the same!"
+                "The number of fit and reference datasets must be the same."
             )
 
     def cost_function(self, x):
