@@ -11,8 +11,12 @@ import unittest
 class TestOCPBalance(unittest.TestCase):
     def test_OCP_balance_init(self):
         optimisation_problem = pbparam.OCPBalance("data_fit", "data_ref")
-        self.assertEqual(optimisation_problem.data_fit, "data_fit")
-        self.assertEqual(optimisation_problem.data_ref, "data_ref")
+        self.assertEqual(optimisation_problem.data_fit, ["data_fit"])
+        self.assertEqual(optimisation_problem.data_ref, ["data_ref"])
+
+        optimisation_problem = pbparam.OCPBalance(["data_fit"], ["data_ref"])
+        self.assertEqual(optimisation_problem.data_fit, ["data_fit"])
+        self.assertEqual(optimisation_problem.data_ref, ["data_ref"])
 
     # def test_OCP_balance_data(self):
     #     data_fit = pd.DataFrame(
