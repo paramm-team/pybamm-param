@@ -2,8 +2,8 @@
 # Tests for the Data Fit class
 #
 import pbparam
-import numpy as np
-import pandas as pd
+# import numpy as np
+# import pandas as pd
 
 import unittest
 
@@ -38,7 +38,8 @@ class TestOCPBalance(unittest.TestCase):
     #         np.array([[7, 5, 3, 1], [3.9, 3, 1.8, 1]]).transpose(),
     #     )
     #     np.testing.assert_array_equal(
-    #         optimisation_problem.data_ref_ch([0, 1, 2, 3]), np.array([0.9, 1.9, 2.9, 4])
+    #         optimisation_problem.data_ref_ch([0, 1, 2, 3]),
+    #         np.array([0.9, 1.9, 2.9, 4]),
     #     )
     #     np.testing.assert_array_equal(
     #         optimisation_problem.data_ref_dch([0, 1, 2, 3]), np.array([1, 2, 3, 4])
