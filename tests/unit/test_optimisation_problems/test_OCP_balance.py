@@ -8,7 +8,7 @@ import unittest
 
 
 class TestOCPBalance(unittest.TestCase):
-    def test_OCP_balance_init(self):
+    def test_init(self):
         optimisation_problem = pbparam.OCPBalance("data_fit", "data_ref")
         self.assertEqual(optimisation_problem.data_fit, ["data_fit"])
         self.assertEqual(optimisation_problem.data_ref, ["data_ref"])
@@ -22,7 +22,7 @@ class TestOCPBalance(unittest.TestCase):
                 ["data_fit"], ["data_ref1", "data_ref2"]
             )
 
-    def test_OCP_balance(self):
+    def test_setup_cost_function(self):
         data_ref = [
             pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [5, 4, 3, 2, 1]}),
             pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [6, 5, 4, 3, 2]}),
@@ -59,6 +59,30 @@ class TestOCPBalance(unittest.TestCase):
 
         # Check cost function is zero at theoretical optimal
         self.assertAlmostEqual(optimisation_problem.cost_function([1.1, -0.2]), 0)
+
+        # Test data type error
+        optimisation_problem = pbparam.OCPBalance(["data_fit"], ["data_ref"])
+        with self.assertRaisesRegex(TypeError, "data_ref elements must"):
+            optimisation_problem.setup_cost_function()
+
+    def test_plot(self):
+        data_ref = [
+            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [5, 4, 3, 2, 1]}),
+            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [6, 5, 4, 3, 2]}),
+        ]
+        data_fit = [
+            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [5, 4, 3, 2, 1]}),
+            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [6, 5, 4, 3, 2]}),
+        ]
+        optimisation_problem = pbparam.OCPBalance(data_fit, data_ref)
+
+        optimisation_problem.setup_cost_function()
+
+        fig = optimisation_problem._plot([-0.1, 0.2])
+        ax = fig.axes[0]
+
+        self.assertEqual(ax.get_xlabel(), "Stoichiometry")
+        self.assertEqual(ax.get_ylabel(), "OCP [V]")
 
 
 if __name__ == "__main__":
