@@ -15,59 +15,59 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
     Parameters
     ----------
     data_fit : pandas.DataFrame
-        The OCP dataset to fit to.
+        The OCP dataset to fit. Either an array-like object or a list of array-like
+        objects.
     data_ref : tuple
-        The OCP reference data. It is a tuple with the discharge and charge curves,
-        either as a function or an array-like object. If the latter, the data is
-        interpolated.
+        The OCP reference dataset(s). They can be passed either as an array-like object
+        or a list of array-like objects.
     """
 
     def __init__(self, data_fit, data_ref):
         super().__init__()
+
         # Allocate init variables
-        self.data_fit = data_fit
-        self.data_ref = data_ref
+        if isinstance(data_fit, list):
+            self.data_fit = data_fit
+            self.data_ref = data_ref
+        else:
+            self.data_fit = [data_fit]
+            self.data_ref = [data_ref]
+
+        # Check both lists have same length
+        if len(self.data_fit) != len(self.data_ref):
+            raise ValueError(
+                "The number of fit and reference datasets must be the same!"
+            )
 
     def cost_function(self, x):
-        err_ch = (
-            self.data_fit_ch[1] / self.data_ref_ch(x[0] + x[1] * self.data_fit_ch[0])
-            - 1
-        )
-        err_dch = (
-            self.data_fit_dch[1] / self.data_ref_dch(x[0] + x[1] * self.data_fit_dch[0])
-            - 1
-        )
+        MSE = 0
 
-        err_ch = err_ch[~np.isnan(err_ch)]
-        err_dch = err_dch[~np.isnan(err_dch)]
-
-        MSE = np.mean(err_ch**2) + np.mean(err_dch**2)
+        for fit, ref in zip(self.data_fit, self.data_ref_fun):
+            err = fit.iloc[:, 1] / ref(x[0] + x[1] * fit.iloc[:, 0]) - 1
+            err = err[~np.isnan(err)]
+            MSE += np.mean(err**2)
 
         return MSE
 
     def setup_cost_function(self):
         # Process reference data
-        if all([callable(x) for x in self.data_ref]):
-            self.data_ref_dch = self.data_ref[0]
-            self.data_ref_ch = self.data_ref[1]
-        elif all([isinstance(x, pd.DataFrame) for x in self.data_ref]):
-            self.data_ref_dch = interpolate.interp1d(
-                self.data_ref[0][0], self.data_ref[0][1], fill_value="extrapolate"
-            )
-            self.data_ref_ch = interpolate.interp1d(
-                self.data_ref[1][0], self.data_ref[1][1], fill_value="extrapolate"
-            )
+        if all([isinstance(x, pd.DataFrame) for x in self.data_ref]):
+            self.data_ref_fun = []
+            for data in self.data_ref:
+                interp = interpolate.interp1d(
+                    data.iloc[:, 0], data.iloc[:, 1], fill_value="extrapolate"
+                )
+                self.data_ref_fun.append(interp)
         else:
             raise TypeError(
-                "data_ref elements must be same type, and either functions or"
-                "array-like objects"
+                "data_ref elements must be all array-like objects"
             )
-        # Process experimental data
-        idx_max = self.data_fit[0].idxmax()
-        Q_V_max = self.data_fit[0].loc[self.data_fit[1].idxmax()]
-        Q_V_min = self.data_fit[0].loc[self.data_fit[1].idxmin()]
 
         # Determine initial guesses and bounds
+        concat_data_fit = pd.concat(self.data_fit, axis=0, ignore_index=True)
+        Q_V_max = concat_data_fit.iloc[:, 0].loc[concat_data_fit.iloc[:, 1].idxmax()]
+        Q_V_min = concat_data_fit.iloc[:, 0].loc[concat_data_fit.iloc[:, 1].idxmin()]
+
         eps = 0.1  # tolerance
         self.x0 = [
             -Q_V_max / (Q_V_min - Q_V_max),
@@ -85,25 +85,27 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
                 (-(1 + eps) / (Q_V_max - Q_V_min), eps),
             ]
 
-        self.data_fit_ch = self.data_fit[: idx_max + 1]
-        self.data_fit_dch = self.data_fit[idx_max:]
-
     def _plot(self, x_optimal):
         import matplotlib.pyplot as plt
 
-        if all([callable(x) for x in self.data_ref]):
-            # TODO: need to think how we pass the limits of the reference function
-            raise NotImplementedError
-
         fig, ax = plt.subplots(1, 1)
-        ax.plot(self.data_ref[0][0], self.data_ref[0][1], "k-", label="Reference")
-        ax.plot(self.data_ref[1][0], self.data_ref[1][1], "k-")
-        ax.plot(
-            x_optimal[0] + x_optimal[1] * self.data_fit[0],
-            self.data_fit[1],
-            "--",
-            label="Fit",
-        )
+        
+        label = "Reference"
+        for ref in self.data_ref:
+            ax.plot(ref.iloc[:, 0], ref.iloc[:, 1], "k-", label=label)
+            label = None
+
+        label = "Fit"
+        for fit in self.data_fit:
+            ax.plot(
+                x_optimal[0] + x_optimal[1] * fit.iloc[:, 0],
+                fit.iloc[:, 1],
+                linestyle="--",
+                color="C0",
+                label=label,
+            )
+            label = None
+
         ax.set_xlabel("Stoichiometry")
         ax.set_ylabel("OCP [V]")
         ax.legend()
