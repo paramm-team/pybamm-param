@@ -9,6 +9,7 @@ import pybamm
 import numpy as np
 import pbparam
 import pandas as pd
+
 os.chdir("../..")
 
 temperature = 25  # in degC, valid values: 0, 10, 25
@@ -72,14 +73,14 @@ model = pybamm.lithium_ion.SPMe(
     name="TSPMe",
 )
 
-param_default = pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Chen2020)
+param_default = pybamm.ParameterValues("Chen2020")
 param = set_thermal_parameters(param_default, 16, 2.32e6, temperature)
 param = set_experiment_parameters(param, crate, temperature)
 param = set_ambient_temperature(param, crate, temperature)
 param.update(
     {
         "Negative electrode exchange-current density [A.m-2]": j0_neg,
-        "Negative electrode reaction coefficient": 6.48e-7
+        "Negative electrode reaction coefficient": 6.48e-7,
     },
     check_already_exists=False,
 )

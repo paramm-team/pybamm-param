@@ -2,10 +2,12 @@
 # Base optimisation problem class
 #
 
-class BaseOptimisationProblem():
+
+class BaseOptimisationProblem:
     """
     Base optimisation problem class
     """
+
     def __init__(self):
         self.x0 = None
         self.bounds = None
