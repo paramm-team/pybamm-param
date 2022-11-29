@@ -1,10 +1,10 @@
 #
-# Base optimisation problem class
+# Base cost function class
 #
 
 class BaseCostFunction():
     """
-    Base optimisation problem class
+    Base cost function class
     """
     def __init__(self):
         self.data = None
@@ -13,3 +13,6 @@ class BaseCostFunction():
         self.scalings = None
         self.map_inputs = None
         self.simulation = None
+        
+    def cost_function(self, x):
+        pass

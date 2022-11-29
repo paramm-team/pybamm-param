@@ -17,7 +17,7 @@ class RMSE(pbparam.BaseCostFunction):
         self.variables_optimise = variables_optimise
         self.x = x
 
-    def cost_function(self):
+    def evaluate(self):
         TNRMSE = 0
         for variable in variables_optimise:
             y_sim = solution[variable](data["Time [s]"])

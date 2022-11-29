@@ -17,7 +17,7 @@ class MLE(pbparam.BaseCostFunction):
         self.variables_optimise = variables_optimise
         self.x = x
 
-    def calcloglikelihood(solution, x_data, y_data, sd):
+    def evaluate(solution, x_data, y_data, sd):
         y_sim = solution(x_data)
         negLL = -np.sum( stats.norm.logpdf(y_data, loc=y_sim, scale=sd))
         return negLL

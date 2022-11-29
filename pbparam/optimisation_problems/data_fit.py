@@ -29,21 +29,21 @@ def update_simulation_parameters(simulation, parameter_values):
 
     return new_simulation
 
-cost_function_full=copy.deepcopy()
+cost_function_full=copy.deepcopy(self.cost_function)
 
-# def cost_function_full(simulation, map_inputs, scalings, data, variables_optimise, x):
-#     # TODO: allow for multifunction optimisation, and for various cost functions
-#     input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
-#     t_end = data["Time [s]"].iloc[-1]
-#     solution = simulation.solve([0, t_end], inputs=input_dict)
-#     TNRMSE = 0
-#     for variable in variables_optimise:
-#         y_sim = solution[variable](data["Time [s]"])
-#         y_data = data[variable]
+def cost_function_full(simulation, map_inputs, scalings, data, variables_optimise, x):
+    # TODO: allow for multifunction optimisation, and for various cost functions
+    input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
+    t_end = data["Time [s]"].iloc[-1]
+    solution = simulation.solve([0, t_end], inputs=input_dict)
+    TNRMSE = 0
+    for variable in variables_optimise:
+        y_sim = solution[variable](data["Time [s]"])
+        y_data = data[variable]
 
-#         err = y_sim - y_data
-#         err = err[~np.isnan(err)]
-
+        err = y_sim - y_data
+        err = err[~np.isnan(err)]
+    return self.cost_function(err)
 #         MSE = np.sum(err**2) / len(err)
 #         RMSE = np.sqrt(MSE)
 #         NRMSE = RMSE / np.mean(y_data)
