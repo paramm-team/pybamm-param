@@ -1,5 +1,5 @@
 #
-# RMSE cost function class
+# MLE cost function class
 #
 
 import pbparam
@@ -9,15 +9,9 @@ import scipy.stats as stats
 
 class MLE(pbparam.BaseCostFunction):
 
-    def __init__(self, simulation, data, variables_optimise, x):
+    def __init__():
         super().__init__()
-        # Allocate init variables
-        self.simulation = simulation
-        self.data = data
-        self.variables_optimise = variables_optimise
-        self.x = x
 
-    def evaluate(solution, x_data, y_data, sd):
-        y_sim = solution(x_data)
+    def evaluate(y_sim, y_data, sd):
         negLL = -np.sum( stats.norm.logpdf(y_data, loc=y_sim, scale=sd))
         return negLL

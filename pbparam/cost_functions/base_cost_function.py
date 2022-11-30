@@ -6,13 +6,7 @@ class BaseCostFunction():
     """
     Base cost function class
     """
-    def __init__(self):
-        self.data = None
-        self.variables_optimise = None
-        self.x = None
-        self.scalings = None
-        self.map_inputs = None
-        self.simulation = None
+    def __init__():
         
-    def cost_function(self, x):
+    def cost_function():
         pass

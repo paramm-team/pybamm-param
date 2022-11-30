@@ -112,6 +112,7 @@ param_optimised = {
 }
 variables_optimised = ["Terminal voltage [V]", "X-averaged cell temperature [K]"]
 opt = pbparam.DataFit(simulation, data_conc, param_optimised, variables_optimised)
+# cost_function = pbparam.MLE
 optimiser = pbparam.ScipyDifferentialEvolution(
     extra_options={"workers": 4, "polish": True, "updating": "deferred", "disp": True}
 )
