@@ -9,10 +9,13 @@ import numpy as np
 
 class RMSE(pbparam.BaseCostFunction):
 
-    def __init__():
-        super().__init__()
+    def __init__(self, y_sim, y_data, sd):
+        # super().__init__()
+        self.y_sim = y_sim
+        self.y_data = y_data
+        self.sd = sd
 
-    def evaluate(y_sim, y_data, sd=None):
+    def evaluate(self, y_sim, y_data, sd=None):
 
         err = y_sim - y_data
         err = err[~np.isnan(err)]

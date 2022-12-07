@@ -29,7 +29,7 @@ def update_simulation_parameters(simulation, parameter_values):
 
     return new_simulation
 
-def cost_function_full(simulation, map_inputs, scalings, data, variables_optimise, x):
+def cost_function_full(self, simulation, map_inputs, scalings, data, variables_optimise, x):
     # TODO: allow for multifunction optimisation, and for various cost functions
     input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
     t_end = data["Time [s]"].iloc[-1]

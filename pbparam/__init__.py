@@ -4,6 +4,13 @@
 from pbparam.version import __version__
 
 #
+# Cost Function
+#
+from .cost_functions.base_cost_function import BaseCostFunction
+from .cost_functions.mle import MLE
+from .cost_functions.rmse import RMSE
+
+#
 # Optimisers
 #
 from .optimisers.base_optimiser import BaseOptimiser

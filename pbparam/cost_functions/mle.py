@@ -9,9 +9,13 @@ import scipy.stats as stats
 
 class MLE(pbparam.BaseCostFunction):
 
-    def __init__():
+    def __init__(self):
+    
         super().__init__()
+        # self.y_sim = y_sim
+        # self.y_data = y_data
+        # self.sd = sd
 
-    def evaluate(y_sim, y_data, sd):
+    def evaluate(self, y_sim, y_data, sd):
         negLL = -np.sum( stats.norm.logpdf(y_data, loc=y_sim, scale=sd))
         return negLL
