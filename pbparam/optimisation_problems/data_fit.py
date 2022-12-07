@@ -38,12 +38,12 @@ def cost_function_full(opt_problem, x):
     scalings = opt_problem.scalings
     data = opt_problem.data
     variables_optimise = opt_problem.variables_optimise
-    
+
     input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
     t_end = data["Time [s]"].iloc[-1]
     solution = simulation.solve([0, t_end], inputs=input_dict)
     norm_tot_func = 0
-    cost_function = copy.deepcopy(cost_function)
+    # cost_function = copy.deepcopy(cost_function)
     for variable in variables_optimise:
         y_sim = solution[variable](data["Time [s]"])
         y_data = data[variable]
@@ -78,6 +78,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
 
     def __init__(
         self,
+        cost_function,
         simulation,
         data,
         parameters_optimise,
@@ -144,7 +145,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
             The value of the cost function evaluated at x.
         """
         simulation = copy.deepcopy(self.simulation)
-        cost_func = partial(
+        objective_function = partial(
             cost_function_full,
             simulation,
             self.map_inputs,
@@ -152,7 +153,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
             self.data,
             self.variables_optimise,
         )
-        self.cost_func = cost_func
+        self.objective_function = objective_function
 
     def calculate_solution(self, parameters=None):
         """

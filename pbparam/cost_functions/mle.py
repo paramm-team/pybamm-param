@@ -10,8 +10,8 @@ import scipy.stats as stats
 class MLE(pbparam.BaseCostFunction):
 
     def __init__(self):
-    
-        super().__init__()
+        self.name = "Maximum Likelihood Estimation Method"
+        # super().__init__()
         # self.y_sim = y_sim
         # self.y_data = y_data
         # self.sd = sd
