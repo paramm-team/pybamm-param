@@ -38,6 +38,7 @@ def cost_function_full(opt_problem, x):
     scalings = opt_problem.scalings
     data = opt_problem.data
     variables_optimise = opt_problem.variables_optimise
+    cost_function = opt_problem.cost_function
 
     input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
     t_end = data["Time [s]"].iloc[-1]
@@ -47,7 +48,9 @@ def cost_function_full(opt_problem, x):
     for variable in variables_optimise:
         y_sim = solution[variable](data["Time [s]"])
         y_data = data[variable]
+        sd=1 
         cost = cost_function.evaluate(y_sim, y_data, sd)
+        print(cost)
         norm_cost = cost / np.mean(y_data)
         norm_tot_func = norm_tot_func + norm_cost
     return norm_tot_func
@@ -84,6 +87,8 @@ class DataFit(pbparam.BaseOptimisationProblem):
         parameters_optimise,
         variables_optimise=["Terminal voltage [V]"],
     ):
+        self.cost_function = cost_function
+
         # Allocate init variables
         self.data = data
         self.parameters_optimise = parameters_optimise
@@ -144,14 +149,15 @@ class DataFit(pbparam.BaseOptimisationProblem):
         cost : float
             The value of the cost function evaluated at x.
         """
-        simulation = copy.deepcopy(self.simulation)
+        # simulation = copy.deepcopy(self.simulation)
         objective_function = partial(
             cost_function_full,
-            simulation,
-            self.map_inputs,
-            self.scalings,
-            self.data,
-            self.variables_optimise,
+            self
+            # simulation,
+            # self.map_inputs,
+            # self.scalings,
+            # self.data,
+            # self.variables_optimise,
         )
         self.objective_function = objective_function
 

@@ -9,7 +9,7 @@ import numpy as np
 
 class RMSE(pbparam.BaseCostFunction):
 
-    def __init__(self, y_sim, y_data, sd):
+    def __init__(self):
         self.name = "Root Mean Square Method"
         # super().__init__()
         # self.y_sim = y_sim
