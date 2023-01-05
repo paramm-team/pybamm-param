@@ -8,7 +8,7 @@ import numpy as np
 
 class RMSE(pbparam.BaseCostFunction):
     def __init__(self):
-        self.name = "Root Mean Square Method"
+        self.name = "Root Mean Square Error"
 
     def evaluate(self, y_sim, y_data, sd=None):
         y_sim = y_sim if isinstance(y_sim, list) else [y_sim]

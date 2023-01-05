@@ -9,7 +9,7 @@ class BaseCostFunction:
     """
 
     def __init__(self):
-        self.name = "Base cost function"
+        self.name = "Base Cost Function"
 
-    def cost_function(self):
+    def evaluate(self, y_sim, y_data, sd=None):
         pass
