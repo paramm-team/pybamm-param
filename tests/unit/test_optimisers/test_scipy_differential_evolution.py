@@ -20,7 +20,7 @@ class TestScipyDifferentialEvolution(unittest.TestCase):
 
     def test_optimiser(self):
         opt = pbparam.BaseOptimisationProblem()
-        opt.objetive_function = parabola
+        opt.objective_function = parabola
         opt.x0 = 2
         opt.bounds = [[-10, 10]]
 
