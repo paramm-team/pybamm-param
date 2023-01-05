@@ -2,52 +2,87 @@
 # Tests for the Data Fit class
 #
 import pbparam
-import numpy as np
 import pandas as pd
 
 import unittest
 
 
 class TestOCPBalance(unittest.TestCase):
-    def test_OCP_balance_init(self):
+    def test_init(self):
         optimisation_problem = pbparam.OCPBalance("data_fit", "data_ref")
-        self.assertEqual(optimisation_problem.data_fit, "data_fit")
-        self.assertEqual(optimisation_problem.data_ref, "data_ref")
+        self.assertEqual(optimisation_problem.data_fit, ["data_fit"])
+        self.assertEqual(optimisation_problem.data_ref, ["data_ref"])
 
-    def test_OCP_balance_data(self):
-        data_fit = pd.DataFrame(
-            {0: [1, 3, 5, 7, 5, 3, 1], 1: [1.1, 1.9, 3.1, 3.9, 3, 1.8, 1]}
-        )
-        data_ref = (
-            pd.DataFrame({0: [0, 1, 2, 3], 1: [1, 2, 3, 4]}),
-            pd.DataFrame({0: [3, 2, 1, 0], 1: [4, 2.9, 1.9, 0.9]}),
-        )
+        optimisation_problem = pbparam.OCPBalance(["data_fit"], ["data_ref"])
+        self.assertEqual(optimisation_problem.data_fit, ["data_fit"])
+        self.assertEqual(optimisation_problem.data_ref, ["data_ref"])
+
+        with self.assertRaisesRegex(ValueError, "The number of fit"):
+            optimisation_problem = pbparam.OCPBalance(
+                ["data_fit"], ["data_ref1", "data_ref2"]
+            )
+
+    def test_setup_cost_function(self):
+        data_ref = [
+            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [5, 4, 3, 2, 1]}),
+            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [6, 5, 4, 3, 2]}),
+        ]
+
+        # Test decreasing fit data
+        data_fit = [
+            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [5, 4, 3, 2, 1]}),
+            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [6, 5, 4, 3, 2]}),
+        ]
         optimisation_problem = pbparam.OCPBalance(data_fit, data_ref)
 
         optimisation_problem.setup_cost_function()
 
-        np.testing.assert_array_equal(
-            optimisation_problem.data_fit_ch.to_numpy(),
-            np.array([[1, 3, 5, 7], [1.1, 1.9, 3.1, 3.9]]).transpose(),
-        )
-        np.testing.assert_array_equal(
-            optimisation_problem.data_fit_dch.to_numpy(),
-            np.array([[7, 5, 3, 1], [3.9, 3, 1.8, 1]]).transpose(),
-        )
-        np.testing.assert_array_equal(
-            optimisation_problem.data_ref_ch([0, 1, 2, 3]), np.array([0.9, 1.9, 2.9, 4])
-        )
-        np.testing.assert_array_equal(
-            optimisation_problem.data_ref_dch([0, 1, 2, 3]), np.array([1, 2, 3, 4])
-        )
+        # Check bounds are correct
+        self.assertEqual(optimisation_problem.x0, [-0.25, 0.25])
+        self.assertEqual(optimisation_problem.bounds, [(-0.275, 1.1), (-0.1, 0.275)])
 
-        self.assertEqual(optimisation_problem.x0, [3.5, -2.0])
-        self.assertEqual(optimisation_problem.bounds, [(-35.0, 35.0), (-20.0, 20.0)])
+        # Check cost function is zero at theoretical optimal
+        self.assertAlmostEqual(optimisation_problem.cost_function([-0.1, 0.2]), 0)
 
-        # TODO: fix once the initial guess is improved
-        self.assertAlmostEqual(
-            optimisation_problem.cost_function([-0.5, 2.0]), 0.016347239
-        )
+        # Test increasing fit data
+        data_fit = [
+            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [1, 2, 3, 4, 5]}),
+            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [2, 3, 4, 5, 6]}),
+        ]
+        optimisation_problem = pbparam.OCPBalance(data_fit, data_ref)
+
+        optimisation_problem.setup_cost_function()
+
+        # Check bounds are correct
+        self.assertEqual(optimisation_problem.x0, [1.25, -0.25])
+        self.assertEqual(optimisation_problem.bounds, [(-0.1, 1.375), (-0.275, 0.1)])
+
+        # Check cost function is zero at theoretical optimal
+        self.assertAlmostEqual(optimisation_problem.cost_function([1.1, -0.2]), 0)
+
+        # Test data type error
+        optimisation_problem = pbparam.OCPBalance(["data_fit"], ["data_ref"])
+        with self.assertRaisesRegex(TypeError, "data_ref elements must"):
+            optimisation_problem.setup_cost_function()
+
+    def test_plot(self):
+        data_ref = [
+            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [5, 4, 3, 2, 1]}),
+            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [6, 5, 4, 3, 2]}),
+        ]
+        data_fit = [
+            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [5, 4, 3, 2, 1]}),
+            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [6, 5, 4, 3, 2]}),
+        ]
+        optimisation_problem = pbparam.OCPBalance(data_fit, data_ref)
+
+        optimisation_problem.setup_cost_function()
+
+        fig = optimisation_problem._plot([-0.1, 0.2])
+        ax = fig.axes[0]
+
+        self.assertEqual(ax.get_xlabel(), "Stoichiometry")
+        self.assertEqual(ax.get_ylabel(), "OCP [V]")
 
 
 if __name__ == "__main__":
