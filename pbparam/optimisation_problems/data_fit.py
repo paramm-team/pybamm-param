@@ -50,7 +50,7 @@ def cost_function_full(opt_problem, x):
         y_data = data[variable]
         sd=1 
         cost = cost_function.evaluate(y_sim, y_data, sd)
-        print(cost)
+        #print(cost)
         norm_cost = cost / np.mean(y_data)
         norm_tot_func = norm_tot_func + norm_cost
     return norm_tot_func

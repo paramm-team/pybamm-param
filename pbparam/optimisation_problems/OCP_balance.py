@@ -22,26 +22,37 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         interpolated.
     """
 
-    def __init__(self, data_fit, data_ref):
+    def __init__(self, cost_function,  data_fit, data_ref):
         super().__init__()
         # Allocate init variables
         self.data_fit = data_fit
         self.data_ref = data_ref
+        self.cost_function = cost_function
 
-    def cost_function(self, x):
-        err_ch = (
-            self.data_fit_ch[1] / self.data_ref_ch(x[0] + self.data_fit_ch[0] / x[1])
-            - 1
-        )
-        err_dch = (
-            self.data_fit_dch[1] / self.data_ref_dch(x[0] + self.data_fit_dch[0] / x[1])
-            - 1
-        )
+    def objective_function(self, x):
+        # err_ch = (
+            # self.data_fit_ch[1] / self.data_ref_ch(x[0] + self.data_fit_ch[0] / x[1])
+            # - 1
+        # )
+        # err_dch = (
+        #     self.data_fit_dch[1] / self.data_ref_dch(x[0] + self.data_fit_dch[0] / x[1])
+        #     - 1
+        # )
 
+        y_sim_ch = x[0]+self.data_fit_ch / x[1]
+        y_sim_dch = x[0]+self.data_fit_dch / x[1]
+        y_data_ch = self.data_ref_ch
+        y_data_dch = self.data_ref_dch
+
+        sd=1
+        err_ch =  self.cost_function.evaluate(y_sim_ch, y_data_ch, sd)
+        err_dch =  self.cost_function.evaluate(y_sim_dch, y_data_dch, sd)
+        
         err_ch = err_ch[~np.isnan(err_ch)]
         err_dch = err_dch[~np.isnan(err_dch)]
 
         MSE = np.mean(err_ch**2) + np.mean(err_dch**2)
+        
 
         return MSE
 
