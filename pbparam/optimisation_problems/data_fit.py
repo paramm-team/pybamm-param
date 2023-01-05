@@ -44,15 +44,12 @@ def objective_function_full(opt_problem, x):
     input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
     t_end = data["Time [s]"].iloc[-1]
     solution = simulation.solve([0, t_end], inputs=input_dict)
-    norm_tot_func = 0
+    cost = 0
     for variable in variables_optimise:
         y_sim = solution[variable](data["Time [s]"])
         y_data = data[variable]
-        sd = 1
-        cost = cost_function.evaluate(y_sim, y_data, sd)
-        norm_cost = cost / np.mean(y_data)
-        norm_tot_func = norm_tot_func + norm_cost
-    return norm_tot_func
+        cost += cost_function.evaluate(y_sim, y_data)
+    return cost
 
 
 class DataFit(pbparam.BaseOptimisationProblem):
