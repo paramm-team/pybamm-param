@@ -22,7 +22,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         or a list of array-like objects.
     """
 
-    def __init__(self, cost_function,  data_fit, data_ref):
+    def __init__(self, cost_function, data_fit, data_ref):
         super().__init__()
 
         # Allocate init variables

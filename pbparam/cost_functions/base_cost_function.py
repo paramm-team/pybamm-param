@@ -2,10 +2,12 @@
 # Base cost function class
 #
 
-class BaseCostFunction():
+
+class BaseCostFunction:
     """
     Base cost function class
     """
+
     def __init__(self):
         # super().__init__()
         self.name = "Cost function"

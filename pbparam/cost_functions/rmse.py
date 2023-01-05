@@ -6,9 +6,7 @@ import pbparam
 import numpy as np
 
 
-
 class RMSE(pbparam.BaseCostFunction):
-
     def __init__(self):
         self.name = "Root Mean Square Method"
         # super().__init__()
@@ -24,4 +22,4 @@ class RMSE(pbparam.BaseCostFunction):
         MSE = np.sum(err**2) / len(err)
         RMSE = np.sqrt(MSE)
 
-        return np.array(RMSE) 
+        return np.array(RMSE)

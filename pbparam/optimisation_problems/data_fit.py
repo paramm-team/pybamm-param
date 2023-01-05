@@ -29,6 +29,7 @@ def update_simulation_parameters(simulation, parameter_values):
 
     return new_simulation
 
+
 def cost_function_full(opt_problem, x):
 
     # TODO: allow for multifunction optimisation, and for various cost functions
@@ -48,9 +49,9 @@ def cost_function_full(opt_problem, x):
     for variable in variables_optimise:
         y_sim = solution[variable](data["Time [s]"])
         y_data = data[variable]
-        sd=1 
+        sd = 1
         cost = cost_function.evaluate(y_sim, y_data, sd)
-        #print(cost)
+        # print(cost)
         norm_cost = cost / np.mean(y_data)
         norm_tot_func = norm_tot_func + norm_cost
     return norm_tot_func
