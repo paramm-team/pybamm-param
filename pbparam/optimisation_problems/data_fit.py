@@ -135,7 +135,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
             simulation, self.parameter_values
         )
 
-    def setup_cost_function(self):
+    def setup_objective_function(self):
         """ "
         Define the cost function to be minimised
 

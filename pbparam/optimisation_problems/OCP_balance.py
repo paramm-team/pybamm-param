@@ -39,17 +39,19 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
                 "The number of fit and reference datasets must be the same."
             )
 
-    def cost_function(self, x):
+    def objective_function(self, x):
         MSE = 0
 
         for fit, ref in zip(self.data_fit, self.data_ref_fun):
-            err = fit.iloc[:, 1] / ref(x[0] + x[1] * fit.iloc[:, 0]) - 1
+            y_sim = ref(x[0] + x[1] * fit.iloc[:, 0])
+            y_data = fit.iloc[:, 1] 
+
             err = err[~np.isnan(err)]
             MSE += np.mean(err**2)
 
         return MSE
 
-    def setup_cost_function(self):
+    def setup_objective_function(self):
         # Process reference data
         if all([isinstance(x, pd.DataFrame) for x in self.data_ref]):
             self.data_ref_fun = []
