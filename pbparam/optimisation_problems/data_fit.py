@@ -145,15 +145,9 @@ class DataFit(pbparam.BaseOptimisationProblem):
         cost : float
             The value of the cost function evaluated at x.
         """
-        # simulation = copy.deepcopy(self.simulation)
         objective_function = partial(
             objective_function_full,
             self
-            # simulation,
-            # self.map_inputs,
-            # self.scalings,
-            # self.data,
-            # self.variables_optimise,
         )
         self.objective_function = objective_function
 
