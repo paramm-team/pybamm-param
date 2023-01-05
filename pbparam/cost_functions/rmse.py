@@ -9,17 +9,15 @@ import numpy as np
 class RMSE(pbparam.BaseCostFunction):
     def __init__(self):
         self.name = "Root Mean Square Method"
-        # super().__init__()
-        # self.y_sim = y_sim
-        # self.y_data = y_data
-        # self.sd = sd
 
     def evaluate(self, y_sim, y_data, sd=None):
+        y_sim = y_sim if isinstance(y_sim, list) else [y_sim]
+        y_data = y_data if isinstance(y_data, list) else [y_data]
 
-        err = y_sim - y_data
-        err = err[~np.isnan(err)]
+        RMSE = 0
 
-        MSE = np.sum(err**2) / len(err)
-        RMSE = np.sqrt(MSE)
+        for sim, data in zip(y_sim, y_data):
+            err = (sim - data) / np.nanmean(data)
+            RMSE += np.sqrt(np.nanmean(err**2))
 
         return np.array(RMSE)
