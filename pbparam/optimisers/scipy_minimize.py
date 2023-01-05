@@ -30,7 +30,7 @@ class ScipyMinimize(pbparam.BaseOptimiser):
         # Initialise timer
         timer = pybamm.Timer()
 
-        print(self.optimisation_problem.cost_function)
+        print(self.optimisation_problem.objective_function)
         print(x0)
         print(bounds)
         raw_result = minimize(

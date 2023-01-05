@@ -12,9 +12,9 @@ class TestBaseOptimisationProblem(unittest.TestCase):
         self.assertIsNone(optimisation_problem.x0)
         self.assertIsNone(optimisation_problem.bounds)
 
-    def test_cost_function(self):
+    def test_objective_function(self):
         optimisation_problem = pbparam.BaseOptimisationProblem()
-        self.assertIsNone(optimisation_problem.cost_function(None))
+        self.assertIsNone(optimisation_problem.objective_function(None))
 
     def test_setup_objective_function(self):
         optimisation_problem = pbparam.BaseOptimisationProblem()

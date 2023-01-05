@@ -9,11 +9,7 @@ class BaseCostFunction:
     """
 
     def __init__(self):
-        # super().__init__()
-        self.name = "Cost function"
-        # self.y_sim = None
-        # self.y_data = None
-        # self.sd = None
+        self.name = "Base cost function"
 
     def cost_function(self):
         pass

@@ -30,7 +30,7 @@ def update_simulation_parameters(simulation, parameter_values):
     return new_simulation
 
 
-def cost_function_full(opt_problem, x):
+def objective_function_full(opt_problem, x):
 
     # TODO: allow for multifunction optimisation, and for various cost functions
 
@@ -45,13 +45,11 @@ def cost_function_full(opt_problem, x):
     t_end = data["Time [s]"].iloc[-1]
     solution = simulation.solve([0, t_end], inputs=input_dict)
     norm_tot_func = 0
-    # cost_function = copy.deepcopy(cost_function)
     for variable in variables_optimise:
         y_sim = solution[variable](data["Time [s]"])
         y_data = data[variable]
         sd = 1
         cost = cost_function.evaluate(y_sim, y_data, sd)
-        # print(cost)
         norm_cost = cost / np.mean(y_data)
         norm_tot_func = norm_tot_func + norm_cost
     return norm_tot_func
@@ -82,18 +80,18 @@ class DataFit(pbparam.BaseOptimisationProblem):
 
     def __init__(
         self,
-        cost_function,
         simulation,
         data,
         parameters_optimise,
         variables_optimise=["Terminal voltage [V]"],
+        cost_function=pbparam.RMSE(),
     ):
-        self.cost_function = cost_function
 
         # Allocate init variables
         self.data = data
         self.parameters_optimise = parameters_optimise
         self.variables_optimise = variables_optimise
+        self.cost_function = cost_function
 
         # Keep a copy of the original parameters for convenience and initialise the new
         # parameters
@@ -152,7 +150,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         """
         # simulation = copy.deepcopy(self.simulation)
         objective_function = partial(
-            cost_function_full,
+            objective_function_full,
             self
             # simulation,
             # self.map_inputs,
