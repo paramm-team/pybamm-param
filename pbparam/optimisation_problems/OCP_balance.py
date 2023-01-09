@@ -3,7 +3,6 @@
 #
 
 import pbparam
-import numpy as np
 import pandas as pd
 from scipy import interpolate
 
@@ -22,7 +21,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         or a list of array-like objects.
     """
 
-    def __init__(self, data_fit, data_ref):
+    def __init__(self, data_fit, data_ref, cost_function=pbparam.RMSE()):
         super().__init__()
 
         # Allocate init variables
@@ -33,23 +32,27 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             self.data_fit = [data_fit]
             self.data_ref = [data_ref]
 
+        self.cost_function = cost_function
+
         # Check both lists have same length
         if len(self.data_fit) != len(self.data_ref):
             raise ValueError(
                 "The number of fit and reference datasets must be the same."
             )
 
-    def cost_function(self, x):
-        MSE = 0
+    def objective_function(self, x):
+        y_sim = []
+        y_data = []
 
         for fit, ref in zip(self.data_fit, self.data_ref_fun):
-            err = fit.iloc[:, 1] / ref(x[0] + x[1] * fit.iloc[:, 0]) - 1
-            err = err[~np.isnan(err)]
-            MSE += np.mean(err**2)
+            y_sim.append(ref(x[0] + x[1] * fit.iloc[:, 0]))
+            y_data.append(fit.iloc[:, 1].to_numpy())
 
-        return MSE
+        cost = self.cost_function.evaluate(y_sim, y_data)
 
-    def setup_cost_function(self):
+        return cost
+
+    def setup_objective_function(self):
         # Process reference data
         if all([isinstance(x, pd.DataFrame) for x in self.data_ref]):
             self.data_ref_fun = []

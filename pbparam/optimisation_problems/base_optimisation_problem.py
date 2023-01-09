@@ -13,10 +13,10 @@ class BaseOptimisationProblem:
         self.bounds = None
         self.scalings = None
 
-    def cost_function(self, x):
+    def objective_function(self, x):
         pass
 
-    def setup_cost_function(self):
+    def setup_objective_function(self):
         pass
 
     def calculate_solution(self):

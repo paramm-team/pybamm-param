@@ -24,7 +24,7 @@ class ScipyDifferentialEvolution(pbparam.BaseOptimiser):
         timer = pybamm.Timer()
 
         raw_result = differential_evolution(
-            optimisation_problem.cost_function,
+            optimisation_problem.objective_function,
             bounds,
             x0=x0,
             **self.extra_options,
