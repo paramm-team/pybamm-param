@@ -9,5 +9,8 @@
 
 ### Optimisers
 
-* SciPy Minimize
-* SciPy Differential Evolution
+* SciPy Minimize (`ScipyMinimize`)
+* SciPy Differential Evolution (`ScipyDifferentialEvolution`)
+
+### Cost Functions
+* Root Mean Square Error (`RMSE`)

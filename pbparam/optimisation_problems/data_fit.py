@@ -30,25 +30,26 @@ def update_simulation_parameters(simulation, parameter_values):
     return new_simulation
 
 
-def cost_function_full(simulation, map_inputs, scalings, data, variables_optimise, x):
+def objective_function_full(opt_problem, x):
+
     # TODO: allow for multifunction optimisation, and for various cost functions
+
+    simulation = opt_problem.simulation
+    map_inputs = opt_problem.map_inputs
+    scalings = opt_problem.scalings
+    data = opt_problem.data
+    variables_optimise = opt_problem.variables_optimise
+    cost_function = opt_problem.cost_function
+
     input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
     t_end = data["Time [s]"].iloc[-1]
     solution = simulation.solve([0, t_end], inputs=input_dict)
-    TNRMSE = 0
+    cost = 0
     for variable in variables_optimise:
         y_sim = solution[variable](data["Time [s]"])
         y_data = data[variable]
-
-        err = y_sim - y_data
-        err = err[~np.isnan(err)]
-
-        MSE = np.sum(err**2) / len(err)
-        RMSE = np.sqrt(MSE)
-        NRMSE = RMSE / np.mean(y_data)
-        TNRMSE = TNRMSE + NRMSE
-
-    return np.array(TNRMSE)
+        cost += cost_function.evaluate(y_sim, y_data)
+    return cost
 
 
 class DataFit(pbparam.BaseOptimisationProblem):
@@ -80,11 +81,14 @@ class DataFit(pbparam.BaseOptimisationProblem):
         data,
         parameters_optimise,
         variables_optimise=["Terminal voltage [V]"],
+        cost_function=pbparam.RMSE(),
     ):
+
         # Allocate init variables
         self.data = data
         self.parameters_optimise = parameters_optimise
         self.variables_optimise = variables_optimise
+        self.cost_function = cost_function
 
         # Keep a copy of the original parameters for convenience and initialise the new
         # parameters
@@ -126,7 +130,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
             simulation, self.parameter_values
         )
 
-    def setup_cost_function(self):
+    def setup_objective_function(self):
         """ "
         Define the cost function to be minimised
 
@@ -141,16 +145,11 @@ class DataFit(pbparam.BaseOptimisationProblem):
         cost : float
             The value of the cost function evaluated at x.
         """
-        simulation = copy.deepcopy(self.simulation)
-        cost_function = partial(
-            cost_function_full,
-            simulation,
-            self.map_inputs,
-            self.scalings,
-            self.data,
-            self.variables_optimise,
+        objective_function = partial(
+            objective_function_full,
+            self
         )
-        self.cost_function = cost_function
+        self.objective_function = objective_function
 
     def calculate_solution(self, parameters=None):
         """

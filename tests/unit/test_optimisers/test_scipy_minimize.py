@@ -24,7 +24,7 @@ class TestScipyMinimize(unittest.TestCase):
         ]
 
         opt = pbparam.BaseOptimisationProblem()
-        opt.cost_function = lambda x: x[0] ** 2
+        opt.objective_function = lambda x: x[0] ** 2
         opt.x0 = 2
         opt.bounds = [[-10, 10]]
 

@@ -47,7 +47,7 @@ class BaseOptimiser(object):
         """
         # Setup cost function which resets simulation.solve.integrator_specs
         # Otherwise the multiprocessing will fail
-        optimisation_problem.setup_cost_function()
+        optimisation_problem.setup_objective_function()
 
         # Change logging level
         old_logging_level = pybamm.logger.level
