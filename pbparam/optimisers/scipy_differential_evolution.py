@@ -9,7 +9,16 @@ import pybamm
 
 class ScipyDifferentialEvolution(pbparam.BaseOptimiser):
     """
-    TODO: write
+    Scipy Differential Evolution Optimiser class. Please refer to 
+    (https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.differential_evolution.html)
+    for more details. Scipy Differential Evolution is a non-gradient based method that is robust but
+    slower to converge than 'Nelder-Mead' method.
+
+    Parameters
+    ----------
+    extra_options : dict, optional
+        Dict of arguments that will be used in optimiser. 
+
     """
 
     def __init__(self, extra_options=None):

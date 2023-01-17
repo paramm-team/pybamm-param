@@ -10,7 +10,48 @@ import copy
 
 class ScipyMinimize(pbparam.BaseOptimiser):
     """
-    TODO: write
+    Scipy Minimize class. Please refer to
+    (https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html)
+    for more details. Scipy Minimize has various minimasiation methods.
+    'Nelder-Mead' method is faster to converge and robust.
+
+    Parameters
+    ----------
+    method : str or callable
+        Type of solver. Should be one of
+
+        ‘Nelder-Mead’ 
+
+        ‘Powell’ 
+
+        ‘CG’ 
+
+        ‘BFGS’ 
+
+        ‘Newton-CG’ 
+
+        ‘L-BFGS-B’ 
+
+        ‘TNC’ 
+
+        ‘COBYLA’ 
+
+        ‘SLSQP’ 
+
+        ‘trust-constr’
+
+        ‘dogleg’ 
+
+        ‘trust-ncg’ 
+
+        ‘trust-exact’ 
+
+        ‘trust-krylov’ 
+
+        custom - a callable object
+        
+    extra_options : dict, optional
+        Dict of arguments that will be used in optimiser. 
     """
 
     def __init__(self, method=None, extra_options=None, solver_options=None):

@@ -9,6 +9,21 @@ import pbparam
 
 
 class MLE(pbparam.BaseCostFunction):
+    """
+    Maximum Likelihood Estimation (MLE) class, to evaluate error of simulation
+    dataset to true dataset.
+
+    Parameters
+    ----------
+    y_sim : array or list
+            contains simulation data points
+    y_data : array or list
+            contains reference data points
+    Returns
+    -------
+    MLE : array
+            Calculated MLE for given inputs.
+    """
     def __init__(self):
         self.name = "Maximum Likelihood Estimation"
 

@@ -9,16 +9,19 @@ from scipy import interpolate
 
 class OCPBalance(pbparam.BaseOptimisationProblem):
     """
-    OCP balance class.
+    OCP balance optimisation problem class.
 
     Parameters
     ----------
     data_fit : pandas.DataFrame
         The OCP dataset to fit. Either an array-like object or a list of array-like
         objects.
-    data_ref : tuple
+    data_ref : pandas.DataFrame
         The OCP reference dataset(s). They can be passed either as an array-like object
         or a list of array-like objects.
+    cost_function : pbparam.BaseCostFunction
+        Cost function class to evaluate error between two databases. It can be explicitly
+        defined if any other method is used.
     """
 
     def __init__(self, data_fit, data_ref, cost_function=pbparam.RMSE()):

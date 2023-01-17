@@ -59,7 +59,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
     ----------
     simulation : :class:`pybamm.Simulation`
         The simulation to be run to fit to data
-    data : pandas dataframe
+    data : pandas.DataFrame
         The data to be fit to
     parameters_optimise : dict
         The parameters to be optimised. They should be provided as a dictionary where
@@ -67,12 +67,9 @@ class DataFit(pbparam.BaseOptimisationProblem):
         tuple with the initial guesses and the lower and upper bounds of the
         optimisation. If a key is a list of strings then all the variables in the list
         will take the same value.
-        TODO: allow it to be a list of variables and pass the bounds and initial
-        guesses when running the optimiser.
     variables_optimise : str or list of str (optional)
         The variable or variables to optimise in the cost function. The default is
         "Terminal voltage [V]". It can be a string or a list of strings.
-        TODO: implement this
     """
 
     def __init__(
