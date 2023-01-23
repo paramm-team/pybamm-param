@@ -46,9 +46,10 @@ API documentation
 .. module:: pybamm-param
 
 .. toctree::
-   :maxdepth: 2
    :caption: Contents:
 
+   source/cost_functions/index
+   source/optimisation_problems/index
    source/optimisers/index
    source/optimisation_result
 
