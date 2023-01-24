@@ -48,12 +48,7 @@ API documentation
 .. toctree::
    :caption: Contents:
 
-   source/cost_functions/index
-   source/optimisation_problems/index
-   source/optimisers/index
-   source/optimisation_result
-
-
+   modules
 
 Indices and tables
 ==================
@@ -68,7 +63,7 @@ Examples
 Detailed examples can be viewed on the
 `GitHub examples page <https://github.com/pybamm-team/PyBaMM/tree/develop/examples/notebooks>`_,
 and run locally using ``jupyter notebook``, or online through
-`Google Colab <https://colab.research.google.com/github/pybamm-team/PyBaMM/blob/develop/>`_.
+`Google Colab <https://colab.research.google.com/github/paramm-team/>`_.
 
 Contributing
 ============

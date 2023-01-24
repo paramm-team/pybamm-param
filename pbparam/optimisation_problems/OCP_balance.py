@@ -13,11 +13,14 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
 
     Parameters
     ----------
-    data_fit : pandas.DataFrame
-        The OCP dataset to fit. Either an array-like object or a list of array-like
+    data_fit : :class:`pandas.DataFrame`
+        The OCP dataset to fit. This is experimental data that will be shifted and stretched
+        to be same with :class:`data_ref`Either an array-like object or a list of array-like
         objects.
-    data_ref : pandas.DataFrame
-        The OCP reference dataset(s). They can be passed either as an array-like object
+    data_ref : :class:`pandas.DataFrame`
+        The OCP reference dataset(s). This dataset will be used as reference and :class:`data_fit`
+        will be shifted and stretched to meet this dataset.
+        They can be passed either as an array-like object
         or a list of array-like objects.
     cost_function : pbparam.BaseCostFunction
         Cost function class to evaluate error between two databases. It can be explicitly
