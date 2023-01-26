@@ -3,9 +3,8 @@
 #
 
 import pbparam
-
-# import numpy as np
-# import scipy.stats as stats
+import numpy as np
+import scipy.stats as stats
 
 
 class MLE(pbparam.BaseCostFunction):
@@ -13,8 +12,12 @@ class MLE(pbparam.BaseCostFunction):
         self.name = "Maximum Likelihood Estimation"
 
     def evaluate(self, y_sim, y_data, sd):
-        # TODO: to be implemented
-        # negLL = -np.sum(stats.norm.logpdf(y_data, loc=y_sim, scale=sd))
-        # return negLL
+        y_sim = y_sim if isinstance(y_sim, list) else [y_sim]
+        y_data = y_data if isinstance(y_data, list) else [y_data]
+        sd = sd if isinstance(sd, list) else [sd]
 
-        pass
+        mle = 0
+        for sim, data, s in zip(y_sim, y_data, sd):
+            mle += -np.sum(stats.norm.logpdf(data, loc=sim, scale=s))
+
+        return mle

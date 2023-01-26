@@ -1,8 +1,9 @@
 #
 # Tests for the Base Cost Function class
 #
-import pbparam
 
+import pbparam
+import numpy as np
 import unittest
 
 
@@ -13,7 +14,14 @@ class TestMLE(unittest.TestCase):
 
     def test_evaluate(self):
         cost_function = pbparam.MLE()
-        self.assertIsNone(cost_function.evaluate(None, None, None))
+
+        y_sim = np.array([1, 2, 3, 4])
+        y_data = y_sim + np.random.normal(0, 0.1, 4)
+
+        self.assertTrue(
+            cost_function.evaluate(y_sim, y_data, 0.1)
+            < cost_function.evaluate(y_sim, y_data, 0.2)
+        )
 
 
 if __name__ == "__main__":
