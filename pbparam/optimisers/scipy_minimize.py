@@ -20,38 +20,38 @@ class ScipyMinimize(pbparam.BaseOptimiser):
     method : str or callable
         Type of solver. Should be one of
 
-        ‘Nelder-Mead’ 
+        ‘Nelder-Mead’
 
-        ‘Powell’ 
+        ‘Powell’
 
-        ‘CG’ 
+        ‘CG’
 
-        ‘BFGS’ 
+        ‘BFGS’
 
-        ‘Newton-CG’ 
+        ‘Newton-CG’
 
-        ‘L-BFGS-B’ 
+        ‘L-BFGS-B’
 
-        ‘TNC’ 
+        ‘TNC’
 
-        ‘COBYLA’ 
+        ‘COBYLA’
 
-        ‘SLSQP’ 
+        ‘SLSQP’
 
         ‘trust-constr’
 
-        ‘dogleg’ 
+        ‘dogleg’
 
-        ‘trust-ncg’ 
+        ‘trust-ncg’
 
-        ‘trust-exact’ 
+        ‘trust-exact’
 
-        ‘trust-krylov’ 
+        ‘trust-krylov’
 
         custom - a callable object
-        
+
     extra_options : dict, optional
-        Dict of arguments that will be used in optimiser. 
+        Dict of arguments that will be used in optimiser.
     """
 
     def __init__(self, method=None, extra_options=None, solver_options=None):
