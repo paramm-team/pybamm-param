@@ -16,7 +16,7 @@ optimiser = pbparam.ScipyMinimize(
 )
 
 result = optimiser.optimise(ocp_balance)
-print(result.x, result.fun)
+print(result)
 
 result.plot()
 
@@ -31,6 +31,6 @@ ocp_balance = pbparam.OCPBalance(
 optimiser = pbparam.ScipyMinimize(method="Nelder-Mead", extra_options={"tol": 1e-6})
 
 result = optimiser.optimise(ocp_balance)
-print(result.x, result.fun)
+print(result)
 
 result.plot()
