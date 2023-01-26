@@ -141,10 +141,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         cost : float
             The value of the cost function evaluated at x.
         """
-        objective_function = partial(
-            objective_function_full,
-            self
-        )
+        objective_function = partial(objective_function_full, self)
         self.objective_function = objective_function
 
     def calculate_solution(self, parameters=None):

@@ -41,9 +41,12 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             )
 
     def objective_function(self, x):
-        y_sim = [ref(x[0] + x[1] * fit.iloc[:, 0]) for fit, ref in zip(self.data_fit, self.data_ref_fun)]
+        y_sim = [
+            ref(x[0] + x[1] * fit.iloc[:, 0])
+            for fit, ref in zip(self.data_fit, self.data_ref_fun)
+        ]
         y_data = [fit.iloc[:, 1].to_numpy() for fit in self.data_fit]
-        
+
         return self.cost_function.evaluate(y_sim, y_data)
 
     def setup_objective_function(self):
