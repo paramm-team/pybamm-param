@@ -26,6 +26,9 @@ class RMSE(pbparam.BaseCostFunction):
         self.name = "Root Mean Square Error"
 
     def evaluate(self, y_sim, y_data, sd=None):
+        """
+        Evaluate RMSE cost function.
+        """
         y_sim = y_sim if isinstance(y_sim, list) else [y_sim]
         y_data = y_data if isinstance(y_data, list) else [y_data]
 

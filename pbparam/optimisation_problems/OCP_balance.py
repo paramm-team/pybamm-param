@@ -25,7 +25,6 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
     cost_function : pbparam.BaseCostFunction
         Cost function class to evaluate error between two databases. It can be explicitly
         defined if any other method is used.
-
     """
 
     def __init__(self, data_fit, data_ref, cost_function=pbparam.RMSE()):
