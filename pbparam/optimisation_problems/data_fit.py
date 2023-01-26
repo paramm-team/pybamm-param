@@ -31,9 +31,6 @@ def update_simulation_parameters(simulation, parameter_values):
 
 
 def objective_function_full(opt_problem, x):
-
-    # TODO: allow for multifunction optimisation, and for various cost functions
-
     simulation = opt_problem.simulation
     map_inputs = opt_problem.map_inputs
     scalings = opt_problem.scalings
@@ -44,12 +41,11 @@ def objective_function_full(opt_problem, x):
     input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
     t_end = data["Time [s]"].iloc[-1]
     solution = simulation.solve([0, t_end], inputs=input_dict)
-    cost = 0
-    for variable in variables_optimise:
-        y_sim = solution[variable](data["Time [s]"])
-        y_data = data[variable]
-        cost += cost_function.evaluate(y_sim, y_data)
-    return cost
+
+    y_sim = [solution[v](data["Time [s]"]) for v in variables_optimise]
+    y_data = [data[v] for v in variables_optimise]
+
+    return cost_function.evaluate(y_sim, y_data)
 
 
 class DataFit(pbparam.BaseOptimisationProblem):
