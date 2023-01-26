@@ -1,3 +1,6 @@
+.. Root of all pybamm-param docs
+
+.. _GitHub: https://github.com/paramm-team/pybamm-param
 .. pybamm-param documentation master file, created by
    sphinx-quickstart on Wed Aug  3 12:41:11 2022.
    You can adapt this file completely to your liking, but it should at least
@@ -10,6 +13,10 @@ Python Battery Mathematical Modelling (**PyBAMM**) Parameter Optimisation packag
 PyBAMM model parameters using various optimisation methods and error functions. 
 
 PyBAMM-param is hosted on Github_. This page provides the *API*, or *developer documentation* for ''pybamm-param''.
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
 
 Quickstart
 =========================
@@ -48,7 +55,10 @@ API documentation
 .. toctree::
    :caption: Contents:
 
-   modules
+   source/cost_functions/index
+   source/optimisation_problems/index
+   source/optimisers/index
+   source/optimisation_result
 
 Indices and tables
 ==================
