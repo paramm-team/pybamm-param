@@ -14,10 +14,10 @@ class RMSE(pbparam.BaseCostFunction):
         y_sim = y_sim if isinstance(y_sim, list) else [y_sim]
         y_data = y_data if isinstance(y_data, list) else [y_data]
 
-        RMSE = 0
+        rmse = 0
 
         for sim, data in zip(y_sim, y_data):
             err = (sim - data) / np.nanmean(data)
-            RMSE += np.sqrt(np.nanmean(err**2))
+            rmse += np.sqrt(np.nanmean(err**2))
 
-        return np.array(RMSE)
+        return np.array(rmse)
