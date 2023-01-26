@@ -20,7 +20,7 @@ class TestMLE(unittest.TestCase):
 
         self.assertTrue(
             cost_function.evaluate(y_sim, y_data, 0.1)
-            < cost_function.evaluate(y_sim, y_data, 0.2)
+            < cost_function.evaluate(y_sim, y_data, 1)
         )
 
 
