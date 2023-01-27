@@ -34,6 +34,16 @@ class OptimisationResult(object):
         # Initialise time
         self.solve_time = None
 
+    def __str__(self):
+        str = f'''
+             Optimal values: {self.x}
+        Cost function value: {self.fun}
+                 Solve time: {self.solve_time}
+                    Message: {self.message}
+        '''
+
+        return str
+
     def plot(self, testing=False):
         """
         Plot the optimisation result.
