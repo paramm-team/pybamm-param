@@ -24,15 +24,6 @@ class ScipyDifferentialEvolution(pbparam.BaseOptimiser):
     extra_options : dict, optional
         Dict of arguments that will be passed to the differential_evolution function.
 
-    Attributes
-    ----------
-    name : str
-        The name of the optimizer.
-    single_variable : bool
-        Indicates if the optimizer only accepts a single variable.
-    global_optimizer : bool
-        Indicates if the optimizer is a global optimizer.
-
     """
 
     def __init__(self, extra_options=None):
