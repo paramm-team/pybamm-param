@@ -1,3 +1,7 @@
+#		
+# Base optimisation problem class		
+#
+
 class BaseOptimisationProblem:
     """
     Base optimisation problem class

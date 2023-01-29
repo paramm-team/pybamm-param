@@ -1,5 +1,10 @@
+#
 # MLE cost function class
+#
+
 import pbparam
+# import numpy as np		
+# import scipy.stats as stats
 
 class MLE(pbparam.BaseCostFunction):
     """
@@ -24,9 +29,7 @@ class MLE(pbparam.BaseCostFunction):
     # Define the evaluate method which will calculate the MLE
     def evaluate(self, y_sim, y_data, sd):
         # The code to calculate the MLE is not yet implemented
-        # It is intended to use numpy and scipy libraries
         # negLL = -np.sum(stats.norm.logpdf(y_data, loc=y_sim, scale=sd))
         # return negLL
-        
-        # Placeholder for now
+
         pass

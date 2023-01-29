@@ -2,7 +2,6 @@
 # Base cost function class
 #
 
-
 class BaseCostFunction:
     """
     Base cost function class
