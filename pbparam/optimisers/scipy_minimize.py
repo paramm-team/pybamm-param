@@ -10,10 +10,12 @@ import copy
 
 class ScipyMinimize(pbparam.BaseOptimiser):
     """
-    Scipy Minimize class. Please refer to
+    Scipy Minimize class. 
+    
+    This class is a wrapper around the scipy.optimize.minimize function and uses various minimization methods.
+    The 'Nelder-Mead' method is faster to converge and robust.Please refer to
     (https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html)
-    for more details. Scipy Minimize has various minimasiation methods.
-    'Nelder-Mead' method is faster to converge and robust.
+    for more details.
 
     Parameters
     ----------
@@ -66,6 +68,20 @@ class ScipyMinimize(pbparam.BaseOptimiser):
     def _run_optimiser(self, optimisation_problem, x0, bounds):
         """
         Run the optimiser.
+
+        Parameters
+        ----------
+        optimisation_problem : :class:`pbparam.OptimisationProblem`
+            The optimization problem.
+        x0 : array-like
+            Initial guess of the solution.
+        bounds : tuple
+            Bounds of the variables.
+        
+        Returns
+        -------
+        result : :class:`pbparam.OptimisationResult`
+            The result of the optimization.
         """
         self.optimisation_problem = copy.deepcopy(optimisation_problem)
         # Initialise timer

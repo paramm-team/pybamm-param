@@ -1,18 +1,11 @@
-#
 # MLE cost function class
-#
-
 import pbparam
-
-# import numpy as np
-# import scipy.stats as stats
-
 
 class MLE(pbparam.BaseCostFunction):
     """
     Maximum Likelihood Estimation (MLE) class, to evaluate error of simulation
     dataset to true dataset.
-
+    
     Parameters
     ----------
     y_sim : array or list
@@ -24,12 +17,16 @@ class MLE(pbparam.BaseCostFunction):
     MLE : array
             Calculated MLE for given inputs.
     """
+    # Initializing the class and giving it a name
     def __init__(self):
         self.name = "Maximum Likelihood Estimation"
 
+    # Define the evaluate method which will calculate the MLE
     def evaluate(self, y_sim, y_data, sd):
-        # TODO: to be implemented
+        # The code to calculate the MLE is not yet implemented
+        # It is intended to use numpy and scipy libraries
         # negLL = -np.sum(stats.norm.logpdf(y_data, loc=y_sim, scale=sd))
         # return negLL
-
+        
+        # Placeholder for now
         pass

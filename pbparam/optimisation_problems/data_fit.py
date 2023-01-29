@@ -10,6 +10,9 @@ from functools import partial
 
 
 def update_simulation_parameters(simulation, parameter_values):
+    """
+    Update the simulation object with new parameter values
+    """
     # Remove integrator_specs from solver
     solver = simulation.solver
     solver.integrator_specs = {}
@@ -31,8 +34,21 @@ def update_simulation_parameters(simulation, parameter_values):
 
 
 def objective_function_full(opt_problem, x):
+    """
+    Calculate the cost function given the current values of the parameters
 
-    # TODO: allow for multifunction optimisation, and for various cost functions
+    Parameters
+    ----------
+    opt_problem : object
+        The optimization problem object
+    x : array-like
+        The current values of the parameters
+
+    Returns
+    -------
+    cost : float
+        The calculated cost of the simulation with the current parameters
+    """
 
     simulation = opt_problem.simulation
     map_inputs = opt_problem.map_inputs
@@ -41,6 +57,7 @@ def objective_function_full(opt_problem, x):
     variables_optimise = opt_problem.variables_optimise
     cost_function = opt_problem.cost_function
 
+    # create a dict of input values from the current parameters
     input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
     t_end = data["Time [s]"].iloc[-1]
     solution = simulation.solve([0, t_end], inputs=input_dict)
@@ -53,15 +70,16 @@ def objective_function_full(opt_problem, x):
 
 
 class DataFit(pbparam.BaseOptimisationProblem):
-    """A class to define an optimisation problem.
+    """
+    A class to define an optimisation problem.
 
     Parameters
     ----------
     simulation : :class:`pybamm.Simulation`
         The simulation to be run to fit to data
-    data : pandas.DataFrame
-        The data to be fit to
-    parameters_optimise : dict
+    data : :class:`pandas.DataFrame`
+         The experimental or reference data to be used in optimisation of simulation parameters.
+    parameters_optimise : :class:`dict`
         The parameters to be optimised. They should be provided as a dictionary where
         the keys are the names of the variables to be optimised and the values are a
         tuple with the initial guesses and the lower and upper bounds of the
@@ -70,6 +88,9 @@ class DataFit(pbparam.BaseOptimisationProblem):
     variables_optimise : str or list of str (optional)
         The variable or variables to optimise in the cost function. The default is
         "Terminal voltage [V]". It can be a string or a list of strings.
+    cost_function : :class:`pbparam.BaseCostFunction`
+        Cost function class to be used in minimisation algorithm. The default is Root-Mean Square
+        Error. It can be selected from pre-defined built-in functions or defined explicitly.
     """
 
     def __init__(
@@ -128,7 +149,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         )
 
     def setup_objective_function(self):
-        """ "
+        """
         Define the cost function to be minimised
 
         Parameters
@@ -146,6 +167,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
             objective_function_full,
             self
         )
+        # Assign the objective function to the class variable
         self.objective_function = objective_function
 
     def calculate_solution(self, parameters=None):
@@ -164,39 +186,58 @@ class DataFit(pbparam.BaseOptimisationProblem):
             The solution for the given inputs.
         """
         if parameters is None:
+            # Create a dictionary of inputs using the original parameters
             inputs = {
                 param: self.x0[i] * self.scalings[i]
                 for param, i in self.map_inputs.items()
             }
         else:
+            # Create a dictionary of inputs using the provided parameters
             inputs = {param: parameters[i] for param, i in self.map_inputs.items()}
 
+        # Check if the simulation has an attribute "experiment"
         if getattr(self.simulation, "experiment", None):
             t_eval = None
         else:
+            # Use the final time from the data as t_eval if experiment is not present
             t_eval = [0, self.data["Time [s]"].iloc[-1]]
 
+        # Solve the simulation with the given inputs and t_eval
         solution = self.simulation.solve(t_eval=t_eval, inputs=inputs)
 
         return solution
 
     def _plot(self, x_optimal):
         """
-        Plot the optimisation result. Should be accessed through the OptimisationResult
+        Plot the optimization result. Should be accessed through the OptimizationResult
         plot method.
+
+        Parameters
+        ----------
+        x_optimal : array-like
+            Optimal values of the parameters found by the optimizer
+
+        Returns
+        -------
+        plot : pybamm.QuickPlot
+            The plot of the optimization result
         """
 
+        # calculate the solution for the initial and optimal parameters
         initial_solution = self.calculate_solution()
         optimal_solution = self.calculate_solution(x_optimal)
 
+        # create a quick plot
         plot = pybamm.QuickPlot(
             [initial_solution, optimal_solution],
             output_variables=self.variables_optimise,
             labels=["Initial values", "Optimal values"],
         )
 
+        # plot the result
         plot.plot(0)
 
+        # plot the data on the same plot
         for ax, var in zip(plot.axes, self.variables_optimise):
             data = self.data
             ax.plot(
