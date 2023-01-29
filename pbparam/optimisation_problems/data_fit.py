@@ -79,7 +79,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         The simulation to be run to fit to data
     data : :class:`pandas.DataFrame`
          The experimental or reference data to be used in optimisation of simulation parameters.
-    parameters_optimise : :class:`dict`
+    parameters_optimise : dict
         The parameters to be optimised. They should be provided as a dictionary where
         the keys are the names of the variables to be optimised and the values are a
         tuple with the initial guesses and the lower and upper bounds of the
