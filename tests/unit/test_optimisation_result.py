@@ -26,6 +26,23 @@ class TestOptimisationResult(unittest.TestCase):
         )
         self.assertIsNone(optimisation_result.solve_time)
 
+    def test_str(self):
+        optimisation_result = pbparam.OptimisationResult(
+            "x",
+            "success",
+            "message",
+            "fun",
+            "raw_result",
+            "optimisation_problem",
+        )
+
+        self.assertEqual(
+            optimisation_result.__str__(),
+            "\n             Optimal values: x\n        Cost function value: fun"
+            "\n                 Solve time: None\n                    Message: message"
+            "\n        "
+        )
+
     def test_plot(self):
         optimisation_result = pbparam.OptimisationResult(
             "x",
