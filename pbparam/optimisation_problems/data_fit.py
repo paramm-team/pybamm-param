@@ -78,7 +78,8 @@ class DataFit(pbparam.BaseOptimisationProblem):
     simulation : :class:`pybamm.Simulation`
         The simulation to be run to fit to data
     data : :class:`pandas.DataFrame`
-         The experimental or reference data to be used in optimisation of simulation parameters.
+         The experimental or reference data to be used in optimisation
+         of simulation parameters.
     parameters_optimise : dict
         The parameters to be optimised. They should be provided as a dictionary where
         the keys are the names of the variables to be optimised and the values are a
@@ -89,8 +90,9 @@ class DataFit(pbparam.BaseOptimisationProblem):
         The variable or variables to optimise in the cost function. The default is
         "Terminal voltage [V]". It can be a string or a list of strings.
     cost_function : :class:`pbparam.BaseCostFunction`
-        Cost function class to be used in minimisation algorithm. The default is Root-Mean Square
-        Error. It can be selected from pre-defined built-in functions or defined explicitly.
+        Cost function class to be used in minimisation algorithm. The default
+        is Root-Mean Square Error. It can be selected from pre-defined built-in
+        functions or defined explicitly.
     """
 
     def __init__(
@@ -163,10 +165,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         cost : float
             The value of the cost function evaluated at x.
         """
-        objective_function = partial(
-            objective_function_full,
-            self
-        )
+        objective_function = partial(objective_function_full, self)
         # Assign the objective function to the class variable
         self.objective_function = objective_function
 

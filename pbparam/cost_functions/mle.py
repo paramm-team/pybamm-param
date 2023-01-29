@@ -3,14 +3,15 @@
 #
 
 import pbparam
-# import numpy as np		
+# import numpy as np
 # import scipy.stats as stats
+
 
 class MLE(pbparam.BaseCostFunction):
     """
     Maximum Likelihood Estimation (MLE) class, to evaluate error of simulation
     dataset to true dataset.
-    
+
     Parameters
     ----------
     y_sim : array or list

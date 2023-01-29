@@ -5,8 +5,9 @@
 class BaseCostFunction:
     """
     Base cost function class
-    
-    This class provide a base for defining cost functions, it defines the method that should be implemented in subclasses to evaluate the cost of a prediction.
+
+    This class provide a base for defining cost functions, it defines the method that
+    should be implemented in subclasses to evaluate the cost of a prediction.
     """
 
     def __init__(self):
@@ -18,9 +19,9 @@ class BaseCostFunction:
     def evaluate(self, y_sim, y_data, sd=None):
         """
         Placeholder method for evaluating the cost of a prediction
-        
+
         Subclasses will override this method to provide specific implementations
-        
+
         Parameters
         ----------
         y_sim : array-like
@@ -29,7 +30,6 @@ class BaseCostFunction:
             actual values
         sd : float, optional
             standard deviation of error, not all cost function need it.
-            
+
         """
         pass
-    

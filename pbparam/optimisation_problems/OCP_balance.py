@@ -22,8 +22,9 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         :class:`data_fit` will be shifted and stretched to meet this dataset. They can
         be passed either as an array-like object or a list of array-like objects.
     cost_function : :class:`pbparam.BaseCostFunction`
-        Cost function class to be used in minimisation algorithm. The default is Root-Mean Square
-        Error. It can be selected from pre-defined built-in functions or defined explicitly.
+        Cost function class to be used in minimisation algorithm.
+        The default is Root-Mean Square Error. It can be selected from
+        pre-defined built-in functions or defined explicitly.
     """
 
     def __init__(self, data_fit, data_ref, cost_function=pbparam.RMSE()):

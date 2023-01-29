@@ -5,6 +5,7 @@
 import pbparam
 import numpy as np
 
+
 class RMSE(pbparam.BaseCostFunction):
     """
     The Root-Mean Square Error (RMSE) class, to evaluate error of simulation

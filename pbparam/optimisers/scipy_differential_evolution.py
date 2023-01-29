@@ -9,9 +9,9 @@ import pybamm
 
 class ScipyDifferentialEvolution(pbparam.BaseOptimiser):
     """
-    Scipy Differential Evolution Optimiser class. Wraps the Scipy's differential 
+    Scipy Differential Evolution Optimiser class. Wraps the Scipy's differential
     evolution optimizer for use in an optimization problem.
-    Inherits from the BaseOptimizer class and overrides the _run_optimizer method 
+    Inherits from the BaseOptimizer class and overrides the _run_optimizer method
     to use the differential_evolution function from Scipy's optimize module.
     Please refer to
     (https://docs.scipy.org/doc/scipy/reference/generated/
@@ -45,7 +45,7 @@ class ScipyDifferentialEvolution(pbparam.BaseOptimiser):
     def _run_optimiser(self, optimisation_problem, x0, bounds):
         """
         Runs the optimization process.
-        
+
         Parameters
         ----------
         optimisation_problem : :class:`pbparam.OptimisationProblem`
