@@ -9,7 +9,7 @@
 Welcome to pybamm-param's documentation!
 ========================================
 
-Python Battery Mathematical Modelling (**PyBAMM**) Parameter Optimisation package is developed for optimising battery parameters of
+Python Battery Mathematical Modelling (**PyBaMM**) Parameter Optimisation package is developed for optimising battery parameters of
 PyBAMM model parameters using various optimisation methods and error functions. 
 
 PyBAMM-param is hosted on Github_. This page provides the *API*, or *developer documentation* for ''pybamm-param''.
