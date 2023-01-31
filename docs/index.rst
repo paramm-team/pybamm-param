@@ -79,6 +79,6 @@ and run locally using ``jupyter notebook``, or online through
 Contributing
 ============
 
-Contributions to PyBaMM and its development are welcome! If you have ideas for features, bug fixes, models, spatial methods, or solvers, we would love to hear from you.
+Contributions to pybamm-param and its development are welcome! If you have ideas for features, bug fixes, models, spatial methods, or solvers, we would love to hear from you.
 
 Before contributing, please read the `Contribution Guidelines <https://github.com/paramm-team/pybamm-param/blob/main/CONTRIBUTING.md>`_.
