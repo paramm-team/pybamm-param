@@ -20,7 +20,7 @@ pybamm-param is hosted on Github_. This page provides the *API*, or *developer d
 
 Quickstart
 =========================
-PyBaMM is available on GNU/Linux, MacOS and Windows.
+pybamm-param is available on GNU/Linux, MacOS and Windows.
 
 Using pip
 ----------
