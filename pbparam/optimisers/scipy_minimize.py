@@ -10,7 +10,51 @@ import copy
 
 class ScipyMinimize(pbparam.BaseOptimiser):
     """
-    TODO: write
+    Scipy Minimize class.
+
+    This class is a wrapper around the scipy.optimize.minimize function and
+    uses various minimization methods.
+    The 'Nelder-Mead' method is faster to converge and robust.Please refer to
+    (https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html)
+    for more details.
+
+    Parameters
+    ----------
+    method : str or callable
+        Type of solver. Should be one of
+
+        ‘Nelder-Mead’
+
+        ‘Powell’
+
+        ‘CG’
+
+        ‘BFGS’
+
+        ‘Newton-CG’
+
+        ‘L-BFGS-B’
+
+        ‘TNC’
+
+        ‘COBYLA’
+
+        ‘SLSQP’
+
+        ‘trust-constr’
+
+        ‘dogleg’
+
+        ‘trust-ncg’
+
+        ‘trust-exact’
+
+        ‘trust-krylov’
+
+        custom - a callable object
+
+    extra_options : dict, optional
+        Dict of arguments that will be used in optimiser.
     """
 
     def __init__(self, method=None, extra_options=None, solver_options=None):
@@ -25,14 +69,25 @@ class ScipyMinimize(pbparam.BaseOptimiser):
     def _run_optimiser(self, optimisation_problem, x0, bounds):
         """
         Run the optimiser.
+
+        Parameters
+        ----------
+        optimisation_problem : :class:`pbparam.OptimisationProblem`
+            The optimization problem.
+        x0 : array-like
+            Initial guess of the solution.
+        bounds : tuple
+            Bounds of the variables.
+
+        Returns
+        -------
+        result : :class:`pbparam.OptimisationResult`
+            The result of the optimization.
         """
         self.optimisation_problem = copy.deepcopy(optimisation_problem)
         # Initialise timer
         timer = pybamm.Timer()
 
-        print(self.optimisation_problem.objective_function)
-        print(x0)
-        print(bounds)
         raw_result = minimize(
             self.optimisation_problem.objective_function,
             x0,

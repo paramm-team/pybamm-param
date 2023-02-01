@@ -9,16 +9,22 @@ from scipy import interpolate
 
 class OCPBalance(pbparam.BaseOptimisationProblem):
     """
-    OCP balance class.
+    OCP balance optimisation problem class.
 
     Parameters
     ----------
-    data_fit : pandas.DataFrame
-        The OCP dataset to fit. Either an array-like object or a list of array-like
-        objects.
-    data_ref : tuple
-        The OCP reference dataset(s). They can be passed either as an array-like object
-        or a list of array-like objects.
+    data_fit : :class:`pandas.DataFrame`
+        The OCP dataset to fit. This is experimental data that will be shifted and
+        stretched to be same with :class:`data_ref`. Either an array-like object or
+        a list of array-like objects.
+    data_ref : :class:`pandas.DataFrame`
+        The OCP reference dataset(s). This dataset will be used as reference and
+        :class:`data_fit` will be shifted and stretched to meet this dataset. They can
+        be passed either as an array-like object or a list of array-like objects.
+    cost_function : :class:`pbparam.BaseCostFunction`
+        Cost function class to be used in minimisation algorithm.
+        The default is Root-Mean Square Error. It can be selected from
+        pre-defined built-in functions or defined explicitly.
     """
 
     def __init__(self, data_fit, data_ref, cost_function=pbparam.RMSE()):
@@ -41,22 +47,47 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             )
 
     def objective_function(self, x):
+        """
+        Calculates the cost of the simulation based on the fitting parameters.
+
+        Parameters
+        ----------
+        x : list
+            List of fitting parameters.
+
+        Returns
+        -------
+        cost : float
+            The cost of the simulation.
+        """
+        # Initialize empty lists to store simulated and data values
         y_sim = []
         y_data = []
 
+        # Iterate over the fit and reference data
         for fit, ref in zip(self.data_fit, self.data_ref_fun):
+            # Append simulated values to the y_sim list
             y_sim.append(ref(x[0] + x[1] * fit.iloc[:, 0]))
+            # Append data values to the y_data list
             y_data.append(fit.iloc[:, 1].to_numpy())
 
+        # Evaluate the cost of the simulation using the cost function
         cost = self.cost_function.evaluate(y_sim, y_data)
 
         return cost
 
     def setup_objective_function(self):
+        """
+        Sets up the objective function for optimization.
+
+        This function processes the reference data, interpolates it, and
+        determines the initial guesses and bounds for the optimization.
+        """
         # Process reference data
         if all([isinstance(x, pd.DataFrame) for x in self.data_ref]):
             self.data_ref_fun = []
             for data in self.data_ref:
+                # Interpolate reference data
                 interp = interpolate.interp1d(
                     data.iloc[:, 0], data.iloc[:, 1], fill_value="extrapolate"
                 )
@@ -87,6 +118,19 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             ]
 
     def _plot(self, x_optimal):
+        """
+        Plot the reference and fit data.
+
+        Parameters
+        ----------
+        x_optimal : list
+            The optimal values of the parameters.
+
+        Returns
+        -------
+        fig : :class:`matplotlib.figure.Figure`
+            The figure object containing the plot.
+        """
         import matplotlib.pyplot as plt
 
         fig, ax = plt.subplots(1, 1)

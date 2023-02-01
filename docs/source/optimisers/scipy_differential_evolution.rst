@@ -1,5 +1,5 @@
-Scipy Differential Evolution Optimiser
-======================================
+Scipy Differential Evolution
+============================
 
 .. autoclass:: pbparam.ScipyDifferentialEvolution
   :members:
