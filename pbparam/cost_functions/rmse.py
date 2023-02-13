@@ -26,7 +26,7 @@ class RMSE(pbparam.BaseCostFunction):
     def __init__(self):
         self.name = "Root Mean Square Error"
 
-    def evaluate(self, y_sim, y_data, sd=None):
+    def evaluate(self, y_sim, y_data, sd=None, weights=None):
         """
         Evaluate RMSE cost function.
 
@@ -39,6 +39,9 @@ class RMSE(pbparam.BaseCostFunction):
         sd : array or list, optional
             contains the standard deviation of the data points, used for weighting
             the cost function. This variable will NOT be used in RMSE. Default is None.
+        weights : array or list, optional
+            contains custom weights for each data point. Size of weights must be 
+            equal to size of reference data points!
 
         Returns
         -------
@@ -50,9 +53,18 @@ class RMSE(pbparam.BaseCostFunction):
         y_data = y_data if isinstance(y_data, list) else [y_data]
 
         RMSE = 0
+        
+        # Check if custom weights are provided and raise error if not correct
+        if weights is None:
+            weights = [1 for _ in y_data]
+        elif len(weights) != len(y_data):
+            raise ValueError("Length of weights must be equal to the length of data points")
+        
+        # Recalculate y_data with the weights provided
+        weighted_y_data = [v * w for v, w in zip(y_data, weights)]
 
         # Iterate over each simulation and data point
-        for sim, data in zip(y_sim, y_data):
+        for sim, data in zip(y_sim, weighted_y_data):
             # Calculate the error and normalize by the mean of the data
             err = (sim - data) / np.nanmean(data)
             # Add the square root of the mean square error to the RMSE variable
