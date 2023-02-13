@@ -40,7 +40,7 @@ class RMSE(pbparam.BaseCostFunction):
             contains the standard deviation of the data points, used for weighting
             the cost function. This variable will NOT be used in RMSE. Default is None.
         weights : array or list, optional
-            contains custom weights for each data point. Size of weights must be 
+            contains custom weights for each data point. Size of weights must be
             equal to size of reference data points!
 
         Returns
@@ -58,8 +58,9 @@ class RMSE(pbparam.BaseCostFunction):
         if weights is None:
             weights = [1 for _ in y_data]
         elif len(weights) != len(y_data):
-            raise ValueError("Length of weights must be equal to the length of data points")
-        
+            raise 
+            ValueError("Length of weights must be equal to the length of data points")
+
         # Recalculate y_data with the weights provided
         weighted_y_data = [v * w for v, w in zip(y_data, weights)]
 
