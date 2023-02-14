@@ -53,12 +53,12 @@ class RMSE(pbparam.BaseCostFunction):
         y_data = y_data if isinstance(y_data, list) else [y_data]
 
         RMSE = 0
-        
+
         # Check if custom weights are provided and raise error if not correct
         if weights is None:
             weights = [1 for _ in y_data]
         elif len(weights) != len(y_data):
-            raise 
+            raise
             ValueError("Length of weights must be equal to the length of data points")
 
         # Recalculate y_data with the weights provided
