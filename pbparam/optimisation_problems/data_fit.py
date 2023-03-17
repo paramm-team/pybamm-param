@@ -74,9 +74,9 @@ def objective_function_full(opt_problem, x):
     for variable in variables_optimise:
         y_sim = solution[variable](data["Time [s]"])
         y_data = data[variable]
-        if len(variable_weights[variable])=1:
+        if len(variable_weights[variable]) == 1:
             variable_weights[variable] = [variable_weights[variable] for _ in y_data]
-        elif len(variable_weights[variable])!= len(y_data)
+        elif len(variable_weights[variable])!= len(y_data)\
             & len(variable_weights[variable])!= 1:
             raise
         ValueError("Length of weights must be equal to the length of data points\
