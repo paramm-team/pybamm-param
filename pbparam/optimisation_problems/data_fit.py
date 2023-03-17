@@ -55,7 +55,16 @@ def objective_function_full(opt_problem, x):
     scalings = opt_problem.scalings
     data = opt_problem.data
     variables_optimise = opt_problem.variables_optimise
+    variable_weights = opt_problem.variable_weights
     cost_function = opt_problem.cost_function
+
+    # Check if custom weights are provided and raise error if not correct
+    # if variable_weights is None:
+    #     weights = [1 for _ in y_data]
+    # elif len(weights) != len(y_data):
+    #     raise
+    #     ValueError("Length of weights must be equal to the length of data points")
+
 
     # create a dict of input values from the current parameters
     input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
@@ -65,7 +74,18 @@ def objective_function_full(opt_problem, x):
     for variable in variables_optimise:
         y_sim = solution[variable](data["Time [s]"])
         y_data = data[variable]
-        cost += cost_function.evaluate(y_sim, y_data)
+        if len(variable_weights[variable])=1:
+            variable_weights[variable] = [variable_weights[variable] for _ in y_data]
+        elif len(variable_weights[variable])!= len(y_data)
+            & len(variable_weights[variable])!= 1:
+            raise
+        ValueError("Length of weights must be equal to the length of data points\
+                   or single value for all points")
+        cost += cost_function.evaluate(
+            y_sim,
+            y_data,
+            weights=variable_weights[variable]
+            )
     return cost
 
 
@@ -89,7 +109,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
     variables_optimise : str or list of str (optional)
         The variable or variables to optimise in the cost function. The default is
         "Terminal voltage [V]". It can be a string or a list of strings.
-    cost_function : :class:`pbparam.BaseCostFunction`
+    cost_function : :class:`pbparam.BaseCostFunction` (optional)
         Cost function class to be used in minimisation algorithm. The default
         is Root-Mean Square Error. It can be selected from pre-defined built-in
         functions or defined explicitly.
@@ -101,6 +121,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         data,
         parameters_optimise,
         variables_optimise=["Terminal voltage [V]"],
+        variable_weights=None,# np.full(len(variables_optimise),(1/len(variables_optimise))),
         cost_function=pbparam.RMSE(),
     ):
 
@@ -108,6 +129,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         self.data = data
         self.parameters_optimise = parameters_optimise
         self.variables_optimise = variables_optimise
+        self.variable_weights = variable_weights
         self.cost_function = cost_function
 
         # Keep a copy of the original parameters for convenience and initialise the new
