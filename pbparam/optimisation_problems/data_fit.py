@@ -58,35 +58,30 @@ def objective_function_full(opt_problem, x):
     variable_weights = opt_problem.variable_weights
     cost_function = opt_problem.cost_function
 
-    # Check if custom weights are provided and raise error if not correct
-    # if variable_weights is None:
-    #     weights = [1 for _ in y_data]
-    # elif len(weights) != len(y_data):
-    #     raise
-    #     ValueError("Length of weights must be equal to the length of data points")
-
     # create a dict of input values from the current parameters
     input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
     t_end = data["Time [s]"].iloc[-1]
     solution = simulation.solve([0, t_end], inputs=input_dict)
     cost = 0
+
     for variable in variables_optimise:
         y_sim = solution[variable](data["Time [s]"])
         y_data = data[variable]
-        if len(variable_weights[variable]) == 1:
+        if variable_weights == {}:
+            variable_weights[variable] = [1 for _ in y_data]
+        elif len(variable_weights[variable]) == 1:
             variable_weights[variable] = [variable_weights[variable] for _ in y_data]
         elif (
-            len(variable_weights[variable])
-            != len(y_data) & len(variable_weights[variable])
-            != 1
+            len(variable_weights[variable]) != len(y_data)
+            and len(variable_weights[variable]) != 1
         ):
             raise
         ValueError(
             "Length of weights must be equal to the length of data points\
-                   or single value for all points"
-        )
+                   or single value for all points")
+
         cost += cost_function.evaluate(
-            y_sim, y_data, weights=variable_weights[variable]
+            y_sim, y_data, variable_weights[variable]
         )
     return cost
 
@@ -123,7 +118,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         data,
         parameters_optimise,
         variables_optimise=["Terminal voltage [V]"],
-        variable_weights=None,
+        variable_weights={},
         cost_function=pbparam.RMSE(),
     ):
 

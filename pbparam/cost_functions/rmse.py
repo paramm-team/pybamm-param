@@ -26,7 +26,7 @@ class RMSE(pbparam.BaseCostFunction):
     def __init__(self):
         self.name = "Root Mean Square Error"
 
-    def evaluate(self, y_sim, y_data, sd=None, weights=None):
+    def evaluate(self, y_sim, y_data, weights, sd=None ):
         """
         Evaluate RMSE cost function.
 
@@ -55,11 +55,11 @@ class RMSE(pbparam.BaseCostFunction):
         RMSE = 0
 
         # Check if custom weights are provided and raise error if not correct
-        if weights is None:
-            weights = [1 for _ in y_data]
-        elif len(weights) != len(y_data):
-            raise
-            ValueError("Length of weights must be equal to the length of data points")
+        # if weights is None:
+        #     weights = [1 for _ in y_data]
+        # elif len(weights) != len(y_data):
+        #     raise
+        #     ValueError("Length of weights must be equal to the length of data points")
 
         # Recalculate y_data with the weights provided
         weighted_y_data = [v * w for v, w in zip(y_data, weights)]
