@@ -65,7 +65,6 @@ def objective_function_full(opt_problem, x):
     #     raise
     #     ValueError("Length of weights must be equal to the length of data points")
 
-
     # create a dict of input values from the current parameters
     input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
     t_end = data["Time [s]"].iloc[-1]
@@ -76,16 +75,19 @@ def objective_function_full(opt_problem, x):
         y_data = data[variable]
         if len(variable_weights[variable]) == 1:
             variable_weights[variable] = [variable_weights[variable] for _ in y_data]
-        elif len(variable_weights[variable])!= len(y_data)\
-            & len(variable_weights[variable])!= 1:
+        elif (
+            len(variable_weights[variable])
+            != len(y_data) & len(variable_weights[variable])
+            != 1
+        ):
             raise
-        ValueError("Length of weights must be equal to the length of data points\
-                   or single value for all points")
+        ValueError(
+            "Length of weights must be equal to the length of data points\
+                   or single value for all points"
+        )
         cost += cost_function.evaluate(
-            y_sim,
-            y_data,
-            weights=variable_weights[variable]
-            )
+            y_sim, y_data, weights=variable_weights[variable]
+        )
     return cost
 
 
@@ -121,7 +123,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         data,
         parameters_optimise,
         variables_optimise=["Terminal voltage [V]"],
-        variable_weights=None,# np.full(len(variables_optimise),(1/len(variables_optimise))),
+        variable_weights=None,
         cost_function=pbparam.RMSE(),
     ):
 
