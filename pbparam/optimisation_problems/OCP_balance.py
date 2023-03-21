@@ -27,7 +27,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         pre-defined built-in functions or defined explicitly.
     """
 
-    def __init__(self, data_fit, data_ref, cost_function=pbparam.RMSE()):
+    def __init__(self, data_fit, data_ref, cost_function=pbparam.RMSE(), weights=[1]):
         super().__init__()
 
         # Allocate init variables
@@ -39,12 +39,21 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             self.data_ref = [data_ref]
 
         self.cost_function = cost_function
+        self.weights = weights
 
         # Check both lists have same length
         if len(self.data_fit) != len(self.data_ref):
             raise ValueError(
                 "The number of fit and reference datasets must be the same."
             )
+        # Check if the weights has same lenght
+        if (
+            len(weights) != len(data_ref)
+            and len(weights) != 1
+        ):
+            raise ValueError(
+            "Length of weights must be equal to the length of data points\
+            or single value for all points")
 
     def objective_function(self, x):
         """
@@ -72,7 +81,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             y_data.append(fit.iloc[:, 1].to_numpy())
 
         # Evaluate the cost of the simulation using the cost function
-        cost = self.cost_function.evaluate(y_sim, y_data)
+        cost = self.cost_function.evaluate(y_sim, y_data, self.weights)
 
         return cost
 
