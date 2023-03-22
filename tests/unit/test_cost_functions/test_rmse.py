@@ -20,11 +20,15 @@ class TestRMSE(unittest.TestCase):
 
         y_sim = np.array([1, 2, 3, 4])
         y_data = np.array([4, 3, 2, 1])
-        self.assertAlmostEqual(cost_function.evaluate(y_sim, y_data, [1 for _ in y_data]), 0.89442719)
+        self.assertAlmostEqual(
+            cost_function.evaluate(y_sim, y_data, [1 for _ in y_data]), 0.89442719
+        )
 
         y_sim = [np.array([1, 2, 3, 4]), np.array([1, 2, 3])]
         y_data = [np.array([4, 3, 2, 1]), np.array([4, 3, 2])]
-        self.assertAlmostEqual(cost_function.evaluate(y_sim, y_data,[1 for _ in y_data]), 1.53271193)
+        self.assertAlmostEqual(
+            cost_function.evaluate(y_sim, y_data, [1 for _ in y_data]), 1.53271193
+        )
 
 
 if __name__ == "__main__":
