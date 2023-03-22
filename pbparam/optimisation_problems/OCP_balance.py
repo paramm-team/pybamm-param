@@ -52,6 +52,8 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
                 "Length of weights must be equal to the length of data points\
             or single value for all points"
             )
+        elif len(weights) == 1:
+            weights = [weights for _ in data_ref]
 
     def objective_function(self, x):
         """
