@@ -71,7 +71,9 @@ def objective_function_full(opt_problem, x):
             variable_weights[variable] = [1 for _ in y_data]
         else:
             if len(variable_weights[variable]) == 1:
-                variable_weights[variable] = [variable_weights[variable] for _ in y_data]
+                variable_weights[variable] = [
+                    variable_weights[variable] for _ in y_data
+                ]
         if (
             len(variable_weights[variable]) != len(y_data)
             and len(variable_weights[variable]) != 1
@@ -79,11 +81,10 @@ def objective_function_full(opt_problem, x):
             raise
         ValueError(
             "Length of weights must be equal to the length of data points\
-                   or single value for all points")
-
-        cost += cost_function.evaluate(
-            y_sim, y_data, variable_weights[variable]
+                   or single value for all points"
         )
+
+        cost += cost_function.evaluate(y_sim, y_data, variable_weights[variable])
     return cost
 
 
