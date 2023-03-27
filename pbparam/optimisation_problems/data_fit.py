@@ -55,7 +55,7 @@ def objective_function_full(opt_problem, x):
     scalings = opt_problem.scalings
     data = opt_problem.data
     variables_optimise = opt_problem.variables_optimise
-    variable_weights = opt_problem.variable_weights
+    variable_weights = vars(opt_problem.variable_weights)
     cost_function = opt_problem.cost_function
 
     # create a dict of input values from the current parameters
