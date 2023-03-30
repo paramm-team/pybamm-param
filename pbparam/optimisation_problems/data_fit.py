@@ -103,7 +103,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         "Terminal voltage [V]". It can be a string or a list of strings.
     weights : dict (optional)
         The custom weights of individual variables. Default is 1 for all variables.
-        It can be a single number for all or a list that has same length with the data.
+        It can be int or list of int that has same length with the data.
     cost_function : :class:`pbparam.BaseCostFunction` (optional)
         Cost function class to be used in minimisation algorithm. The default
         is Root-Mean Square Error. It can be selected from pre-defined built-in
