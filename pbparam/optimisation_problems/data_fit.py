@@ -55,7 +55,7 @@ def objective_function_full(opt_problem, x):
     scalings = opt_problem.scalings
     data = opt_problem.data
     variables_optimise = opt_problem.variables_optimise
-    variable_weights = vars(opt_problem.variable_weights)
+    weights = vars(opt_problem.weights)
     cost_function = opt_problem.cost_function
 
     # create a dict of input values from the current parameters
@@ -67,23 +67,17 @@ def objective_function_full(opt_problem, x):
     for variable in variables_optimise:
         y_sim = solution[variable](data["Time [s]"])
         y_data = data[variable]
-        if variable_weights == {}:
-            variable_weights[variable] = [1 for _ in y_data]
-        elif len(variable_weights.get(variable)) == 1:
-            variable_weights[variable] = [
-                variable_weights[variable] for _ in y_data
-            ]
-        elif (
-            len(variable_weights.get(variable)) != len(y_data)
-            and len(variable_weights.get(variable)) != 1
-        ):
+        variable_weights = weights.get(variable, [1 for _ in y_data])
+        if len(variable_weights) == 1:
+            variable_weights = [variable_weights for _ in y_data]
+        elif len(variable_weights) != len(y_data):
             raise
         ValueError(
             "Length of weights must be equal to the length of data points\
                    or single value for all points"
         )
 
-        cost += cost_function.evaluate(y_sim, y_data, variable_weights[variable])
+        cost += cost_function.evaluate(y_sim, y_data, variable_weights)
     return cost
 
 
@@ -119,7 +113,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         data,
         parameters_optimise,
         variables_optimise=["Terminal voltage [V]"],
-        variable_weights={},
+        weights={},
         cost_function=pbparam.RMSE(),
     ):
 
@@ -127,7 +121,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         self.data = data
         self.parameters_optimise = parameters_optimise
         self.variables_optimise = variables_optimise
-        self.variable_weights = variable_weights
+        self.weights = weights
         self.cost_function = cost_function
 
         # Keep a copy of the original parameters for convenience and initialise the new
