@@ -26,7 +26,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         The default is Root-Mean Square Error. It can be selected from
         pre-defined built-in functions or defined explicitly.
     weights : :class:`int or list of int` (optional)
-        Custom weights can be defined for cost function as single int 
+        Custom weights can be defined for cost function as single int
         or list of int with same length. This is optional and default is 1.
     """
 
