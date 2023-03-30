@@ -55,7 +55,7 @@ def objective_function_full(opt_problem, x):
     scalings = opt_problem.scalings
     data = opt_problem.data
     variables_optimise = opt_problem.variables_optimise
-    weights = vars(opt_problem.weights)
+    weights = opt_problem.weights
     cost_function = opt_problem.cost_function
 
     # create a dict of input values from the current parameters
@@ -67,7 +67,7 @@ def objective_function_full(opt_problem, x):
     for variable in variables_optimise:
         y_sim = solution[variable](data["Time [s]"])
         y_data = data[variable]
-        variable_weights = weights.get(variable, [1 for _ in y_data])
+        variable_weights = getattr(weights, variable, [1 for _ in y_data])
         if len(variable_weights) == 1:
             variable_weights = [variable_weights for _ in y_data]
         elif len(variable_weights) != len(y_data):
@@ -101,6 +101,9 @@ class DataFit(pbparam.BaseOptimisationProblem):
     variables_optimise : str or list of str (optional)
         The variable or variables to optimise in the cost function. The default is
         "Terminal voltage [V]". It can be a string or a list of strings.
+    weights : dict (optional)
+        The custom weights of individual variables. Default is 1 for all variables.
+        It can be a single number for all or a list that has same length with the data.
     cost_function : :class:`pbparam.BaseCostFunction` (optional)
         Cost function class to be used in minimisation algorithm. The default
         is Root-Mean Square Error. It can be selected from pre-defined built-in
