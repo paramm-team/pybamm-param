@@ -64,6 +64,22 @@ class TestDataFit(unittest.TestCase):
             ["Terminal voltage [V]", "Cell temperature [K]"],
         )
 
+        # Test custom_weights
+        optimisation_problem = pbparam.DataFit(
+            sim,
+            data,
+            parameters_optimise,
+            variables_optimise=["Terminal voltage [V]", "Cell temperature [K]"],
+            weights={
+                "X-averaged cell temperature [K]": [2],
+                "Terminal voltage [V]": [1],
+            },
+        )
+        self.assertEqual(
+            optimisation_problem.weights,
+            {"X-averaged cell temperature [K]": [2], "Terminal voltage [V]": [1]},
+        )
+
         # Test multiple parameters_optimise with same value
         parameter_names = (
             "Negative electrode diffusivity [m2.s-1]",
