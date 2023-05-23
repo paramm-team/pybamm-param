@@ -108,7 +108,6 @@ class DataFit(pbparam.BaseOptimisationProblem):
         cost_function=pbparam.RMSE(),
         solve_options=None,
     ):
-
         # Allocate init variables
         self.data = data
         self.parameters_optimise = parameters_optimise
@@ -208,7 +207,9 @@ class DataFit(pbparam.BaseOptimisationProblem):
             t_eval = [0, self.data["Time [s]"].iloc[-1]]
 
         # Solve the simulation with the given inputs and t_eval
-        solution = self.simulation.solve(t_eval=t_eval, inputs=inputs, **self.solve_options)
+        solution = self.simulation.solve(
+            t_eval=t_eval, inputs=inputs, **self.solve_options
+        )
 
         return solution
 
