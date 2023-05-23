@@ -60,7 +60,9 @@ def objective_function_full(opt_problem, x):
     # create a dict of input values from the current parameters
     input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
     t_end = data["Time [s]"].iloc[-1]
-    solution = simulation.solve([0, t_end], inputs=input_dict, **opt_problem.simulation_options)
+    solution = simulation.solve(
+        [0, t_end], inputs=input_dict, **opt_problem.simulation_options
+    )
     cost = 0
     for variable in variables_optimise:
         y_sim = solution[variable](data["Time [s]"])
