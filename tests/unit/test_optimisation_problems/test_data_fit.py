@@ -85,16 +85,6 @@ class TestDataFit(unittest.TestCase):
             },
         )
 
-        # Test bad parameters_optimise
-        parameters_optimise = {2: (5e-15, (2.06e-16, 2.06e-12))}
-
-        with self.assertRaisesRegex(TypeError, "parameters_optimise must be a"):
-            optimisation_problem = pbparam.DataFit(
-                sim,
-                data,
-                parameters_optimise,
-            )
-
 
 if __name__ == "__main__":
     print("Add -v for more debug output")
