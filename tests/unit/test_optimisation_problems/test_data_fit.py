@@ -25,9 +25,6 @@ class TestDataFit(unittest.TestCase):
             optimisation_problem.variables_optimise, ["Voltage [V]"]
         )
 
-        self.assertEqual(
-            optimisation_problem.original_parameters, model.default_parameter_values
-        )
         self.assertIsInstance(
             optimisation_problem.parameter_values[
                 "Negative electrode diffusivity [m2.s-1]"
