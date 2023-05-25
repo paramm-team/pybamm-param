@@ -29,6 +29,7 @@ class TestScipyDifferentialEvolution(unittest.TestCase):
         result = optimiser.optimise(opt)
         self.assertAlmostEqual(result.x[0], 0, places=4)
 
+
 if __name__ == "__main__":
     print("Add -v for more debug output")
     import sys

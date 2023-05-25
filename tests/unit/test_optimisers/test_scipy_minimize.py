@@ -15,6 +15,7 @@ class TestScipyMinimize(unittest.TestCase):
         self.assertFalse(optimiser.global_optimiser)
         self.assertEqual(optimiser.extra_options, {})
 
+
 if __name__ == "__main__":
     print("Add -v for more debug output")
     import sys

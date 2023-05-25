@@ -21,9 +21,7 @@ class TestDataFit(unittest.TestCase):
         # Test class variables
         self.assertTrue(optimisation_problem.data.empty)
         self.assertEqual(optimisation_problem.parameters_optimise, parameters_optimise)
-        self.assertEqual(
-            optimisation_problem.variables_optimise, ["Voltage [V]"]
-        )
+        self.assertEqual(optimisation_problem.variables_optimise, ["Voltage [V]"])
 
         self.assertIsInstance(
             optimisation_problem.parameter_values[
