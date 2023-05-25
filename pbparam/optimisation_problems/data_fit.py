@@ -68,7 +68,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         guesses when running the optimiser.
     variables_optimise : str or list of str (optional)
         The variable or variables to optimise in the cost function. The default is
-        "Terminal voltage [V]". It can be a string or a list of strings.
+        "Voltage [V]". It can be a string or a list of strings.
         TODO: implement this
     """
 
@@ -77,7 +77,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         simulation,
         data,
         parameters_optimise,
-        variables_optimise=["Terminal voltage [V]"],
+        variables_optimise=["Voltage [V]"],
         cost_function=pbparam.RMSE(),
     ):
 

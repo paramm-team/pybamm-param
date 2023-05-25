@@ -18,7 +18,7 @@ cell_selected = ["789"]
 dataset = prepos.import_thermal_data(crate, temperature)
 data_conc = {
     "Time [s]": [],
-    "Terminal voltage [V]": [],
+    "Voltage [V]": [],
     "X-averaged cell temperature [degC]": [],
 }
 for cell, data in dataset.items():
@@ -31,8 +31,8 @@ for cell, data in dataset.items():
             data["Time [s]"][idx_start[0] : idx_end[1]]
             - data["Time [s]"][idx_start[0]],
         )
-        data_conc["Terminal voltage [V]"] = np.append(
-            data_conc["Terminal voltage [V]"],
+        data_conc["Voltage [V]"] = np.append(
+            data_conc["Voltage [V]"],
             data["Voltage [V]"][idx_start[0] : idx_end[1]],
         )
         data_conc["X-averaged cell temperature [degC]"] = np.append(
@@ -111,7 +111,7 @@ param_optimised = {
     #     "Positive electrode specific heat capacity [J.kg-1.K-1]",
     # ): (2.85e3, (2.85, 2.85e6)),
 }
-variables_optimised = ["Terminal voltage [V]", "X-averaged cell temperature [K]"]
+variables_optimised = ["Voltage [V]", "X-averaged cell temperature [K]"]
 opt = pbparam.DataFit(simulation, data_conc, param_optimised, variables_optimised)
 optimiser = pbparam.ScipyDifferentialEvolution(
     extra_options={"workers": 4, "polish": True, "updating": "deferred", "disp": True}

@@ -22,7 +22,7 @@ class TestDataFit(unittest.TestCase):
         self.assertTrue(optimisation_problem.data.empty)
         self.assertEqual(optimisation_problem.parameters_optimise, parameters_optimise)
         self.assertEqual(
-            optimisation_problem.variables_optimise, ["Terminal voltage [V]"]
+            optimisation_problem.variables_optimise, ["Voltage [V]"]
         )
 
         self.assertEqual(
@@ -57,11 +57,11 @@ class TestDataFit(unittest.TestCase):
             sim,
             data,
             parameters_optimise,
-            variables_optimise=["Terminal voltage [V]", "Cell temperature [K]"],
+            variables_optimise=["Voltage [V]", "Cell temperature [K]"],
         )
         self.assertEqual(
             optimisation_problem.variables_optimise,
-            ["Terminal voltage [V]", "Cell temperature [K]"],
+            ["Voltage [V]", "Cell temperature [K]"],
         )
 
         # Test multiple parameters_optimise with same value

@@ -11,7 +11,7 @@ sol = sim0.solve([0, 3600])
 data = pd.DataFrame(
     {
         "Time [s]": sol["Time [s]"].entries,
-        "Terminal voltage [V]": sol["Terminal voltage [V]"].entries,
+        "Voltage [V]": sol["Voltage [V]"].entries,
     }
 )
 
