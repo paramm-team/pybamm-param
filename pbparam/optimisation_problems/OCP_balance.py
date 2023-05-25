@@ -71,9 +71,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             # Append data values to the y_data list
             y_data.append(fit.iloc[:, 1].to_numpy())
 
-        # Evaluate the cost of the simulation using the cost function
-        cost = self.cost_function.evaluate(y_sim, y_data)
-
+        # Return the cost of the simulation using the cost function
         return self.cost_function.evaluate(y_sim, y_data)
 
     def setup_objective_function(self):

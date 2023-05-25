@@ -56,6 +56,6 @@ class RMSE(pbparam.BaseCostFunction):
             # Calculate the error and normalize by the mean of the data
             err = (sim - data) / np.nanmean(data)
             # Add the square root of the mean square error to the RMSE variable
-            RMSE += np.sqrt(np.nanmean(err**2))
+            rmse += np.sqrt(np.nanmean(err**2))
 
         return np.array(rmse)
