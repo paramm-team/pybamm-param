@@ -5,7 +5,6 @@
 import pbparam
 import pybamm
 import numpy as np
-import copy
 from functools import partial
 
 
@@ -154,7 +153,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
                 scaling = value[0]
             else:
                 scaling = 1
-            
+
             self.scalings[i] = scaling
             self.x0[i] = value[0] / scaling
             self.bounds[i] = tuple(v / scaling for v in value[1])
