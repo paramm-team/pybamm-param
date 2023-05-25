@@ -1,6 +1,0 @@
-#
-# Shared objective functions for testing
-#
-
-def parabola(x):
-    return x[0] ** 2
