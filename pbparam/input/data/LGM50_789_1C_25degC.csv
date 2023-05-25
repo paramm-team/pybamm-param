@@ -1,4 +1,4 @@
-Time [s],Terminal voltage [V],X-averaged cell temperature [K]
+Time [s],Voltage [V],X-averaged cell temperature [K]
 0.0,4.17955,297.75
 0.0010000000002037268,4.02629,297.75
 0.5079999999998108,4.01529,297.75

@@ -88,7 +88,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         will take the same value.
     variables_optimise : str or list of str (optional)
         The variable or variables to optimise in the cost function. The default is
-        "Terminal voltage [V]". It can be a string or a list of strings.
+        "Voltage [V]". It can be a string or a list of strings.
     cost_function : :class:`pbparam.BaseCostFunction`
         Cost function class to be used in minimisation algorithm. The default
         is Root-Mean Square Error. It can be selected from pre-defined built-in

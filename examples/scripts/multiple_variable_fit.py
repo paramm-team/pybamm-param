@@ -75,7 +75,7 @@ param_optimised = {
     #     "Positive electrode specific heat capacity [J.kg-1.K-1]",
     # ): (2.85e3, (2.85, 2.85e6)),
 }
-variables_optimised = ["Terminal voltage [V]", "X-averaged cell temperature [K]"]
+variables_optimised = ["Voltage [V]", "X-averaged cell temperature [K]"]
 cost_function = pbparam.RMSE()
 opt = pbparam.DataFit(
     simulation, data, param_optimised, variables_optimised, cost_function
