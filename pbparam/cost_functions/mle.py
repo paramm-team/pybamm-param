@@ -8,9 +8,26 @@ import scipy.stats as stats
 
 
 class MLE(pbparam.BaseCostFunction):
+    """
+    Maximum Likelihood Estimation (MLE) class, to evaluate error of simulation
+    dataset to true dataset.
+
+    Parameters
+    ----------
+    y_sim : array or list
+            contains simulation data points
+    y_data : array or list
+            contains reference data points
+    Returns
+    -------
+    MLE : array
+            Calculated MLE for given inputs.
+    """
+    # Initializing the class and giving it a name
     def __init__(self):
         self.name = "Maximum Likelihood Estimation"
 
+    # Define the evaluate method which will calculate the MLE
     def evaluate(self, y_sim, y_data, sd):
         y_sim = y_sim if isinstance(y_sim, list) else [y_sim]
         y_data = y_data if isinstance(y_data, list) else [y_data]

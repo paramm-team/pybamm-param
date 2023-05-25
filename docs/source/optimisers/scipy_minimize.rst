@@ -1,5 +1,5 @@
-Scipy Minimize Optimiser
-========================
+Scipy Minimize
+==============
 
 .. autoclass:: pbparam.ScipyMinimize
   :members:

@@ -9,7 +9,21 @@ import pybamm
 
 class ScipyDifferentialEvolution(pbparam.BaseOptimiser):
     """
-    TODO: write
+    Scipy Differential Evolution Optimiser class. Wraps the Scipy's differential
+    evolution optimizer for use in an optimization problem.
+    Inherits from the BaseOptimizer class and overrides the _run_optimizer method
+    to use the differential_evolution function from Scipy's optimize module.
+    Please refer to
+    (https://docs.scipy.org/doc/scipy/reference/generated/
+    scipy.optimize.differential_evolution.html) for more details.
+    Scipy Differential Evolution is a non-gradient based method that is robust but
+    slower to converge than 'Nelder-Mead' method.
+
+    Parameters
+    ----------
+    extra_options : dict, optional
+        Dict of arguments that will be passed to the differential_evolution function.
+
     """
 
     def __init__(self, extra_options=None):
@@ -20,9 +34,25 @@ class ScipyDifferentialEvolution(pbparam.BaseOptimiser):
         self.global_optimiser = True
 
     def _run_optimiser(self, optimisation_problem, x0, bounds):
-        # Initialise timer
-        timer = pybamm.Timer()
+        """
+        Runs the optimization process.
 
+        Parameters
+        ----------
+        optimisation_problem : :class:`pbparam.OptimisationProblem`
+            The optimization problem to solve.
+        x0 : array_like
+            Initial guess for the optimization problem.
+        bounds : array_like
+            Bounds for the optimization problem.
+
+        Returns
+        -------
+        result : :class:`pbparam.pbparam.OptimisationResult`
+            The results of the optimization process.
+
+        """
+        timer = pybamm.Timer()
         raw_result = differential_evolution(
             optimisation_problem.objective_function,
             bounds,
@@ -30,7 +60,6 @@ class ScipyDifferentialEvolution(pbparam.BaseOptimiser):
             **self.extra_options,
         )
         solve_time = timer.time()
-
         if optimisation_problem.scalings is None:
             scaled_result = raw_result.x
         else:
@@ -44,7 +73,5 @@ class ScipyDifferentialEvolution(pbparam.BaseOptimiser):
             raw_result,
             optimisation_problem,
         )
-
         result.solve_time = solve_time
-
         return result

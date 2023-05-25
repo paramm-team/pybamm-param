@@ -39,6 +39,6 @@ optimiser = pbparam.ScipyDifferentialEvolution(
 
 result = optimiser.optimise(opt)
 
-print(result.x, result.fun, result.solve_time)
+print(result)
 
 result.plot()

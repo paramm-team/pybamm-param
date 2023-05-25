@@ -21,9 +21,14 @@ class OptimisationResult(object):
         Value of the objective function.
     raw_result : scipy.optimize.OptimizeResult
         The raw result of the optimisation.
+    optimisation_problem : object
+        The optimisation problem that was used for the optimization.
     """
 
     def __init__(self, x, success, message, fun, raw_result, optimisation_problem):
+        """
+        Initialize the OptimisationResult class
+        """
         self.x = x
         self.success = success
         self.message = message
@@ -34,9 +39,29 @@ class OptimisationResult(object):
         # Initialise time
         self.solve_time = None
 
+    def __str__(self):
+        str = f'''
+             Optimal values: {self.x}
+        Cost function value: {self.fun}
+                 Solve time: {self.solve_time}
+                    Message: {self.message}
+        '''
+
+        return str
+
     def plot(self, testing=False):
         """
         Plot the optimisation result.
+
+        Parameters
+        ----------
+        testing : bool, optional
+            If True, the plot is not shown. The default is False.
+
+        Returns
+        -------
+        plot : object
+            The plot object.
         """
         import matplotlib.pyplot as plt
 

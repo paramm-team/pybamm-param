@@ -1,51 +1,18 @@
 import os
-import process_experimental_data as prepos
-from set_parameters import (
-    set_thermal_parameters,
-    set_experiment_parameters,
-    set_ambient_temperature,
-)
 import pybamm
-import numpy as np
 import pbparam
 import pandas as pd
 
-os.chdir("../..")
+# Change working directory to import data
+os.chdir(
+    os.path.join(
+        pbparam.__path__[0],
+        "input",
+        "data",
+    )
+)
 
-temperature = 25  # in degC, valid values: 0, 10, 25
-crate = 1  # valid values: 0.5, 1, 2
-cell_selected = ["789"]
-dataset = prepos.import_thermal_data(crate, temperature)
-data_conc = {
-    "Time [s]": [],
-    "Voltage [V]": [],
-    "X-averaged cell temperature [degC]": [],
-}
-for cell, data in dataset.items():
-    if cell in cell_selected:
-        idx_start, idx_end = prepos.get_idxs(data, crate * 5, 5 / 3)
-        if len(idx_end) == 1:
-            idx_end = np.append(idx_end, len(data["Time [s]"]))
-        data_conc["Time [s]"] = np.append(
-            data_conc["Time [s]"],
-            data["Time [s]"][idx_start[0] : idx_end[1]]
-            - data["Time [s]"][idx_start[0]],
-        )
-        data_conc["Voltage [V]"] = np.append(
-            data_conc["Voltage [V]"],
-            data["Voltage [V]"][idx_start[0] : idx_end[1]],
-        )
-        data_conc["X-averaged cell temperature [degC]"] = np.append(
-            data_conc["X-averaged cell temperature [degC]"],
-            data["Temp Cell [degC]"][idx_start[0] : idx_end[1]],
-        )
-data_conc = pd.DataFrame(data_conc)
-data_conc["X-averaged cell temperature [degC]"] = (
-    data_conc["X-averaged cell temperature [degC]"] + 273.15
-)
-data_conc = data_conc.rename(
-    columns={"X-averaged cell temperature [degC]": "X-averaged cell temperature [K]"}
-)
+data = pd.read_csv("LGM50_789_1C_25degC.csv")
 
 
 def j0_neg(c_e, c_s_surf, c_s_max, T):
@@ -73,10 +40,7 @@ model = pybamm.lithium_ion.SPMe(
     name="TSPMe",
 )
 
-param_default = pybamm.ParameterValues("Chen2020")
-param = set_thermal_parameters(param_default, 16, 2.32e6, temperature)
-param = set_experiment_parameters(param, crate, temperature)
-param = set_ambient_temperature(param, crate, temperature)
+param = pybamm.ParameterValues("Chen2020")
 param.update(
     {
         "Negative electrode exchange-current density [A.m-2]": j0_neg,
@@ -86,7 +50,7 @@ param.update(
 )
 experiment = pybamm.Experiment(
     [
-        "Discharge at {}C until 2.5 V (5 seconds period)".format(crate),
+        "Discharge at 1C until 2.5 V (5 seconds period)",
         "Rest for 2 hours",
     ],
     period="30 seconds",
@@ -111,10 +75,12 @@ param_optimised = {
     #     "Positive electrode specific heat capacity [J.kg-1.K-1]",
     # ): (2.85e3, (2.85, 2.85e6)),
 }
-variables_optimised = ["Voltage [V]", "X-averaged cell temperature [K]"]
-opt = pbparam.DataFit(simulation, data_conc, param_optimised, variables_optimised)
-optimiser = pbparam.ScipyDifferentialEvolution(
-    extra_options={"workers": 4, "polish": True, "updating": "deferred", "disp": True}
+variables_optimised = ["Terminal voltage [V]", "X-averaged cell temperature [K]"]
+cost_function = pbparam.RMSE()
+opt = pbparam.DataFit(
+    simulation, data, param_optimised, variables_optimised, cost_function
 )
+optimiser = pbparam.ScipyMinimize(method="Nelder-Mead")
 result = optimiser.optimise(opt)
+print(result)
 result.plot()

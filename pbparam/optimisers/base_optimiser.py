@@ -13,8 +13,6 @@ class BaseOptimiser(object):
     ----------
     method : str, optional
         The method to use for optimisation, specific to each optimiser
-    additional args :
-        TODO: write this
     """
 
     def __init__(self):
@@ -31,7 +29,7 @@ class BaseOptimiser(object):
 
         Parameters
         ----------
-        optimisation_problem : :class:`OptimisationProblem`
+        optimisation_problem : :class:`pbparam.OptimisationProblem`
             The optimisation problem to be optimised.
         x0 : numpy array (optional)
             The initial guesses for the optimisation.
@@ -42,7 +40,7 @@ class BaseOptimiser(object):
             defaults to "ERROR"
         Returns
         -------
-        :class:`OptimisationResult` object.
+        result : :class:`OptimisationResult` object.
             The results of the optimisation.
         """
         # Setup cost function which resets simulation.solve.integrator_specs

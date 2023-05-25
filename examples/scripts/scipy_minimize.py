@@ -37,6 +37,6 @@ optimiser = pbparam.ScipyMinimize(method="Nelder-Mead", extra_options={"tol": 1e
 
 result = optimiser.optimise(opt)
 
-print(result.x, result.fun, result.solve_time)
+print(result)
 
 result.plot()
