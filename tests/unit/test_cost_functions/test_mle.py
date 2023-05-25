@@ -28,8 +28,8 @@ class TestMLE(unittest.TestCase):
         variables = ["Voltage [V]", "X-averaged temperature [K]"]
         parameters = cost_function._get_parameters(variables)
         expected_result = {
-            "Standard deviation of voltage [V]": (0, (0, 1e3)),
-            "Standard deviation of x-averaged temperature [K]": (0, (0, 1e3)),
+            "Standard deviation of voltage [V]": (1, (1e-6, 1e3)),
+            "Standard deviation of x-averaged temperature [K]": (1, (0, 1e3)),
         }
 
         self.assertDictEqual(parameters, expected_result)

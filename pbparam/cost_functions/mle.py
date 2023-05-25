@@ -36,7 +36,7 @@ class MLE(pbparam.BaseCostFunction):
 
         mle = 0
         for sim, data, s in zip(y_sim, y_data, sd):
-            mle += -np.sum(stats.norm.logpdf(data, loc=sim, scale=s))
+            mle += -np.nansum(stats.norm.logpdf(data, loc=sim, scale=s))
 
         return mle
 
@@ -58,5 +58,5 @@ class MLE(pbparam.BaseCostFunction):
         for variable in variables:
             name = "Standard deviation of " + variable[0].lower() + variable[1:]
             # TODO: provide better guesses for the bounds
-            parameters[name] = (0, (0, 1e3))
+            parameters[name] = (1, (1e-16, 1e3))
         return parameters
