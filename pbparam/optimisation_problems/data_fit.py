@@ -60,7 +60,9 @@ def objective_function_full(opt_problem, x):
     # create a dict of input values from the current parameters
     input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
     t_end = data["Time [s]"].iloc[-1]
-    solution = simulation.solve([0, t_end], inputs=input_dict)
+    solution = simulation.solve(
+        [0, t_end], inputs=input_dict, **opt_problem.solve_options
+    )
     cost = 0
     for variable in variables_optimise:
         y_sim = solution[variable](data["Time [s]"])
@@ -93,6 +95,8 @@ class DataFit(pbparam.BaseOptimisationProblem):
         Cost function class to be used in minimisation algorithm. The default
         is Root-Mean Square Error. It can be selected from pre-defined built-in
         functions or defined explicitly.
+    solve_options : dict (optional)
+        A dictionary of options to pass to the simulation. The default is None.
     """
 
     def __init__(
@@ -102,13 +106,14 @@ class DataFit(pbparam.BaseOptimisationProblem):
         parameters_optimise,
         variables_optimise=["Terminal voltage [V]"],
         cost_function=pbparam.RMSE(),
+        solve_options=None,
     ):
-
         # Allocate init variables
         self.data = data
         self.parameters_optimise = parameters_optimise
         self.variables_optimise = variables_optimise
         self.cost_function = cost_function
+        self.solve_options = solve_options or {}
 
         # Keep a copy of the original parameters for convenience and initialise the new
         # parameters
@@ -202,7 +207,9 @@ class DataFit(pbparam.BaseOptimisationProblem):
             t_eval = [0, self.data["Time [s]"].iloc[-1]]
 
         # Solve the simulation with the given inputs and t_eval
-        solution = self.simulation.solve(t_eval=t_eval, inputs=inputs)
+        solution = self.simulation.solve(
+            t_eval=t_eval, inputs=inputs, **self.solve_options
+        )
 
         return solution
 

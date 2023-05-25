@@ -57,11 +57,11 @@ class ScipyMinimize(pbparam.BaseOptimiser):
         Dict of arguments that will be used in optimiser.
     """
 
-    def __init__(self, method=None, extra_options=None, solver_options=None):
+    def __init__(self, method=None, extra_options=None, optimiser_options=None):
         super().__init__()
         self.method = method
         self.extra_options = extra_options or {}
-        self.solver_options = solver_options or {}
+        self.optimiser_options = optimiser_options or {}
         self.name = "SciPy Minimize optimiser with {} method".format(method)
         self.single_variable = False
         self.global_optimiser = False
@@ -94,7 +94,7 @@ class ScipyMinimize(pbparam.BaseOptimiser):
             method=self.method,
             bounds=bounds,
             **self.extra_options,
-            options=self.solver_options,
+            options=self.optimiser_options,
         )
         solve_time = timer.time()
 
