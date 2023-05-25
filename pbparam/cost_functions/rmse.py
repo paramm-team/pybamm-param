@@ -23,6 +23,7 @@ class RMSE(pbparam.BaseCostFunction):
     RMSE : array
         Calculated RMSE for given inputs.
     """
+
     def __init__(self):
         self.name = "Root Mean Square Error"
 
@@ -59,3 +60,19 @@ class RMSE(pbparam.BaseCostFunction):
             rmse += np.sqrt(np.nanmean(err**2))
 
         return np.array(rmse)
+
+    def _get_parameters(self, variables):
+        """
+        Get the optimisation parameters introduced by the cost function.
+
+        Parameters
+        ----------
+        variables : list
+            List of variables to optimise.
+
+        Returns
+        -------
+        parameters : dict
+            Dictionary of parameters.
+        """
+        return {}

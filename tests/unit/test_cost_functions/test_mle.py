@@ -23,6 +23,17 @@ class TestMLE(unittest.TestCase):
             < cost_function.evaluate(y_sim, y_data, 1)
         )
 
+    def test_get_parameters(self):
+        cost_function = pbparam.MLE()
+        variables = ["Voltage [V]", "X-averaged temperature [K]"]
+        parameters = cost_function._get_parameters(variables)
+        expected_result = {
+            "Standard deviation of voltage [V]": (0, (0, 1e3)),
+            "Standard deviation of x-averaged temperature [K]": (0, (0, 1e3)),
+        }
+
+        self.assertDictEqual(parameters, expected_result)
+
 
 if __name__ == "__main__":
     print("Add -v for more debug output")

@@ -23,6 +23,7 @@ class MLE(pbparam.BaseCostFunction):
     MLE : array
             Calculated MLE for given inputs.
     """
+
     # Initializing the class and giving it a name
     def __init__(self):
         self.name = "Maximum Likelihood Estimation"
@@ -38,3 +39,24 @@ class MLE(pbparam.BaseCostFunction):
             mle += -np.sum(stats.norm.logpdf(data, loc=sim, scale=s))
 
         return mle
+
+    def _get_parameters(self, variables):
+        """
+        Get the optimisation parameters introduced by the cost function.
+
+        Parameters
+        ----------
+        variables : list
+            List of variables to optimise.
+
+        Returns
+        -------
+        parameters : dict
+            Dictionary of parameters.
+        """
+        parameters = {}
+        for variable in variables:
+            name = "Standard deviation of " + variable[0].lower() + variable[1:]
+            # TODO: provide better guesses for the bounds
+            parameters[name] = (0, (0, 1e3))
+        return parameters
