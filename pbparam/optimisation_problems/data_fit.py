@@ -64,9 +64,9 @@ def objective_function_full(opt_problem, x):
 
     y_sim = [solution[v](data["Time [s]"]) for v in variables_optimise]
     y_data = [data[v] for v in variables_optimise]
-    # TODO: sd = [x[cost] for v in variables_optimise]
+    sd = [x[opt_problem.map_inputs[k]] for k in opt_problem.cost_function_parameters]
 
-    return cost_function.evaluate(y_sim, y_data)
+    return cost_function.evaluate(y_sim, y_data, sd)
 
 
 class DataFit(pbparam.BaseOptimisationProblem):
