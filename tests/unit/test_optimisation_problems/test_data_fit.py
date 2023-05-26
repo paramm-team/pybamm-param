@@ -15,7 +15,8 @@ class TestDataFit(unittest.TestCase):
         sim = pybamm.Simulation(model)
         data = pd.DataFrame()
         parameters_optimise = {
-            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
+            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12)),
+            "Total heat transfer coefficient [W.m-2.K-1]": (0, (0, 1000)),
         }
         optimisation_problem = pbparam.DataFit(sim, data, parameters_optimise)
 
@@ -30,18 +31,36 @@ class TestDataFit(unittest.TestCase):
             ],
             pybamm.InputParameter,
         )
+        self.assertIsInstance(
+            optimisation_problem.parameter_values[
+                "Total heat transfer coefficient [W.m-2.K-1]"
+            ],
+            pybamm.InputParameter,
+        )
 
-        self.assertEqual(optimisation_problem.x0, [1.0])
-        self.assertEqual(optimisation_problem.bounds, [(0.0412, 412)])
+        np.testing.assert_array_equal(optimisation_problem.x0, [1.0, 0.0])
+        np.testing.assert_array_equal(
+            optimisation_problem.bounds, [(0.0412, 412), (0, 1000)]
+        )
+        np.testing.assert_array_equal(optimisation_problem.scalings, [5e-15, 1.0])
 
         self.assertEqual(
             optimisation_problem.map_inputs,
-            {"Negative electrode diffusivity [m2.s-1]": 0},
+            {
+                "Negative electrode diffusivity [m2.s-1]": 0,
+                "Total heat transfer coefficient [W.m-2.K-1]": 1,
+            },
         )
 
         self.assertIsInstance(
             optimisation_problem.simulation.parameter_values[
                 "Negative electrode diffusivity [m2.s-1]"
+            ],
+            pybamm.InputParameter,
+        )
+        self.assertIsInstance(
+            optimisation_problem.simulation.parameter_values[
+                "Total heat transfer coefficient [W.m-2.K-1]"
             ],
             pybamm.InputParameter,
         )
