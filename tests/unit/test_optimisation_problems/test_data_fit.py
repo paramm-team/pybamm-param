@@ -4,12 +4,13 @@
 import pbparam
 import pybamm
 import pandas as pd
+import numpy as np
 
 import unittest
 
 
 class TestDataFit(unittest.TestCase):
-    def test_data_fit_init(self):
+    def test_init(self):
         model = pybamm.lithium_ion.SPM()
         sim = pybamm.Simulation(model)
         data = pd.DataFrame()
@@ -82,6 +83,100 @@ class TestDataFit(unittest.TestCase):
                 "Positive electrode diffusivity [m2.s-1]": 0,
             },
         )
+
+    def test_setup_objective_function(self):
+        model = pybamm.lithium_ion.SPM()
+        sim = pybamm.Simulation(model)
+        data = pd.DataFrame(
+            {
+                "Time [s]": [0, 1, 2, 3],
+                "Voltage [V]": [3.7, 3.6, 3.5, 3.4],
+            }
+        )
+        parameters_optimise = {
+            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
+        }
+        optimisation_problem = pbparam.DataFit(sim, data, parameters_optimise)
+
+        # Check objective_function raises error before setup
+        with self.assertRaisesRegex(
+            NotImplementedError, "objective_function not defined"
+        ):
+            optimisation_problem.objective_function(None)
+
+        # Check objective_function returns a number after setup
+        optimisation_problem.setup_objective_function()
+        self.assertIsNotNone(optimisation_problem.objective_function([1e-15]))
+
+    def test_calculate_solution(self):
+        # Test without experiment & initial parameter values
+        model = pybamm.lithium_ion.SPM()
+        sim = pybamm.Simulation(model)
+        data = pd.DataFrame(
+            {
+                "Time [s]": [0, 1, 2, 3],
+                "Voltage [V]": [3.7, 3.6, 3.5, 3.4],
+            }
+        )
+        parameters_optimise = {
+            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
+        }
+        optimisation_problem = pbparam.DataFit(sim, data, parameters_optimise)
+        sol = optimisation_problem.calculate_solution()
+
+        # Check final time is 3 (from data)
+        self.assertEqual(sol.t[-1], 3)
+
+        # Check inputs are correct
+        self.assertEqual(
+            sol.all_inputs,
+            [{"Negative electrode diffusivity [m2.s-1]": np.array([5e-15])}],
+        )
+
+        # Test with experiment & passing parameter values
+        model = pybamm.lithium_ion.SPM()
+        sim = pybamm.Simulation(
+            model, experiment=pybamm.Experiment(["Discharge at 1C for 20 seconds"])
+        )
+        data = pd.DataFrame(
+            {
+                "Time [s]": [0, 1, 2, 3],
+                "Voltage [V]": [3.7, 3.6, 3.5, 3.4],
+            }
+        )
+        parameters_optimise = {
+            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
+        }
+        optimisation_problem = pbparam.DataFit(sim, data, parameters_optimise)
+        sol = optimisation_problem.calculate_solution([1e-15])
+
+        # Check final time is 3 (from data)
+        self.assertEqual(sol.t[-1], 20)
+
+        # Check inputs are correct
+        self.assertEqual(
+            sol.all_inputs,
+            [{"Negative electrode diffusivity [m2.s-1]": np.array([1e-15])}],
+        )
+
+    def test__plot(self):
+        model = pybamm.lithium_ion.SPM()
+        sim = pybamm.Simulation(model)
+        data = pd.DataFrame(
+            {
+                "Time [s]": [0, 1, 2, 3],
+                "Voltage [V]": [3.7, 3.6, 3.5, 3.4],
+            }
+        )
+        parameters_optimise = {
+            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
+        }
+        optimisation_problem = pbparam.DataFit(sim, data, parameters_optimise)
+
+        plot = optimisation_problem._plot(None)
+
+        self.assertIsInstance(plot, pybamm.QuickPlot)
+        self.assertListEqual(plot.labels, ["Initial values", "Optimal values"])
 
 
 if __name__ == "__main__":
