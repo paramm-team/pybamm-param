@@ -6,7 +6,6 @@ import pbparam
 import pybamm
 import numpy as np
 import copy
-from functools import partial
 
 
 def update_simulation_parameters(simulation, parameter_values):
@@ -31,44 +30,6 @@ def update_simulation_parameters(simulation, parameter_values):
     )
 
     return new_simulation
-
-
-def objective_function_full(opt_problem, x):
-    """
-    Calculate the cost function given the current values of the parameters
-
-    Parameters
-    ----------
-    opt_problem : object
-        The optimization problem object
-    x : array-like
-        The current values of the parameters
-
-    Returns
-    -------
-    cost : float
-        The calculated cost of the simulation with the current parameters
-    """
-
-    simulation = opt_problem.simulation
-    map_inputs = opt_problem.map_inputs
-    scalings = opt_problem.scalings
-    data = opt_problem.data
-    variables_optimise = opt_problem.variables_optimise
-    cost_function = opt_problem.cost_function
-
-    # create a dict of input values from the current parameters
-    input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
-    t_end = data["Time [s]"].iloc[-1]
-    solution = simulation.solve(
-        [0, t_end], inputs=input_dict, **opt_problem.solve_options
-    )
-    cost = 0
-    for variable in variables_optimise:
-        y_sim = solution[variable](data["Time [s]"])
-        y_data = data[variable]
-        cost += cost_function.evaluate(y_sim, y_data)
-    return cost
 
 
 class DataFit(pbparam.BaseOptimisationProblem):
@@ -155,24 +116,34 @@ class DataFit(pbparam.BaseOptimisationProblem):
             simulation, self.parameter_values
         )
 
-    def setup_objective_function(self):
+    def objective_function(self, x):
         """
-        Define the cost function to be minimised
+        Calculate the cost function given the current values of the parameters
 
         Parameters
         ----------
         x : array-like
-            The values of the parameters to be optimised. Array of real elements of
-            size (n,) where `n` is the number of parameters to be optimised.
+            The current values of the parameters
 
         Returns
         -------
         cost : float
-            The value of the cost function evaluated at x.
+            The calculated cost of the simulation with the current parameters
         """
-        objective_function = partial(objective_function_full, self)
-        # Assign the objective function to the class variable
-        self.objective_function = objective_function
+
+        # create a dict of input values from the current parameters
+        input_dict = {param: self.scalings[i] * x[i]
+                      for param, i in self.map_inputs.items()}
+        t_end = self.data["Time [s]"].iloc[-1]
+        solution = self.simulation.solve(
+            [0, t_end], inputs=input_dict, **self.solve_options
+        )
+        cost = 0
+        for variable in self.variables_optimise:
+            y_sim = solution[variable](self.data["Time [s]"])
+            y_data = self.data[variable]
+            cost += self.cost_function.evaluate(y_sim, y_data)
+        return cost
 
     def calculate_solution(self, parameters=None):
         """

@@ -60,20 +60,16 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         cost : float
             The cost of the simulation.
         """
-        # Initialize empty lists to store simulated and data values
-        y_sim = []
-        y_data = []
 
         # Iterate over the fit and reference data
+        cost = 0
         for fit, ref in zip(self.data_fit, self.data_ref_fun):
             # Append simulated values to the y_sim list
-            y_sim.append(ref(x[0] + x[1] * fit.iloc[:, 0]))
+            y_sim = ref(x[0] + x[1] * fit.iloc[:, 0])
             # Append data values to the y_data list
-            y_data.append(fit.iloc[:, 1].to_numpy())
-
-        # Evaluate the cost of the simulation using the cost function
-        cost = self.cost_function.evaluate(y_sim, y_data)
-
+            y_data = fit.iloc[:, 1].to_numpy()
+            # Evaluate the cost of the simulation using the cost function
+            cost += self.cost_function.evaluate(y_sim, y_data)
         return cost
 
     def setup_objective_function(self):

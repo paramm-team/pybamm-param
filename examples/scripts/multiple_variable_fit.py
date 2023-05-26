@@ -80,7 +80,9 @@ cost_function = pbparam.RMSE()
 opt = pbparam.DataFit(
     simulation, data, param_optimised, variables_optimised, cost_function
 )
+
 optimiser = pbparam.ScipyMinimize(method="Nelder-Mead")
 result = optimiser.optimise(opt)
+
 print(result)
 result.plot()
