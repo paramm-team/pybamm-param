@@ -70,9 +70,11 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             y_sim.append(ref(x[0] + x[1] * fit.iloc[:, 0]))
             # Append data values to the y_data list
             y_data.append(fit.iloc[:, 1].to_numpy())
+        
+        sd = list(x[2:])
 
         # Return the cost of the simulation using the cost function
-        return self.cost_function.evaluate(y_sim, y_data)
+        return self.cost_function.evaluate(y_sim, y_data, sd)
 
     def setup_objective_function(self):
         """
@@ -105,15 +107,21 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         ]
 
         if Q_V_min - Q_V_max > 0:
-            self.bounds = [
+            ideal_bounds = [
                 (-(1 + eps) * Q_V_max / (Q_V_min - Q_V_max), 1 + eps),
                 (-eps, (1 + eps) / (Q_V_min - Q_V_max)),
             ]
         else:
-            self.bounds = [
+            ideal_bounds = [
                 (-eps, (1 + eps) * Q_V_max / (Q_V_max - Q_V_min)),
                 (-(1 + eps) / (Q_V_max - Q_V_min), eps),
             ]
+        
+        self.bounds = [(min(x - 1e-6, bound[0]), max(x + 1e-6, bound[1])) for x, bound in zip(self.x0, ideal_bounds)]
+
+        if isinstance(self.cost_function, pbparam.MLE):
+            self.x0 += [1] * len(self.data_fit)
+            self.bounds += [(1e-16, 1e3)] * len(self.data_fit)
 
     def _plot(self, x_optimal):
         """
