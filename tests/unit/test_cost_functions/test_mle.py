@@ -1,8 +1,9 @@
 #
 # Tests for the Base Cost Function class
 #
-import pbparam
 
+import pbparam
+import numpy as np
 import unittest
 
 
@@ -13,7 +14,25 @@ class TestMLE(unittest.TestCase):
 
     def test_evaluate(self):
         cost_function = pbparam.MLE()
-        self.assertIsNone(cost_function.evaluate(None, None, None))
+
+        y_sim = np.array([1, 2, 3, 4])
+        y_data = y_sim + np.random.normal(0, 0.1, 4)
+
+        self.assertTrue(
+            cost_function.evaluate(y_sim, y_data, 0.1)
+            < cost_function.evaluate(y_sim, y_data, 1)
+        )
+
+    def test_get_parameters(self):
+        cost_function = pbparam.MLE()
+        variables = ["Voltage [V]", "X-averaged temperature [K]"]
+        parameters = cost_function._get_parameters(variables)
+        expected_result = {
+            "Standard deviation of voltage [V]": (1, (1e-16, 1e3)),
+            "Standard deviation of x-averaged temperature [K]": (1, (1e-16, 1e3)),
+        }
+
+        self.assertDictEqual(parameters, expected_result)
 
 
 if __name__ == "__main__":

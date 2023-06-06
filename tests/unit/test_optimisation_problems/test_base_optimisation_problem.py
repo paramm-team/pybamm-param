@@ -14,7 +14,10 @@ class TestBaseOptimisationProblem(unittest.TestCase):
 
     def test_objective_function(self):
         optimisation_problem = pbparam.BaseOptimisationProblem()
-        self.assertIsNone(optimisation_problem.objective_function(None))
+        with self.assertRaisesRegex(
+            NotImplementedError, "objective_function not defined"
+        ):
+            optimisation_problem.objective_function(None)
 
     def test_setup_objective_function(self):
         optimisation_problem = pbparam.BaseOptimisationProblem()

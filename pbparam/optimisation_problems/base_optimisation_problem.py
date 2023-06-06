@@ -42,7 +42,10 @@ class BaseOptimisationProblem:
         float
             the value of the objective function
         """
-        pass
+        raise NotImplementedError(
+            "objective_function not defined, setup_objective_function needs to"
+            " be called first"
+        )
 
     def setup_objective_function(self):
         """
