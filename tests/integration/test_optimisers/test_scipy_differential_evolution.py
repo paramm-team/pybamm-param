@@ -30,8 +30,8 @@ class TestScipyDifferentialEvolution(unittest.TestCase):
 
     def test_rosenbrock(self):
         self.opt.objective_function = rosenbrock
-        self.opt.x0 = [2, -2, 2, -2]
-        self.opt.bounds = [[-5, 5]] * 4
+        self.opt.x0 = [2, 2, 2, 2]
+        self.opt.bounds = [[0, 5]] * 4
 
         # Test single worker
         optimiser = pbparam.ScipyDifferentialEvolution()
