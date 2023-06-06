@@ -14,15 +14,15 @@ class TestDataFit(unittest.TestCase):
         model = pybamm.lithium_ion.SPM()
         sim = pybamm.Simulation(model)
         data = pd.DataFrame()
-        parameters_optimise = {
+        model_parameters = {
             "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12)),
             "Total heat transfer coefficient [W.m-2.K-1]": (0, (0, 1000)),
         }
-        optimisation_problem = pbparam.DataFit(sim, data, parameters_optimise)
+        optimisation_problem = pbparam.DataFit(sim, data, model_parameters)
 
         # Test class variables
         self.assertTrue(optimisation_problem.data.empty)
-        self.assertEqual(optimisation_problem.parameters_optimise, parameters_optimise)
+        self.assertEqual(optimisation_problem.model_parameters, model_parameters)
         self.assertEqual(optimisation_problem.variables_optimise, ["Voltage [V]"])
 
         self.assertIsInstance(
@@ -71,7 +71,7 @@ class TestDataFit(unittest.TestCase):
         optimisation_problem = pbparam.DataFit(
             sim,
             data,
-            parameters_optimise,
+            model_parameters,
             variables_optimise=["Voltage [V]", "Cell temperature [K]"],
         )
         self.assertEqual(
@@ -79,16 +79,16 @@ class TestDataFit(unittest.TestCase):
             ["Voltage [V]", "Cell temperature [K]"],
         )
 
-        # Test multiple parameters_optimise with same value
+        # Test multiple model_parameters with same value
         parameter_names = (
             "Negative electrode diffusivity [m2.s-1]",
             "Positive electrode diffusivity [m2.s-1]",
         )
-        parameters_optimise = {parameter_names: (5e-15, (2.06e-16, 2.06e-12))}
+        model_parameters = {parameter_names: (5e-15, (2.06e-16, 2.06e-12))}
         optimisation_problem = pbparam.DataFit(
             sim,
             data,
-            parameters_optimise,
+            model_parameters,
         )
         for name in parameter_names:
             self.assertIsInstance(
@@ -112,10 +112,10 @@ class TestDataFit(unittest.TestCase):
                 "Voltage [V]": [3.7, 3.6, 3.5, 3.4],
             }
         )
-        parameters_optimise = {
+        model_parameters = {
             "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
         }
-        optimisation_problem = pbparam.DataFit(sim, data, parameters_optimise)
+        optimisation_problem = pbparam.DataFit(sim, data, model_parameters)
 
         # Check objective_function raises error before setup
         with self.assertRaisesRegex(
@@ -137,10 +137,10 @@ class TestDataFit(unittest.TestCase):
                 "Voltage [V]": [3.7, 3.6, 3.5, 3.4],
             }
         )
-        parameters_optimise = {
+        model_parameters = {
             "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
         }
-        optimisation_problem = pbparam.DataFit(sim, data, parameters_optimise)
+        optimisation_problem = pbparam.DataFit(sim, data, model_parameters)
         sol = optimisation_problem.calculate_solution()
 
         # Check final time is 3 (from data)
@@ -163,10 +163,10 @@ class TestDataFit(unittest.TestCase):
                 "Voltage [V]": [3.7, 3.6, 3.5, 3.4],
             }
         )
-        parameters_optimise = {
+        model_parameters = {
             "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
         }
-        optimisation_problem = pbparam.DataFit(sim, data, parameters_optimise)
+        optimisation_problem = pbparam.DataFit(sim, data, model_parameters)
         sol = optimisation_problem.calculate_solution([1e-15])
 
         # Check final time is 3 (from data)
@@ -187,10 +187,10 @@ class TestDataFit(unittest.TestCase):
                 "Voltage [V]": [3.7, 3.6, 3.5, 3.4],
             }
         )
-        parameters_optimise = {
+        model_parameters = {
             "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
         }
-        optimisation_problem = pbparam.DataFit(sim, data, parameters_optimise)
+        optimisation_problem = pbparam.DataFit(sim, data, model_parameters)
 
         plot = optimisation_problem._plot(None)
 

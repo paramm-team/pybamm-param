@@ -80,7 +80,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
     data : :class:`pandas.DataFrame`
          The experimental or reference data to be used in optimisation
          of simulation parameters.
-    parameters_optimise : dict
+    model_parameters : dict
         The parameters to be optimised. They should be provided as a dictionary where
         the keys are the names of the variables to be optimised and the values are a
         tuple with the initial guesses and the lower and upper bounds of the
@@ -101,14 +101,14 @@ class DataFit(pbparam.BaseOptimisationProblem):
         self,
         simulation,
         data,
-        parameters_optimise,
+        model_parameters,
         variables_optimise=["Voltage [V]"],
         cost_function=pbparam.RMSE(),
         solve_options=None,
     ):
         # Allocate init variables
         self.data = data
-        self.parameters_optimise = parameters_optimise
+        self.model_parameters = model_parameters
         self.variables_optimise = variables_optimise
         self.cost_function = cost_function
         self.solve_options = solve_options or {}
@@ -118,7 +118,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
             self.variables_optimise
         )
         self.joint_parameters = {
-            **self.parameters_optimise,
+            **self.model_parameters,
             **self.cost_function_parameters,
         }
 
