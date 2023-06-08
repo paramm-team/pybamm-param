@@ -21,13 +21,13 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         The OCP reference dataset(s). This dataset will be used as reference and
         :class:`data_fit` will be shifted and stretched to meet this dataset. They can
         be passed either as an array-like object or a list of array-like objects.
-    cost_function : :class:`pbparam.BaseCostFunction` (optional)
+    cost_function : :class:`pbparam.BaseCostFunction`(optional)
         Cost function class to be used in minimisation algorithm.
         The default is Root-Mean Square Error. It can be selected from
         pre-defined built-in functions or defined explicitly.
     weights : :class:`int or list of int` (optional)
-        Custom weights can be defined for cost function as single int
-        or list of int with same length. This is optional and default is 1.
+         Custom weights can be defined for cost function as single int
+         or list of int with same length. This is optional and default is 1.
     """
 
     def __init__(self, data_fit, data_ref, cost_function=pbparam.RMSE(), weights=[1]):
@@ -83,10 +83,10 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             # Append data values to the y_data list
             y_data.append(fit.iloc[:, 1].to_numpy())
 
-        # Evaluate the cost of the simulation using the cost function
-        cost = self.cost_function.evaluate(y_sim, y_data, self.weights)
+        sd = list(x[2:])
 
-        return cost
+        # Return the cost of the simulation using the cost function
+        return self.cost_function.evaluate(y_sim, y_data, sd, self.weights)
 
     def setup_objective_function(self):
         """
@@ -119,15 +119,24 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         ]
 
         if Q_V_min - Q_V_max > 0:
-            self.bounds = [
+            ideal_bounds = [
                 (-(1 + eps) * Q_V_max / (Q_V_min - Q_V_max), 1 + eps),
                 (-eps, (1 + eps) / (Q_V_min - Q_V_max)),
             ]
         else:
-            self.bounds = [
+            ideal_bounds = [
                 (-eps, (1 + eps) * Q_V_max / (Q_V_max - Q_V_min)),
                 (-(1 + eps) / (Q_V_max - Q_V_min), eps),
             ]
+
+        self.bounds = [
+            (min(x - 1e-6, bound[0]), max(x + 1e-6, bound[1]))
+            for x, bound in zip(self.x0, ideal_bounds)
+        ]
+
+        if isinstance(self.cost_function, pbparam.MLE):
+            self.x0 += [1] * len(self.data_fit)
+            self.bounds += [(1e-16, 1e3)] * len(self.data_fit)
 
     def _plot(self, x_optimal):
         """

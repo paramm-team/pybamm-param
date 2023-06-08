@@ -5,7 +5,6 @@
 import pbparam
 import pybamm
 import numpy as np
-import copy
 from functools import partial
 
 
@@ -15,7 +14,8 @@ def update_simulation_parameters(simulation, parameter_values):
     """
     # Remove integrator_specs from solver
     solver = simulation.solver
-    solver.integrator_specs = {}
+    if hasattr(solver, "integrator_specs"):
+        solver.integrator_specs = {}
 
     new_simulation = pybamm.Simulation(
         simulation.model,
@@ -55,30 +55,22 @@ def objective_function_full(opt_problem, x):
     scalings = opt_problem.scalings
     data = opt_problem.data
     variables_optimise = opt_problem.variables_optimise
-    weights = opt_problem.weights
     cost_function = opt_problem.cost_function
+    weights = opt_problem.weights
 
     # create a dict of input values from the current parameters
     input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
     t_end = data["Time [s]"].iloc[-1]
     solution = simulation.solve([0, t_end], inputs=input_dict)
-    cost = 0
 
-    for variable in variables_optimise:
-        y_sim = solution[variable](data["Time [s]"])
-        y_data = data[variable]
-        variable_weights = getattr(weights, variable, [1 for _ in y_data])
-        if len(variable_weights) == 1:
-            variable_weights = [variable_weights for _ in y_data]
-        elif len(variable_weights) != len(y_data):
-            raise
-        ValueError(
-            "Length of weights must be equal to the length of data points\
-                   or single value for all points"
-        )
+    y_sim = [solution[v](data["Time [s]"]) for v in variables_optimise]
+    y_data = [data[v] for v in variables_optimise]
+    sd = [x[opt_problem.map_inputs[k]] for k in opt_problem.cost_function_parameters]
+    weights = getattr(weights, variables_optimise[0], [1])
+    if len(weights) != 1 and len(weights) != len(y_data[0]):
+        raise ValueError("Length of weights must be equal to the length of data points or a single value for all points")
 
-        cost += cost_function.evaluate(y_sim, y_data, variable_weights)
-    return cost
+    return cost_function.evaluate(y_sim, y_data, sd, weights)
 
 
 class DataFit(pbparam.BaseOptimisationProblem):
@@ -92,7 +84,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
     data : :class:`pandas.DataFrame`
          The experimental or reference data to be used in optimisation
          of simulation parameters.
-    parameters_optimise : dict
+    model_parameters : dict
         The parameters to be optimised. They should be provided as a dictionary where
         the keys are the names of the variables to be optimised and the values are a
         tuple with the initial guesses and the lower and upper bounds of the
@@ -100,72 +92,84 @@ class DataFit(pbparam.BaseOptimisationProblem):
         will take the same value.
     variables_optimise : str or list of str (optional)
         The variable or variables to optimise in the cost function. The default is
-        "Terminal voltage [V]". It can be a string or a list of strings.
-    weights : dict (optional)
+        "Voltage [V]". It can be a string or a list of strings.
+        weights : dict (optional)
         The custom weights of individual variables. Default is 1 for all variables.
         It can be int or list of int that has same length with the data.
-    cost_function : :class:`pbparam.BaseCostFunction` (optional)
+    cost_function : :class:`pbparam.BaseCostFunction`
         Cost function class to be used in minimisation algorithm. The default
         is Root-Mean Square Error. It can be selected from pre-defined built-in
         functions or defined explicitly.
+    solve_options : dict (optional)
+        A dictionary of options to pass to the simulation. The default is None.
     """
 
     def __init__(
         self,
         simulation,
         data,
-        parameters_optimise,
-        variables_optimise=["Terminal voltage [V]"],
-        weights={},
+        model_parameters,
+        variables_optimise=["Voltage [V]"],
         cost_function=pbparam.RMSE(),
+        weights={},
+        solve_options=None,
     ):
-
         # Allocate init variables
         self.data = data
-        self.parameters_optimise = parameters_optimise
+        self.model_parameters = model_parameters
         self.variables_optimise = variables_optimise
         self.weights = weights
         self.cost_function = cost_function
+        self.solve_options = solve_options or {}
 
-        # Keep a copy of the original parameters for convenience and initialise the new
-        # parameters
-        self.original_parameters = copy.deepcopy(simulation.parameter_values)
+        # Obtain the new parameters to optimise introduced by the cost function
+        self.cost_function_parameters = self.cost_function._get_parameters(
+            self.variables_optimise
+        )
+        self.joint_parameters = {
+            **self.model_parameters,
+            **self.cost_function_parameters,
+        }
+
+        # Initialise the parameters_values dictionary
         self.parameter_values = simulation.parameter_values.copy()
 
         # Initialise the dictionary to map each parameter to optimise to the index of x
         # it corresponds to
-        self.map_inputs = {}
+        self._process_parameters()
 
-        # Initialise the initial guesses, bounds and scalings for the optimisation
-        # TODO: allow these to not be passed at this stage
-        self.x0 = np.empty([len(self.parameters_optimise)])
-        self.bounds = [None] * len(self.parameters_optimise)
-        self.scalings = np.empty([len(self.parameters_optimise)])
-
-        for i, (param, value) in enumerate(self.parameters_optimise.items()):
-            if isinstance(param, str):
-                self.parameter_values[param] = "[input]"
-                self.map_inputs[param] = i
-            elif isinstance(param, (tuple, list)):
-                for p in param:
-                    self.parameter_values[p] = "[input]"
-                    self.map_inputs[p] = i
-            else:
-                raise TypeError(
-                    "parameters_optimise must be a dictionary and its keys should be "
-                    "strings or tuples/lists of strings."
-                )
-
-            if value[0]:
-                scaling = value[0]
-
-            self.scalings[i] = scaling
-            self.x0[i] = value[0] / scaling
-            self.bounds[i] = tuple(v / scaling for v in value[1])
+        # Update the simulation parameters to inputs
+        for k in self.map_inputs.keys() & self.parameter_values.keys():
+            self.parameter_values[k] = "[input]"
 
         self.simulation = update_simulation_parameters(
             simulation, self.parameter_values
         )
+
+    def _process_parameters(self):
+        # Assemble the map_inputs dictionary, where the keys are the names parameters to
+        # optimise and the values are their index in the x array
+        self.map_inputs = {
+            key: index
+            for index, keys in enumerate(self.joint_parameters)
+            for key in (keys if isinstance(keys, tuple) else [keys])
+        }
+
+        # Initialise the initial guesses, bounds and scalings for the optimisation
+        # TODO: allow these to not be passed at this stage
+        self.x0 = np.empty([len(self.joint_parameters)])
+        self.bounds = [None] * len(self.joint_parameters)
+        self.scalings = np.empty([len(self.joint_parameters)])
+
+        for i, value in enumerate(self.joint_parameters.values()):
+            if value[0]:
+                scaling = value[0]
+            else:
+                scaling = 1
+
+            self.scalings[i] = scaling
+            self.x0[i] = value[0] / scaling
+            self.bounds[i] = tuple(v / scaling for v in value[1])
 
     def setup_objective_function(self):
         """
@@ -219,7 +223,9 @@ class DataFit(pbparam.BaseOptimisationProblem):
             t_eval = [0, self.data["Time [s]"].iloc[-1]]
 
         # Solve the simulation with the given inputs and t_eval
-        solution = self.simulation.solve(t_eval=t_eval, inputs=inputs)
+        solution = self.simulation.solve(
+            t_eval=t_eval, inputs=inputs, **self.solve_options
+        )
 
         return solution
 
