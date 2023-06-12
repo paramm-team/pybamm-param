@@ -29,7 +29,7 @@ class MLE(pbparam.BaseCostFunction):
         self.name = "Maximum Likelihood Estimation"
 
     # Define the evaluate method which will calculate the MLE
-    def evaluate(self, y_sim, y_data, weights, sd):
+    def evaluate(self, y_sim, y_data, sd, weights=[1]):
         y_sim = y_sim if isinstance(y_sim, list) else [y_sim]
         y_data = y_data if isinstance(y_data, list) else [y_data]
         weights = weights if isinstance(weights, list) else [weights]

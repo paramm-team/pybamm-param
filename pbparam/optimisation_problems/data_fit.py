@@ -56,7 +56,6 @@ def objective_function_full(opt_problem, x):
     data = opt_problem.data
     variables_optimise = opt_problem.variables_optimise
     cost_function = opt_problem.cost_function
-    weights = opt_problem.weights
 
     # create a dict of input values from the current parameters
     input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
@@ -66,7 +65,7 @@ def objective_function_full(opt_problem, x):
     y_sim = [solution[v](data["Time [s]"]) for v in variables_optimise]
     y_data = [data[v] for v in variables_optimise]
     sd = [x[opt_problem.map_inputs[k]] for k in opt_problem.cost_function_parameters]
-    weights = getattr(weights, variables_optimise[0], [1])
+    weights = getattr(opt_problem, "weights",{}).get(variables_optimise[0], [1])
     if len(weights) != 1 and len(weights) != len(y_data[0]):
         raise ValueError(
             "Length of weights must be equal to the length of data points \
@@ -114,7 +113,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         model_parameters,
         variables_optimise=["Voltage [V]"],
         cost_function=pbparam.RMSE(),
-        weights={},
+        weights=[1],
         solve_options=None,
     ):
         # Allocate init variables
