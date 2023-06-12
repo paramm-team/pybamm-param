@@ -88,6 +88,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         # Return the cost of the simulation using the cost function
         return self.cost_function.evaluate(y_sim, y_data, sd, self.weights)
 
+
     def setup_objective_function(self):
         """
         Sets up the objective function for optimization.
