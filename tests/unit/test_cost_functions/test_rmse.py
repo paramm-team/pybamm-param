@@ -16,18 +16,18 @@ class TestRMSE(unittest.TestCase):
         cost_function = pbparam.RMSE()
         y_sim = np.ones(4)
         y_data = np.ones(4)
-        self.assertEqual(cost_function.evaluate(y_sim, y_data), [1 for _ in y_data], 0)
+        self.assertEqual(cost_function.evaluate(y_sim, y_data,1), 0)
 
         y_sim = np.array([1, 2, 3, 4])
         y_data = np.array([4, 3, 2, 1])
         self.assertAlmostEqual(
-            cost_function.evaluate(y_sim, y_data, [1 for _ in y_data]), 0.89442719
+            cost_function.evaluate(y_sim, y_data,1), 0.89442719
         )
 
         y_sim = [np.array([1, 2, 3, 4]), np.array([1, 2, 3])]
         y_data = [np.array([4, 3, 2, 1]), np.array([4, 3, 2])]
         self.assertAlmostEqual(
-            cost_function.evaluate(y_sim, y_data, [1 for _ in y_data]), 1.53271193
+            cost_function.evaluate(y_sim, y_data,1), 1.53271193
         )
 
     def test_get_parameters(self):

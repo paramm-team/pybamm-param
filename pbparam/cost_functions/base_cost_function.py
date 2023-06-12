@@ -17,7 +17,7 @@ class BaseCostFunction:
         """
         self.name = "Base Cost Function"
 
-    def evaluate(self, y_sim, y_data, sd=None, weights=[1]):
+    def evaluate(self, y_sim, y_data, weights, sd=None):
         """
         Placeholder method for evaluating the cost of a prediction
 

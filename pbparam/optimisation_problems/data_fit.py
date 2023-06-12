@@ -72,7 +72,7 @@ def objective_function_full(opt_problem, x):
             or a single value for all points"
         )
 
-    return cost_function.evaluate(y_sim, y_data, weights, sd)
+    return cost_function.evaluate(y_sim, y_data, sd, weights)
 
 
 class DataFit(pbparam.BaseOptimisationProblem):
@@ -95,7 +95,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
     variables_optimise : str or list of str (optional)
         The variable or variables to optimise in the cost function. The default is
         "Voltage [V]". It can be a string or a list of strings.
-        weights : dict (optional)
+    weights : dict (optional)
         The custom weights of individual variables. Default is 1 for all variables.
         It can be int or list of int that has same length with the data.
     cost_function : :class:`pbparam.BaseCostFunction`
@@ -113,7 +113,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         model_parameters,
         variables_optimise=["Voltage [V]"],
         cost_function=pbparam.RMSE(),
-        weights=[1],
+        weights={},
         solve_options=None,
     ):
         # Allocate init variables
