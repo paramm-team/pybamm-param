@@ -38,6 +38,7 @@ class TestRMSE(unittest.TestCase):
 
         self.assertDictEqual(parameters, expected_result)
 
+
 if __name__ == "__main__":
     print("Add -v for more debug output")
     import sys

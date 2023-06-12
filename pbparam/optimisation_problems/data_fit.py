@@ -69,7 +69,8 @@ def objective_function_full(opt_problem, x):
     weights = getattr(weights, variables_optimise[0], [1])
     if len(weights) != 1 and len(weights) != len(y_data[0]):
         raise ValueError(
-            "Length of weights must be equal to the length of data points or a single value for all points"
+            "Length of weights must be equal to the length of data points \
+            or a single value for all points"
         )
 
     return cost_function.evaluate(y_sim, y_data, weights, sd)
