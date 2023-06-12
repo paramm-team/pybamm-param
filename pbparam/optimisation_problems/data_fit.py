@@ -65,7 +65,7 @@ def objective_function_full(opt_problem, x):
     y_sim = [solution[v](data["Time [s]"]) for v in variables_optimise]
     y_data = [data[v] for v in variables_optimise]
     sd = [x[opt_problem.map_inputs[k]] for k in opt_problem.cost_function_parameters]
-    weights = getattr(opt_problem, "weights",{}).get(variables_optimise[0], [1])
+    weights = getattr(opt_problem, "weights", {}).get(variables_optimise[0], [1])
     if len(weights) != 1 and len(weights) != len(y_data[0]):
         raise ValueError(
             "Length of weights must be equal to the length of data points \
