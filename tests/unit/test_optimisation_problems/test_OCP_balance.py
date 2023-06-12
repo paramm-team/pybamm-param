@@ -70,7 +70,9 @@ class TestOCPBalance(unittest.TestCase):
         self.assertEqual(optimisation_problem.bounds, [(-0.1, 1.375), (-0.275, 0.1)])
 
         # Check cost function is zero at theoretical optimal
-        self.assertAlmostEqual(optimisation_problem.objective_function([1.1, -0.2, 1]), 0)
+        self.assertAlmostEqual(
+            optimisation_problem.objective_function([1.1, -0.2, 1]), 0
+        )
 
         # Test data type error
         optimisation_problem = pbparam.OCPBalance(["data_fit"], ["data_ref"])
