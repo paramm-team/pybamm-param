@@ -57,9 +57,9 @@ class RMSE(pbparam.BaseCostFunction):
         rmse = 0
 
         # Iterate over each simulation and data point
-        for sim, data, weight in zip(y_sim, y_data, weight):
+        for sim, data, weight in zip(y_sim, y_data, weights):
             # Calculate the error and normalize by the mean of the data
-            err = ((sim - data)* weight) / np.nanmean(data)
+            err = ((sim - data) * weight) / np.nanmean(data)
             # Add the square root of the mean square error to the RMSE variable
             rmse += np.sqrt(np.nanmean(err**2))
 

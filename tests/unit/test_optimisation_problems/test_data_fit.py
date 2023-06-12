@@ -82,7 +82,7 @@ class TestDataFit(unittest.TestCase):
         optimisation_problem = pbparam.DataFit(
             sim,
             data,
-            parameters_optimise,
+            model_parameters,
             variables_optimise=["Terminal voltage [V]", "Cell temperature [K]"],
             weights={
                 "X-averaged cell temperature [K]": [2],
