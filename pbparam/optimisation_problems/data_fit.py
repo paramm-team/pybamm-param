@@ -66,13 +66,12 @@ def objective_function_full(opt_problem, x):
     y_data = [data[v] for v in variables_optimise]
     sd = [x[opt_problem.map_inputs[k]] for k in opt_problem.cost_function_parameters]
     weights = getattr(opt_problem, "weights", {}).get(variables_optimise[0], [1])
-    if len(weights) != 1 and len(weights) != len(y_data[0]):
+    if len(weights) != 1 and type(weights) != list:
         raise ValueError(
-            "Length of weights must be equal to the length of data points \
-            or a single value for all points"
+            "Weights should be dictionary with variables optimise values in a list."
         )
 
-    return cost_function.evaluate(y_sim, y_data, sd, weights)
+    return cost_function.evaluate(y_sim, y_data, weights, sd)
 
 
 class DataFit(pbparam.BaseOptimisationProblem):
