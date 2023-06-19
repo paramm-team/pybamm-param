@@ -41,9 +41,6 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             self.data_fit = [data_fit]
             self.data_ref = [data_ref]
 
-        self.cost_function = cost_function
-        self.weights = weights
-
         # Check both lists have same length
         if len(self.data_fit) != len(self.data_ref):
             raise ValueError(
@@ -54,8 +51,10 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             weights *= len(data_ref)
         elif len(weights) != len(data_ref):
             raise ValueError(
-                "Weights should have the same length as y_data."
+                "Weights should have the same length as data_ref."
             )
+        self.cost_function = cost_function
+        self.weights = weights
 
     def objective_function(self, x):
         """
@@ -83,7 +82,6 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             y_data.append(fit.iloc[:, 1].to_numpy())
 
         sd = list(x[2:])
-
         # Return the cost of the simulation using the cost function
         return self.cost_function.evaluate(y_sim, y_data, self.weights, sd)
 
