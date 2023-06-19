@@ -68,14 +68,30 @@ class TestOCPBalance(unittest.TestCase):
         self.assertEqual(optimisation_problem.bounds, [(-0.1, 1.375), (-0.275, 0.1)])
 
         # Check cost function is zero at theoretical optimal
-        self.assertAlmostEqual(
-            optimisation_problem.objective_function([1.1, -0.2]), 0
-        )
+        self.assertAlmostEqual(optimisation_problem.objective_function([1.1, -0.2]), 0)
 
         # Test data type error
         optimisation_problem = pbparam.OCPBalance(["data_fit"], ["data_ref"])
         with self.assertRaisesRegex(TypeError, "data_ref elements must"):
             optimisation_problem.setup_objective_function()
+
+    def test_weights_length_mismatch(self):
+        data_fit = [
+            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [5, 4, 3, 2, 1]}),
+            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [6, 5, 4, 3, 2]}),
+        ]
+        data_ref = [
+            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [5, 4, 3, 2, 1]}),
+            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [6, 5, 4, 3, 2]}),
+        ]
+        weights = [1, 2, 3, 4]  # Mismatched weights length
+
+        with self.assertRaisesRegex(
+            ValueError, "Weights should have the same length as data_ref."
+        ):
+            pbparam.ScipyMinimize(method="Nelder-Mead").optimise(
+                pbparam.OCPBalance(data_fit, data_ref, weights=weights)
+            )
 
     def test_plot(self):
         data_ref = [

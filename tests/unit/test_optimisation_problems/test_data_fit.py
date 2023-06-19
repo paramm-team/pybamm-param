@@ -110,6 +110,27 @@ class TestDataFit(unittest.TestCase):
             },
         )
 
+    def test_weights_length_mismatch_data_fit(self):
+        model = pybamm.lithium_ion.SPM()
+        sim = pybamm.Simulation(model)
+        data = pd.DataFrame(
+            {
+                "Time [s]": [0, 1, 2, 3],
+                "Voltage [V]": [3.7, 3.6, 3.5, 3.4],
+            }
+        )
+        model_parameters = {
+            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
+        }
+        variable_weights = {"Voltage [V]": [1, 2]}
+        optimisation_problem = pbparam.DataFit(sim, data, model_parameters, weights=variable_weights)
+
+        # Check objective_function raises error before setup
+        optimisation_problem.setup_objective_function()
+        with self.assertRaisesRegex(ValueError, "Weights should have the same length as y_data."):
+            optimisation_problem.objective_function([1e-15])
+
+
     def test_setup_objective_function(self):
         model = pybamm.lithium_ion.SPM()
         sim = pybamm.Simulation(model)
