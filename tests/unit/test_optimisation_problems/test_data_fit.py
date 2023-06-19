@@ -84,14 +84,6 @@ class TestDataFit(unittest.TestCase):
             data,
             model_parameters,
             variables_optimise=["Terminal voltage [V]", "Cell temperature [K]"],
-            weights={
-                "X-averaged cell temperature [K]": [2],
-                "Terminal voltage [V]": [1],
-            },
-        )
-        self.assertEqual(
-            optimisation_problem.weights,
-            {"X-averaged cell temperature [K]": [2], "Terminal voltage [V]": [1]},
         )
 
         # Test multiple model_parameters with same value

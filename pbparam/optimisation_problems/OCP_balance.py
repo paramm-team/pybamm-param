@@ -50,9 +50,11 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
                 "The number of fit and reference datasets must be the same."
             )
         # Check if the weights has same lenght
-        if len(weights) != 1 and type(weights) != list:
+        if len(weights) == 1:
+            weights *= len(data_ref)
+        elif len(weights) != len(data_ref):
             raise ValueError(
-                "Weights should be list with single number."
+                "Weights should have the same length as y_data."
             )
 
     def objective_function(self, x):

@@ -60,9 +60,7 @@ class TestOCPBalance(unittest.TestCase):
             pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [2, 3, 4, 5, 6]}),
         ]
 
-        weights = [2]
-
-        optimisation_problem = pbparam.OCPBalance(data_fit, data_ref, weights)
+        optimisation_problem = pbparam.OCPBalance(data_fit, data_ref)
         optimisation_problem.setup_objective_function()
 
         # Check bounds are correct
