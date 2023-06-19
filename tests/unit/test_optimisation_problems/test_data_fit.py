@@ -123,13 +123,16 @@ class TestDataFit(unittest.TestCase):
             "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
         }
         variable_weights = {"Voltage [V]": [1, 2]}
-        optimisation_problem = pbparam.DataFit(sim, data, model_parameters, weights=variable_weights)
+        optimisation_problem = pbparam.DataFit(
+            sim, data, model_parameters, weights=variable_weights
+        )
 
         # Check objective_function raises error before setup
         optimisation_problem.setup_objective_function()
-        with self.assertRaisesRegex(ValueError, "Weights should have the same length as y_data."):
+        with self.assertRaisesRegex(
+            ValueError, "Weights should have the same length as y_data."
+        ):
             optimisation_problem.objective_function([1e-15])
-
 
     def test_setup_objective_function(self):
         model = pybamm.lithium_ion.SPM()
