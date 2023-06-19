@@ -13,19 +13,19 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
 
     Parameters
     ----------
-    data_fit : :class:`pandas.DataFrame`
+    data_fit : pandas.DataFrame
         The OCP dataset to fit. This is experimental data that will be shifted and
         stretched to be same with :class:`data_ref`. Either an array-like object or
         a list of array-like objects.
-    data_ref : :class:`pandas.DataFrame`
+    data_ref : pandas.DataFrame
         The OCP reference dataset(s). This dataset will be used as reference and
         :class:`data_fit` will be shifted and stretched to meet this dataset. They can
         be passed either as an array-like object or a list of array-like objects.
-    cost_function : :class:`pbparam.BaseCostFunction`(optional)
+    cost_function : pbparam.BaseCostFunction, optional
         Cost function class to be used in minimisation algorithm.
         The default is Root-Mean Square Error. It can be selected from
         pre-defined built-in functions or defined explicitly.
-    weights : :class:`int or list of int` (optional)
+    weights : list of int , optional
          Custom weights can be defined for cost function as single int
          or list of int with same length. This is optional and default is 1.
     """
