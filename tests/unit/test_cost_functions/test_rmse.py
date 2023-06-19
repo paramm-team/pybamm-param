@@ -26,6 +26,14 @@ class TestRMSE(unittest.TestCase):
         y_data = [np.array([4, 3, 2, 1]), np.array([4, 3, 2])]
         self.assertAlmostEqual(cost_function.evaluate(y_sim, y_data), 1.53271193)
 
+    def test_get_parameters(self):
+        cost_function = pbparam.RMSE()
+        variables = ["Voltage [V]", "X-averaged temperature [K]"]
+        parameters = cost_function._get_parameters(variables)
+        expected_result = {}
+
+        self.assertDictEqual(parameters, expected_result)
+
 
 if __name__ == "__main__":
     print("Add -v for more debug output")

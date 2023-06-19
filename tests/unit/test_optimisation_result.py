@@ -40,7 +40,7 @@ class TestOptimisationResult(unittest.TestCase):
             optimisation_result.__str__(),
             "\n             Optimal values: x\n        Cost function value: fun"
             "\n                 Solve time: None\n                    Message: message"
-            "\n        "
+            "\n        ",
         )
 
     def test_plot(self):
