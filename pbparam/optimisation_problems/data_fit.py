@@ -32,42 +32,6 @@ def update_simulation_parameters(simulation, parameter_values):
     return new_simulation
 
 
-def objective_function_full(opt_problem, x):
-    """
-    Calculate the cost function given the current values of the parameters
-
-    Parameters
-    ----------
-    opt_problem : object
-        The optimization problem object
-    x : array-like
-        The current values of the parameters
-
-    Returns
-    -------
-    cost : float
-        The calculated cost of the simulation with the current parameters
-    """
-
-    simulation = opt_problem.simulation
-    map_inputs = opt_problem.map_inputs
-    scalings = opt_problem.scalings
-    data = opt_problem.data
-    variables_optimise = opt_problem.variables_optimise
-    cost_function = opt_problem.cost_function
-
-    # create a dict of input values from the current parameters
-    input_dict = {param: scalings[i] * x[i] for param, i in map_inputs.items()}
-    t_end = data["Time [s]"].iloc[-1]
-    solution = simulation.solve([0, t_end], inputs=input_dict)
-
-    y_sim = [solution[v](data["Time [s]"]) for v in variables_optimise]
-    y_data = [data[v] for v in variables_optimise]
-    sd = [x[opt_problem.map_inputs[k]] for k in opt_problem.cost_function_parameters]
-
-    return cost_function.evaluate(y_sim, y_data, sd)
-
-
 class DataFit(pbparam.BaseOptimisationProblem):
     """
     A class to define an optimisation problem.
@@ -189,6 +153,34 @@ class DataFit(pbparam.BaseOptimisationProblem):
             y_data = self.data[variable]
             cost += self.cost_function.evaluate(y_sim, y_data)
         return cost
+
+    def objective_function_full(self, x):
+        """
+        Calculate the cost function given the current values of the parameters
+
+        Parameters
+        ----------
+        x : array-like
+            The current values of the parameters
+
+        Returns
+        -------
+        cost : float
+            The calculated cost of the simulation with the current parameters
+        """
+
+        # create a dict of input values from the current parameters
+        input_dict = {
+            param: self.scalings[i] * x[i] for param, i in self.map_inputs.items()
+        }
+        t_end = self.data["Time [s]"].iloc[-1]
+        solution = self.simulation.solve([0, t_end], inputs=input_dict)
+
+        y_sim = [solution[v](self.data["Time [s]"]) for v in self.variables_optimise]
+        y_data = [self.data[v] for v in self.variables_optimise]
+        sd = [x[self.map_inputs[k]] for k in self.cost_function_parameters]
+
+        return self.cost_function.evaluate(y_sim, y_data, sd)
 
     def calculate_solution(self, parameters=None):
         """
