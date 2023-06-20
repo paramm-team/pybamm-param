@@ -11,7 +11,7 @@ class BaseOptimisationProblem:
     methods that should be overridden in subclasses to provide specific implementations.
     """
 
-    def __init__(self):
+    def __init__(self, cost_function=None):
         """
         Initialize the class properties
 
@@ -21,10 +21,16 @@ class BaseOptimisationProblem:
             bounds of the optimization problem
         scalings : array-like
             scalings for the optimization problem
+        cost_function : :class:`pbparam.BaseCostFunction`
+            Cost function class to be used in minimisation algorithm.
+            The default is Root-Mean Square Error. It can be selected from
+            pre-defined built-in functions or defined explicitly
         """
         self.x0 = None
         self.bounds = None
         self.scalings = None
+        self.cost_function = cost_function
+        assert self.cost_function is not None, "cost_function must be defined"
 
     def objective_function(self, x):
         """

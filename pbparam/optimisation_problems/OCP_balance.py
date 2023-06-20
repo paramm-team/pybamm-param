@@ -28,7 +28,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
     """
 
     def __init__(self, data_fit, data_ref, cost_function=pbparam.RMSE()):
-        super().__init__()
+        super().__init__(cost_function)
 
         # Allocate init variables
         if isinstance(data_fit, list):
