@@ -49,7 +49,7 @@ class RMSE(pbparam.BaseCostFunction):
         RMSE : array
             Calculated RMSE for given inputs.
         """
-        # Ensure y_sim, y_data adn weights are lists
+        # Ensure y_sim, y_data and weights are lists
         y_sim = y_sim if isinstance(y_sim, list) else [y_sim]
         y_data = y_data if isinstance(y_data, list) else [y_data]
         weights = weights if isinstance(weights, list) else [weights]
