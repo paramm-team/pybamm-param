@@ -66,7 +66,7 @@ def objective_function_full(opt_problem, x):
     y_data = [data[v] for v in variables_optimise]
     sd = [x[opt_problem.map_inputs[k]] for k in opt_problem.cost_function_parameters]
     weights = getattr(opt_problem, "weights", {}).get(
-        variables_optimise[0], [1] * len(y_data)
+        variables_optimise[0], [1 / np.nanmean(y_data)] * len(y_data)
     )
     if len(weights) == 1:
         weights *= len(y_data)
