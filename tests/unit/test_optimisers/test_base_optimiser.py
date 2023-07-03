@@ -35,14 +35,14 @@ class TestBaseOptimiser(unittest.TestCase):
 
         # Test default logging level
         internal_logging_level = optimiser.optimise(optimisation_problem)
-        self.assertEqual(pybamm.logger.level, 40)
+        self.assertEqual(pybamm.logger.level, 30)
         self.assertEqual(internal_logging_level, 40)
 
         # Test custom logging level
         internal_logging_level = optimiser.optimise(
             optimisation_problem, pybamm_logging_level="DEBUG"
         )
-        self.assertEqual(pybamm.logger.level, 40)
+        self.assertEqual(pybamm.logger.level, 30)
         self.assertEqual(internal_logging_level, 10)
 
 
