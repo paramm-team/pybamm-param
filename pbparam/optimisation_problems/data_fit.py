@@ -114,15 +114,24 @@ class DataFit(pbparam.BaseOptimisationProblem):
     ):
         if weights is None:
             # No weights provided, initialize with default values
-            weights = {var: [1/np.nanmean(data[var])] * len(data[var]) for var in variables_optimise}
+            weights = {
+                var: [1 / np.nanmean(data[var])] * len(data[var])
+                for var in variables_optimise
+            }
         else:
             for var in variables_optimise:
                 if var not in weights:
-                    raise ValueError("Weights dictionary should contain all variables in variables_optimise.")
+                    raise ValueError(
+                        "Weights dictionary should contain all \
+                        variables in variables_optimise."
+                    )
         if weights is not None:
             for var, weight in weights.items():
                 if len(weight) != 1 and len(weight) != len(data[var]):
-                    raise ValueError(f"Length of weights[{var}] should be 1 or same as the length of data.")
+                    raise ValueError(
+                        f"Length of weights[{var}] should be 1 or \
+                        same as the length of data."
+                    )
 
         # Allocate init variables
         self.data = data
