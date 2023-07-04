@@ -54,6 +54,7 @@ def objective_function_full(opt_problem, x):
     map_inputs = opt_problem.map_inputs
     scalings = opt_problem.scalings
     data = opt_problem.data
+    weights = opt_problem.weights
     variables_optimise = opt_problem.variables_optimise
     cost_function = opt_problem.cost_function
 
@@ -65,13 +66,7 @@ def objective_function_full(opt_problem, x):
     y_sim = [solution[v](data["Time [s]"]) for v in variables_optimise]
     y_data = [data[v] for v in variables_optimise]
     sd = [x[opt_problem.map_inputs[k]] for k in opt_problem.cost_function_parameters]
-    weights = getattr(opt_problem, "weights", {}).get(
-        variables_optimise[0], [1 / np.nanmean(y_data)] * len(y_data)
-    )
-    if len(weights) == 1:
-        weights *= len(y_data)
-    elif len(weights) != len(y_data):
-        raise ValueError("Weights should have the same length as y_data.")
+    weights = [weights[v] for v in variables_optimise]
 
     return cost_function.evaluate(y_sim, y_data, weights, sd)
 
@@ -114,9 +109,21 @@ class DataFit(pbparam.BaseOptimisationProblem):
         model_parameters,
         variables_optimise=["Voltage [V]"],
         cost_function=pbparam.RMSE(),
-        weights={},
+        weights=None,
         solve_options=None,
     ):
+        if weights is None:
+            # No weights provided, initialize with default values
+            weights = {var: [1/np.nanmean(data[var])] * len(data[var]) for var in variables_optimise}
+        else:
+            for var in variables_optimise:
+                if var not in weights:
+                    raise ValueError("Weights dictionary should contain all variables in variables_optimise.")
+        if weights is not None:
+            for var, weight in weights.items():
+                if len(weight) != 1 and len(weight) != len(data[var]):
+                    raise ValueError(f"Length of weights[{var}] should be 1 or same as the length of data.")
+
         # Allocate init variables
         self.data = data
         self.model_parameters = model_parameters
