@@ -64,17 +64,19 @@ class DataFit(pbparam.BaseOptimisationProblem):
         self,
         simulation,
         data,
-        model_parameters,
-        variables_optimise=["Voltage [V]"],
+        parameters,
+        variables_to_optimise=["Voltage [V]"],
         cost_function=pbparam.RMSE(),
         solve_options=None,
     ):
-        super().__init__(cost_function)
-        
-        # Allocate init variables
-        self.data = data
-        self.model_parameters = model_parameters
-        self.variables_optimise = variables_optimise
+        super().__init__(
+            cost_function=cost_function,
+            data=data,
+            model=simulation,
+            parameters=parameters,
+            variables_to_fit=variables_to_optimise
+        )
+
         self.solve_options = solve_options or {}
 
         # Obtain the new parameters to optimise introduced by the cost function
@@ -141,6 +143,14 @@ class DataFit(pbparam.BaseOptimisationProblem):
             The calculated cost of the simulation with the current parameters
         """
 
+        # Update the parameter values and solve the simulation using PyBaMM
+        input_dict = {
+            param: self.scalings[i] * x[i] for param, i in self.map_inputs.items()
+        }
+        t_end = self.data["Time [s]"].iloc[-1]
+        self.solution = self.simulation.solve([0, t_end], inputs=input_dict)
+
+        # Get the new y values from the simulation
         y_sim = [
             self.solution[v](self.data["Time [s]"])
             for v in self.variables_optimise
@@ -158,11 +168,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
 
     def setup_objective_function(self):
         # create a dict of input values from the current parameters
-        input_dict = {
-            param: self.scalings[i] * x[i] for param, i in self.map_inputs.items()
-        }
-        t_end = self.data["Time [s]"].iloc[-1]
-        self.solution = self.simulation.solve([0, t_end], inputs=input_dict)
+        pass
 
     def calculate_solution(self, parameters=None):
         """

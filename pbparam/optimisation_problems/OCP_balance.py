@@ -27,18 +27,24 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         pre-defined built-in functions or defined explicitly.
     """
 
-    def __init__(self, data_fit, data_ref, cost_function=pbparam.RMSE()):
-        super().__init__(cost_function)
+    def __init__(self, model, data, cost_function=pbparam.RMSE()):
+        """
+        Initialise the optimisation problem.
+        model : list or float
+            id the fitting data, if float recast as list length 1
+        data : list or float
+            is the reference data, if float recast as list length 1
+        """
+        super().__init__(
+            cost_function=cost_function,
+            data=data,
+            model=model,
+        )
 
         # Allocate init variables
-        if isinstance(data_fit, list):
-            self.data_fit = data_fit
-            self.data_ref = data_ref
-        else:
-            self.data_fit = [data_fit]
-            self.data_ref = [data_ref]
-
-        self.cost_function = cost_function
+        if not isinstance(self.data, list):
+            self.model = [self.model]
+            self.data = [self.data]
 
         # Check both lists have same length
         if len(self.data_fit) != len(self.data_ref):
