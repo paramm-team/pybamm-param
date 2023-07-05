@@ -139,10 +139,6 @@ class DataFit(pbparam.BaseOptimisationProblem):
 
         return self.cost_function.evaluate(y_sim, y_data, sd)
 
-    def setup_objective_function(self):
-        # create a dict of input values from the current parameters
-        pass
-
     def update_simulation_parameters(self, simulation):
         """
         Update the simulation object with new parameter values
