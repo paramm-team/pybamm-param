@@ -32,11 +32,13 @@ class BaseOptimisationProblem:
             Cost function class to be used in minimisation algorithm.
             The default is Root-Mean Square Error. It can be selected from
             pre-defined built-in functions or defined explicitly
-        data : :class:`pbparam.Data`
+        data : 
             Data object containing the data to be fitted
-        model : :class:`pbparam.Model`
+        model : 
             Model object containing the model to be fitted
-        variables_to_fit : list
+        parameters : 
+            Parameters object containing the parameters to be fitted
+        variables_to_fit : 
             List of variables to be fitted
         """
         # Parameters to be defined in constructor
@@ -51,6 +53,10 @@ class BaseOptimisationProblem:
         self.model = model
         self.parameters = parameters
         self.variables_to_fit = variables_to_fit
+
+        # This should be a requirement to run, if it's not defined in the subclass it 
+        # will pass
+        self.setup_objective_function()
 
     def objective_function(self, x):
         """
