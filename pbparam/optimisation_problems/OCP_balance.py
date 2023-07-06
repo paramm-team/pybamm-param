@@ -53,6 +53,8 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             model=model,
         )
 
+        self.process_and_clean_data()
+
     def objective_function(self, x):
         """
         Calculates the cost of the simulation based on the fitting parameters.
@@ -81,7 +83,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         # Return the cost of the simulation using the cost function
         return self.cost_function.evaluate(y_sim, y_data, sd)
 
-    def setup_objective_function(self):
+    def process_and_clean_data(self):
         """
         Sets up the objective function for optimization.
 
