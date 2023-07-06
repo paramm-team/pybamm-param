@@ -57,8 +57,8 @@ class BaseOptimisationProblem:
         self.parameters = parameters
         self.variables_to_fit = variables_to_fit
 
-        # This should be a requirement to run, if it's not defined in the subclass it
-        # will pass
+        # This should be a requirement to run if defined, if it's not defined in the
+        #  subclass it will pass
         self.setup_objective_function()
 
     def objective_function(self, x):
@@ -112,7 +112,7 @@ class BaseOptimisationProblem:
             simulation.model,
             experiment=getattr(simulation, "experiment", None),
             geometry=simulation.geometry,
-            parameter_values=self.parameter_values,
+            parameter_values=self.parameters,
             submesh_types=simulation.submesh_types,
             var_pts=simulation.var_pts,
             spatial_methods=simulation.spatial_methods,
@@ -136,7 +136,7 @@ class BaseOptimisationProblem:
         }
 
         # Initialise the parameters_values dictionary
-        self.parameter_values = self.simulation.parameter_values.copy()
+        self.parameter_values = self.model.parameter_values.copy()
 
         # Initialise the dictionary to map each parameter to optimise to the index of x
         # it corresponds to

@@ -49,9 +49,9 @@ class DataFit(pbparam.BaseOptimisationProblem):
             parameters=parameters,
             variables_to_fit=variables_to_fit
         )
-
-        self.collect_parameters(solve_options)
+       
         self.update_simulation_parameters(simulation)
+        self.collect_parameters(solve_options)
 
     def objective_function(self, x):
         """
