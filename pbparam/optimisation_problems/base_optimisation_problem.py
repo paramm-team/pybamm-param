@@ -57,7 +57,7 @@ class BaseOptimisationProblem:
         self.parameters = parameters
         self.variables_to_fit = variables_to_fit
 
-        # This should be a requirement to run, if it's not defined in the subclass it 
+        # This should be a requirement to run, if it's not defined in the subclass it
         # will pass
         self.setup_objective_function()
 
@@ -107,6 +107,7 @@ class BaseOptimisationProblem:
         if hasattr(solver, "integrator_specs"):
             solver.integrator_specs = {}
 
+        # Updating sim params requires recreating the simulation
         new_simulation = pybamm.Simulation(
             simulation.model,
             experiment=getattr(simulation, "experiment", None),

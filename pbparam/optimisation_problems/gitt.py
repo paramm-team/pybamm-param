@@ -34,19 +34,15 @@ class Gitt(pbparam.BaseOptimisationProblem):
     ):
         super().__init__(
             cost_function=cost_function,
-            data=data
+            data=data,
+            parameters={
+                "Negative electrode diffusivity [m2.s-1]": (5e-14, (2.06e-16, 2.06e-12))
+            },
+            variables_to_fit=["Voltage [V]"],
         )
 
-        # Allocate init variables
-        self.parameters = {
-            "Negative electrode diffusivity [m2.s-1]": (5e-14, (2.06e-16, 2.06e-12))
-        }
-        self.variables_to_fit = ["Voltage [V]"]
-        self.cost_function = cost_function
-
         self.collect_parameters(solve_options)
-
-        self.update_simulation_parameters(simulation, self.parameter_values)
+        self.update_simulation_parameters(simulation)
 
     def objective_function(self, x):
         # create a dict of input values from the current parameters

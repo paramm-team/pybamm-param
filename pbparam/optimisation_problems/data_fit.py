@@ -4,7 +4,6 @@
 
 import pbparam
 import pybamm
-import numpy as np
 
 
 class DataFit(pbparam.BaseOptimisationProblem):
@@ -52,34 +51,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         )
 
         self.collect_parameters(solve_options)
-
-        # Update the simulation parameters and assign simulation to self.model
         self.update_simulation_parameters(simulation)
-
-    def _process_parameters(self):
-        # Assemble the map_inputs dictionary, where the keys are the names parameters to
-        # optimise and the values are their index in the x array
-        self.map_inputs = {
-            key: index
-            for index, keys in enumerate(self.joint_parameters)
-            for key in (keys if isinstance(keys, tuple) else [keys])
-        }
-
-        # Initialise the initial guesses, bounds and scalings for the optimisation
-        # TODO: allow these to not be passed at this stage
-        self.x0 = np.empty([len(self.joint_parameters)])
-        self.bounds = [None] * len(self.joint_parameters)
-        self.scalings = np.empty([len(self.joint_parameters)])
-
-        for i, value in enumerate(self.joint_parameters.values()):
-            if value[0]:
-                scaling = value[0]
-            else:
-                scaling = 1
-
-            self.scalings[i] = scaling
-            self.x0[i] = value[0] / scaling
-            self.bounds[i] = tuple(v / scaling for v in value[1])
 
     def objective_function(self, x):
         """
