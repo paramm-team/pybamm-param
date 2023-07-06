@@ -2,6 +2,9 @@
 # Base optimisation problem class
 #
 
+import pybamm
+import numpy as np
+
 
 class BaseOptimisationProblem:
     """
@@ -94,6 +97,78 @@ class BaseOptimisationProblem:
         Subclasses will override this method to provide specific implementations
         """
         pass
+
+    def update_simulation_parameters(self, simulation):
+        """
+        Update the simulation object with new parameter values
+        """
+        # Remove integrator_specs from solver
+        solver = simulation.solver
+        if hasattr(solver, "integrator_specs"):
+            solver.integrator_specs = {}
+
+        new_simulation = pybamm.Simulation(
+            simulation.model,
+            experiment=getattr(simulation, "experiment", None),
+            geometry=simulation.geometry,
+            parameter_values=self.parameter_values,
+            submesh_types=simulation.submesh_types,
+            var_pts=simulation.var_pts,
+            spatial_methods=simulation.spatial_methods,
+            solver=solver,
+            output_variables=simulation.output_variables,
+            C_rate=getattr(simulation, "C_rate", None),
+        )
+
+        self.model = new_simulation
+
+    def collect_parameters(self, solve_options=None):
+        self.solve_options = solve_options or {}
+
+        # Obtain the new parameters to optimise introduced by the cost function
+        self.cost_function_parameters = self.cost_function._get_parameters(
+            self.variables_to_fit
+        )
+        self.joint_parameters = {
+            **self.parameters,
+            **self.cost_function_parameters,
+        }
+
+        # Initialise the parameters_values dictionary
+        self.parameter_values = self.simulation.parameter_values.copy()
+
+        # Initialise the dictionary to map each parameter to optimise to the index of x
+        # it corresponds to
+        self._process_parameters()
+
+        # Update the simulation parameters to inputs
+        for k in self.map_inputs.keys() & self.parameter_values.keys():
+            self.parameter_values[k] = "[input]"
+
+    def _process_parameters(self):
+        # Assemble the map_inputs dictionary, where the keys are the names parameters to
+        # optimise and the values are their index in the x array
+        self.map_inputs = {
+            key: index
+            for index, keys in enumerate(self.joint_parameters)
+            for key in (keys if isinstance(keys, tuple) else [keys])
+        }
+
+        # Initialise the initial guesses, bounds and scalings for the optimisation
+        # TODO: allow these to not be passed at this stage
+        self.x0 = np.empty([len(self.joint_parameters)])
+        self.bounds = [None] * len(self.joint_parameters)
+        self.scalings = np.empty([len(self.joint_parameters)])
+
+        for i, value in enumerate(self.joint_parameters.values()):
+            if value[0]:
+                scaling = value[0]
+            else:
+                scaling = 1
+
+            self.scalings[i] = scaling
+            self.x0[i] = value[0] / scaling
+            self.bounds[i] = tuple(v / scaling for v in value[1])
 
     def _plot(self, x):
         """

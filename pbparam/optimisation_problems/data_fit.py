@@ -51,27 +51,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
             variables_to_fit=variables_to_fit
         )
 
-        self.solve_options = solve_options or {}
-
-        # Obtain the new parameters to optimise introduced by the cost function
-        self.cost_function_parameters = self.cost_function._get_parameters(
-            self.variables_to_fit
-        )
-        self.joint_parameters = {
-            **self.parameters,
-            **self.cost_function_parameters,
-        }
-
-        # Initialise the parameters_values dictionary
-        self.parameter_values = simulation.parameter_values.copy()
-
-        # Initialise the dictionary to map each parameter to optimise to the index of x
-        # it corresponds to
-        self._process_parameters()
-
-        # Update the simulation parameters to inputs
-        for k in self.map_inputs.keys() & self.parameter_values.keys():
-            self.parameter_values[k] = "[input]"
+        self.collect_parameters(solve_options)
 
         # Update the simulation parameters and assign simulation to self.model
         self.update_simulation_parameters(simulation)
@@ -138,30 +118,6 @@ class DataFit(pbparam.BaseOptimisationProblem):
         ]
 
         return self.cost_function.evaluate(y_sim, y_data, sd)
-
-    def update_simulation_parameters(self, simulation):
-        """
-        Update the simulation object with new parameter values
-        """
-        # Remove integrator_specs from solver
-        solver = simulation.solver
-        if hasattr(solver, "integrator_specs"):
-            solver.integrator_specs = {}
-
-        new_simulation = pybamm.Simulation(
-            simulation.model,
-            experiment=getattr(simulation, "experiment", None),
-            geometry=simulation.geometry,
-            parameter_values=self.parameter_values,
-            submesh_types=simulation.submesh_types,
-            var_pts=simulation.var_pts,
-            spatial_methods=simulation.spatial_methods,
-            solver=solver,
-            output_variables=simulation.output_variables,
-            C_rate=getattr(simulation, "C_rate", None),
-        )
-
-        self.model = new_simulation
 
     def calculate_solution(self, parameters=None):
         """
