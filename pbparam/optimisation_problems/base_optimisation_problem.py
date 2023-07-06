@@ -2,7 +2,7 @@
 # Base optimisation problem class
 #
 
-import pybamm
+# import pybamm
 import numpy as np
 
 
@@ -106,22 +106,26 @@ class BaseOptimisationProblem:
         solver = simulation.solver
         if hasattr(solver, "integrator_specs"):
             solver.integrator_specs = {}
-
+        
+        #Why cant we do this?
+        self.model.parameter_values = self.parameter_values
+        self.model.solver = solver
+        
         # Updating sim params requires recreating the simulation
-        new_simulation = pybamm.Simulation(
-            simulation.model,
-            experiment=getattr(simulation, "experiment", None),
-            geometry=simulation.geometry,
-            parameter_values=self.parameters,
-            submesh_types=simulation.submesh_types,
-            var_pts=simulation.var_pts,
-            spatial_methods=simulation.spatial_methods,
-            solver=solver,
-            output_variables=simulation.output_variables,
-            C_rate=getattr(simulation, "C_rate", None),
-        )
-
-        self.model = new_simulation
+        # new_simulation = pybamm.Simulation(
+        #     simulation.model,
+        #     experiment=getattr(simulation, "experiment", None),
+        #     geometry=simulation.geometry,
+        #     parameter_values=self.parameter_values,
+        #     submesh_types=simulation.submesh_types,
+        #     var_pts=simulation.var_pts,
+        #     spatial_methods=simulation.spatial_methods,
+        #     solver=solver,
+        #     output_variables=simulation.output_variables,
+        #     C_rate=getattr(simulation, "C_rate", None),
+        # )
+        #
+        # self.model = new_simulation
 
     def collect_parameters(self, solve_options=None):
         self.solve_options = solve_options or {}

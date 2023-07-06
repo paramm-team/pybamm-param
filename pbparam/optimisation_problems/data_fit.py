@@ -44,14 +44,15 @@ class DataFit(pbparam.BaseOptimisationProblem):
         solve_options=None,
     ):
         super().__init__(
+            model=simulation,
             cost_function=cost_function,
             data=data,
             parameters=parameters,
             variables_to_fit=variables_to_fit
         )
-       
-        self.update_simulation_parameters(simulation)
+
         self.collect_parameters(solve_options)
+        self.update_simulation_parameters(simulation)
 
     def objective_function(self, x):
         """
