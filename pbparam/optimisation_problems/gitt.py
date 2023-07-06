@@ -33,6 +33,7 @@ class Gitt(pbparam.BaseOptimisationProblem):
         solve_options=None,
     ):
         super().__init__(
+            model=simulation,
             cost_function=cost_function,
             data=data,
             parameters={
