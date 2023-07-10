@@ -13,7 +13,7 @@ class TestDataFit(unittest.TestCase):
     def test_init(self):
         model = pybamm.lithium_ion.SPM()
         sim = pybamm.Simulation(model)
-        data = pd.DataFrame()
+        data = pd.DataFrame(columns=["Voltage [V]"])
         model_parameters = {
             "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12)),
             "Total heat transfer coefficient [W.m-2.K-1]": (0, (0, 1000)),

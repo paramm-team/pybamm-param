@@ -35,12 +35,8 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         super().__init__()
 
         # Allocate init variables
-        if isinstance(data_fit, list):
-            self.data_fit = data_fit
-            self.data_ref = data_ref
-        else:
-            self.data_fit = [data_fit]
-            self.data_ref = [data_ref]
+        self.data_fit = data_fit if isinstance(data_fit, list) else [data_fit]
+        self.data_ref = data_ref if isinstance(data_ref, list) else [data_ref]
 
         # Check both lists have same length
         if len(self.data_fit) != len(self.data_ref):
@@ -50,12 +46,13 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
 
         # Check the weights if it's None
         if weights is None:
-            weights = [1 / np.nanmean(data_ref)]
+            valid_data_ref = pd.to_numeric(self.data_ref, errors="coerce")
+            weights = [1 / np.nanmean(valid_data_ref)] * len(self.data_ref)
 
         # Check if the weights has same lenght
         if len(weights) == 1:
-            weights *= len(data_ref)
-        elif len(weights) != len(data_ref):
+            weights *= len(self.data_ref)
+        elif len(weights) != len(self.data_ref):
             raise ValueError("Weights should have the same length as data_ref.")
 
         self.cost_function = cost_function
