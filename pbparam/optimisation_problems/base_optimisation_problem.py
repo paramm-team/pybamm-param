@@ -83,7 +83,7 @@ class BaseOptimisationProblem:
             List of variables to be optimised in the cost function.
         """
 
-        if len(*args) > 0:
+        if len(args) > 0:
             # if positional arguments are passed raise an error, this enforces the use
             # of proper names for the arguments during subclass constructors making
             # inspection easier for future developers.
@@ -112,7 +112,8 @@ class BaseOptimisationProblem:
         """
         Placeholder for data cleaning and preperation routines
 
-        This method should be overridden in subclasses to provide specific implementations.
+        This method should be overridden in subclasses to provide specific
+        implementations.
         """
         pass
 
@@ -172,11 +173,11 @@ class BaseOptimisationProblem:
         solver = simulation.solver
         if hasattr(solver, "integrator_specs"):
             solver.integrator_specs = {}
-      
+
         #Why cant we do this?
         self.model.parameter_values = self.parameter_values
         self.model.solver = solver
-       
+
         # Updating sim params requires recreating the simulation
         # new_simulation = pybamm.Simulation(
         #     simulation.model,
