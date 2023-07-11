@@ -22,7 +22,7 @@ class BaseOptimisationProblem:
     user.
 
     Parameters (required)
-    ----------
+    ---------------------
     model : :class:`pybamm.Simulation` (or pandas.DataFrame)
         The object to be used in optimisation of simulation parameters.
     data : :class:`pandas.DataFrame`
@@ -30,7 +30,7 @@ class BaseOptimisationProblem:
         of simulation parameters.
 
     Parameters (optional)
-    ----------
+    ---------------------
     cost_function : :class:`pbparam.BaseCostFunction`
         Cost function class to be used in minimisation algorithm.
     parameters : dict
@@ -42,7 +42,7 @@ class BaseOptimisationProblem:
         The variable or variables to optimise in the cost function.
 
     Properties (non user settable defined in constructor)
-    ----------
+    -----------------------------------------------------
     x0 : array-like
         Initial guess for the optimization problem
     bounds : tuple
