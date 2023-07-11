@@ -13,7 +13,7 @@ class TestDataFit(unittest.TestCase):
     def test_init(self):
         model = pybamm.lithium_ion.SPM()
         sim = pybamm.Simulation(model)
-        data = pd.DataFrame(columns=["Voltage [V]"])
+        data = pd.DataFrame(columns=["Voltage [V]", "Cell temperature [K]"])
         model_parameters = {
             "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12)),
             "Total heat transfer coefficient [W.m-2.K-1]": (0, (0, 1000)),
@@ -83,7 +83,7 @@ class TestDataFit(unittest.TestCase):
             sim,
             data,
             model_parameters,
-            variables_optimise=["Terminal voltage [V]", "Cell temperature [K]"],
+            variables_optimise=["Voltage [V]", "Cell temperature [K]"],
         )
 
         # Test multiple model_parameters with same value
@@ -122,15 +122,18 @@ class TestDataFit(unittest.TestCase):
         model_parameters = {
             "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
         }
-        variable_weights = {"Voltage [V]": [1, 2]}
+        variable_weights = {"Voltage [V]": [1]}
         optimisation_problem = pbparam.DataFit(
             sim, data, model_parameters, weights=variable_weights
         )
 
         # Check objective_function raises error before setup
         optimisation_problem.setup_objective_function()
+        # print(variable_weights.keys())
         with self.assertRaisesRegex(
-            ValueError, "Weights should have the same length as y_data."
+            ValueError,
+            f"Length of weights[{variable_weights.keys()}] should be 1 \
+                or same as the length of data.",
         ):
             optimisation_problem.objective_function([1e-15])
 

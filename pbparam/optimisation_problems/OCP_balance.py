@@ -6,6 +6,7 @@ import pbparam
 import numpy as np
 import pandas as pd
 from scipy import interpolate
+import warnings
 
 
 class OCPBalance(pbparam.BaseOptimisationProblem):
@@ -54,6 +55,10 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             weights *= len(self.data_ref)
         elif len(weights) != len(self.data_ref):
             raise ValueError("Weights should have the same length as data_ref.")
+
+        # Give warning if weights are given with MLE
+        if cost_function == pbparam.MLE() and weights is not None:
+            warnings.warn("Weights are provided but not used in the MLE calculation.")
 
         self.cost_function = cost_function
         self.weights = weights

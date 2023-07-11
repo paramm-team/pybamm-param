@@ -6,6 +6,7 @@ import pbparam
 import pybamm
 import numpy as np
 from functools import partial
+import warnings
 
 
 def update_simulation_parameters(simulation, parameter_values):
@@ -130,8 +131,11 @@ class DataFit(pbparam.BaseOptimisationProblem):
                 if len(weight) != 1 and len(weight) != len(data[var]):
                     raise ValueError(
                         f"Length of weights[{var}] should be 1 or \
-                        same as the length of data."
+                            same as the length of data."
                     )
+        # Give warning if weights are given with MLE
+        if cost_function == pbparam.MLE() and weights is not None:
+            warnings.warn("Weights are provided but not used in the MLE calculation.")
 
         # Allocate init variables
         self.data = data

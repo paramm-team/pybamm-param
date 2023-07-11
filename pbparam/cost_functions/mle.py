@@ -32,12 +32,11 @@ class MLE(pbparam.BaseCostFunction):
     def evaluate(self, y_sim, y_data, weights, sd):
         y_sim = y_sim if isinstance(y_sim, list) else [y_sim]
         y_data = y_data if isinstance(y_data, list) else [y_data]
-        weights = weights if isinstance(weights, list) else [weights]
         sd = sd if isinstance(sd, list) else [sd]
 
         mle = 0
-        for sim, data, s, weight in zip(y_sim, y_data, sd, weights):
-            mle += -np.nansum(weight * stats.norm.logpdf(data, loc=sim, scale=s))
+        for sim, data, s in zip(y_sim, y_data, sd):
+            mle += -np.nansum(stats.norm.logpdf(data, loc=sim, scale=s))
 
         return mle
 
