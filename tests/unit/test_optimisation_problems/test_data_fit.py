@@ -122,7 +122,7 @@ class TestDataFit(unittest.TestCase):
         model_parameters = {
             "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
         }
-        variable_weights = {"Voltage [V]": [1]}
+        variable_weights = {"Voltage [V]": [1, 2]}
         optimisation_problem = pbparam.DataFit(
             sim, data, model_parameters, weights=variable_weights
         )
@@ -132,7 +132,7 @@ class TestDataFit(unittest.TestCase):
         # print(variable_weights.keys())
         with self.assertRaisesRegex(
             ValueError,
-            f"Length of weights[{variable_weights.keys()}] should be 1 \
+            "Length of weights[Voltage [V]] should be 1 \
                 or same as the length of data.",
         ):
             optimisation_problem.objective_function([1e-15])
