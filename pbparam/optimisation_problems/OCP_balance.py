@@ -27,7 +27,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         pre-defined built-in functions or defined explicitly.
     """
 
-    def __init__(self, model, data, cost_function=pbparam.RMSE()):
+    def __init__(self, data_fit, data_ref, cost_function=pbparam.RMSE()):
         """
         Initialise the optimisation problem.
         model : list or float
@@ -37,20 +37,20 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         """
 
         # Check data type of data and model, if not list recast as list
-        if not isinstance(self.data, list):
-            self.model = [self.model]
-            self.data = [self.data]
+        if not isinstance(data_fit, (list)):
+            data_fit = [data_fit]
+            data_ref = [data_ref]
 
         # Check both lists have same length
-        if len(self.model != len(self.data)):
+        if len(data_fit) != len(data_ref):
             raise ValueError(
                 "The number of fit and reference datasets must be the same."
             )
 
         super().__init__(
             cost_function=cost_function,
-            data=data,
-            model=model,
+            data=data_fit,
+            model=data_ref,
         )
 
         self.process_and_clean_data()
@@ -71,10 +71,11 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         """
 
         # Iterate over the fit and reference data
+        y_sim = []
         y_data = []
-        for fit, ref in zip(self.model, self.data_fun):
+        for fit, ref in zip(self.data, self.model_fun):
             # Append simulated values to the y_sim list
-            y_sim = ref(x[0] + x[1] * fit.iloc[:, 0])
+            y_sim.append(ref(x[0] + x[1] * fit.iloc[:, 0]))
             # Append data values to the y_data list
             y_data.append(fit.iloc[:, 1].to_numpy())
 
@@ -90,20 +91,23 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         This function processes the reference data, interpolates it, and
         determines the initial guesses and bounds for the optimization.
         """
-        # Process reference data
-        if all([isinstance(x, pd.DataFrame) for x in self.data]):
-            self.data_fun = []
-            for data in self.data:
+        # Process reference data, check if all elements are array-like
+        if all([
+            isinstance(x, (pd.DataFrame))
+            for x in self.model]
+        ):
+            self.model_fun = []
+            for data in self.model:
                 # Interpolate reference data
                 interp = interpolate.interp1d(
                     data.iloc[:, 0], data.iloc[:, 1], fill_value="extrapolate"
                 )
-                self.data_fun.append(interp)
+                self.model_fun.append(interp)
         else:
             raise TypeError("data elements must be all array-like objects")
 
         # Determine initial guesses and bounds
-        concat_model = pd.concat(self.model, axis=0, ignore_index=True)
+        concat_model = pd.concat(self.data, axis=0, ignore_index=True)
         Q_V_max = concat_model.iloc[:, 0].loc[concat_model.iloc[:, 1].idxmax()]
         Q_V_min = concat_model.iloc[:, 0].loc[concat_model.iloc[:, 1].idxmin()]
 
