@@ -65,14 +65,14 @@ class TestDataFit(unittest.TestCase):
             pybamm.InputParameter,
         )
 
-        self.assertIsInstance(optimisation_problem.model, type(model))
+        self.assertIsInstance(optimisation_problem.model.model, type(model))
 
         # Test variables_to_optimise
         optimisation_problem = pbparam.DataFit(
             sim,
             data,
             model_parameters,
-            variables_optimise=["Voltage [V]", "Cell temperature [K]"],
+            variables_to_fit=["Voltage [V]", "Cell temperature [K]"],
         )
         self.assertEqual(
             optimisation_problem.variables_to_fit,
@@ -92,7 +92,7 @@ class TestDataFit(unittest.TestCase):
         )
         for name in parameter_names:
             self.assertIsInstance(
-                optimisation_problem.model.parameters[name],
+                optimisation_problem.model.parameter_values[name],
                 pybamm.InputParameter,
             )
         self.assertEqual(
