@@ -58,7 +58,9 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
 
         # Give warning if weights are given with MLE
         if cost_function == pbparam.MLE() and weights is not None:
-            warnings.warn("Weights are provided but not used in the MLE calculation.")
+            warnings.warn(
+                "Weights are provided but not used in the MLE calculation.", UserWarning
+            )
 
         self.cost_function = cost_function
         self.weights = weights
