@@ -126,7 +126,7 @@ class TestDataFit(unittest.TestCase):
         variable_weights = {"Voltage [V]": [1, 2]}
         with self.assertRaisesRegex(
             ValueError,
-            "Length of weights should",
+            "Length of weights",
         ):
             pbparam.DataFit(
                 sim, data, model_parameters, weights=variable_weights
