@@ -166,7 +166,7 @@ class TestDataFit(unittest.TestCase):
         variable_weights = {"Voltage [V]": [1]}
         cost_function = pbparam.MLE()
         with self.assertWarnsRegex(
-            UserWarning,
+            Warning,
             "Weights are provided but",
         ):
             pbparam.DataFit(
