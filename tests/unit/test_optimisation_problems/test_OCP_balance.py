@@ -5,6 +5,7 @@ import pbparam
 import pandas as pd
 
 import unittest
+import logging
 
 
 class TestOCPBalance(unittest.TestCase):
@@ -102,9 +103,13 @@ class TestOCPBalance(unittest.TestCase):
         ]
         weights = {0: [1, 1, 1, 1, 1], 1: [1, 1, 1, 1, 1]}
         cost_function = pbparam.MLE()
-        with self.assertWarnsRegex(UserWarning, "Weights are provided but"):
+        with self.assertLogs(level=logging.WARNING) as log:
             pbparam.OCPBalance(
                 data_fit, data_ref, cost_function=cost_function, weights=weights
+            )
+            self.assertIn(
+                "Weights are provided but not used in the MLE calculation.",
+                log.output[0],
             )
 
     def test_plot(self):

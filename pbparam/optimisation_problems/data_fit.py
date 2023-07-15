@@ -113,12 +113,9 @@ class DataFit(pbparam.BaseOptimisationProblem):
         weights=None,
         solve_options=None,
     ):
-
         # Give warning if weights are given with MLE
-        if type(cost_function) is type(pbparam.MLE()) and weights is not None:
-            logging.warning(
-                'Weights are provided but not used in the MLE calculation.'
-            )
+        if isinstance(cost_function, type(pbparam.MLE())) and weights is not None:
+            logging.warning("Weights are provided but not used in the MLE calculation.")
         if weights is None:
             # No weights provided, initialize with default values
             weights = {
