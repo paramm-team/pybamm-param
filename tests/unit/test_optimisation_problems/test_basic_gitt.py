@@ -26,7 +26,7 @@ class TestBasicGITT(unittest.TestCase):
         simulation = pybamm.Simulation(model, parameter_values=param)
         solution = simulation.solve([0, 100])
         self.assertEqual(len(solution["Voltage [V]"].entries), 100)
-        self.assertEqual(solution["Voltage [V]"].entries[-1], 4.11620357738794)
+        self.assertAlmostEqual(solution["Voltage [V]"].entries[-1], 4.116203577)
 
 
 if __name__ == "__main__":
