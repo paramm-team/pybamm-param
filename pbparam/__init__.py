@@ -23,7 +23,7 @@ from .optimisers.scipy_differential_evolution import ScipyDifferentialEvolution
 from .optimisation_problems.base_optimisation_problem import BaseOptimisationProblem
 from .optimisation_problems.data_fit import DataFit
 from .optimisation_problems.OCP_balance import OCPBalance
-from .optimisation_problems.basic_gitt import BasicGITT
+from .models.basic_gitt import BasicGITT
 
 #
 # Optimisation result
