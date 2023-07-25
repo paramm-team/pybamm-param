@@ -50,7 +50,9 @@ class TestOptimisationResult(unittest.TestCase):
             "message",
             "fun",
             "raw_result",
-            pbparam.BaseOptimisationProblem(),
+            pbparam.BaseOptimisationProblem(
+                cost_function=pbparam.MLE()
+            ),
         )
 
         plot = optimisation_result.plot(testing=True)

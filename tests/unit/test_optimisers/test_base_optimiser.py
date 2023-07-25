@@ -16,7 +16,9 @@ class TestBaseOptimiser(unittest.TestCase):
 
     def test_optimise(self):
         optimiser = pbparam.BaseOptimiser()
-        optimisation_problem = pbparam.BaseOptimisationProblem()
+        optimisation_problem = pbparam.BaseOptimisationProblem(
+            cost_function=pbparam.MLE()
+        )
 
         _ = optimiser.optimise(optimisation_problem, x0=-1, bounds=-1)
 
@@ -25,7 +27,9 @@ class TestBaseOptimiser(unittest.TestCase):
 
     def test_pybamm_logging_level(self):
         optimiser = pbparam.BaseOptimiser()
-        optimisation_problem = pbparam.BaseOptimisationProblem()
+        optimisation_problem = pbparam.BaseOptimisationProblem(
+            cost_function=pbparam.MLE()
+        )
 
         # Hack _run_optimiser to test internal logging level
         def hack_optimiser(optimisation_problem, x0, bounds):

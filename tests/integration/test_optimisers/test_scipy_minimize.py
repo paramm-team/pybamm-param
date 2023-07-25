@@ -16,7 +16,7 @@ class TestScipyMinimize(unittest.TestCase):
             "BFGS",
         ]
 
-        self.opt = pbparam.BaseOptimisationProblem()
+        self.opt = pbparam.BaseOptimisationProblem(cost_function=pbparam.MLE())
 
     def test_sphere(self):
         self.opt.objective_function = sphere

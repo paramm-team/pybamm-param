@@ -14,3 +14,8 @@
 
 ### Cost Functions
 * Root Mean Square Error (`RMSE`)
+
+
+### PRs
+
+#42 Refactor for base_optimisation_problem conformity.
