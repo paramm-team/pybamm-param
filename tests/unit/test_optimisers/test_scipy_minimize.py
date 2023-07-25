@@ -8,7 +8,7 @@ import unittest
 
 class TestScipyMinimize(unittest.TestCase):
     def test_scipy_minimize_init(self):
-        optimiser = pbparam.ScipyMinimize(method="method", cost_function=pbparam.MLE())
+        optimiser = pbparam.ScipyMinimize(method="method")
         self.assertEqual(optimiser.name, "SciPy Minimize optimiser with method method")
         self.assertEqual(optimiser.method, "method")
         self.assertFalse(optimiser.single_variable)
