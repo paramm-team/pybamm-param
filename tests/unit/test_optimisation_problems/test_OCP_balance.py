@@ -5,7 +5,6 @@ import pbparam
 import pandas as pd
 
 import unittest
-import logging
 
 
 class TestOCPBalance(unittest.TestCase):

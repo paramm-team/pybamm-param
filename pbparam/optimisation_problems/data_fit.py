@@ -83,22 +83,10 @@ class DataFit(pbparam.BaseOptimisationProblem):
         self.solution = self.model.solve([0, t_end], inputs=input_dict)
 
         # Get the new y values from the simulation
-        y_sim = [
-            self.solution[v](self.data["Time [s]"])
-            for v in self.variables_to_fit
-        ]
-        y_data = [
-            self.data[v]
-            for v in self.variables_to_fit
-        ]
-        weights = [
-            self.weights[v] 
-            for v in self.variables_to_fit
-        ]
-        sd = [
-            x[self.map_inputs[k]]
-            for k in self.cost_function_parameters
-        ]
+        y_sim = [self.solution[v](self.data["Time [s]"]) for v in self.variables_to_fit]
+        y_data = [self.data[v] for v in self.variables_to_fit]
+        weights = [self.weights[v] for v in self.variables_to_fit]
+        sd = [x[self.map_inputs[k]] for k in self.cost_function_parameters]
 
         return self.cost_function.evaluate(y_sim, y_data, weights, sd)
 
@@ -135,9 +123,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
             t_eval = [0, self.data["Time [s]"].iloc[-1]]
 
         # Solve the simulation with the given inputs and t_eval
-        solution = self.model.solve(
-            t_eval=t_eval, inputs=inputs, **self.solve_options
-        )
+        solution = self.model.solve(t_eval=t_eval, inputs=inputs, **self.solve_options)
 
         return solution
 
