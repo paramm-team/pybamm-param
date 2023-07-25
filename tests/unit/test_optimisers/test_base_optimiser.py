@@ -9,13 +9,13 @@ import unittest
 
 class TestBaseOptimiser(unittest.TestCase):
     def test_base_optimiser_init(self):
-        optimiser = pbparam.BaseOptimiser(cost_function=pbparam.MLE())
+        optimiser = pbparam.BaseOptimiser()
         self.assertEqual(optimiser.name, "Base optimiser")
         self.assertFalse(optimiser.single_variable)
         self.assertFalse(optimiser.global_optimiser)
 
     def test_optimise(self):
-        optimiser = pbparam.BaseOptimiser(cost_function=pbparam.MLE())
+        optimiser = pbparam.BaseOptimiser()
         optimisation_problem = pbparam.BaseOptimisationProblem(
             cost_function=pbparam.MLE()
         )
@@ -26,7 +26,7 @@ class TestBaseOptimiser(unittest.TestCase):
         self.assertEqual(optimiser.bounds, -1)
 
     def test_pybamm_logging_level(self):
-        optimiser = pbparam.BaseOptimiser(cost_function=pbparam.MLE())
+        optimiser = pbparam.BaseOptimiser()
         optimisation_problem = pbparam.BaseOptimisationProblem(
             cost_function=pbparam.MLE()
         )
