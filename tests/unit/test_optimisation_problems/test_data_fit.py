@@ -171,17 +171,13 @@ class TestDataFit(unittest.TestCase):
 
         variable_weights = {"Voltage [V]": [1]}
         cost_function = pbparam.MLE()
-        with self.assertLogs(level=logging.WARNING) as log:
+        with self.assertWarnsRegex(Warning, "MLE calculation"):
             pbparam.DataFit(
                 sim,
                 data,
                 model_parameters,
                 cost_function=cost_function,
                 weights=variable_weights,
-            )
-            self.assertIn(
-                "Weights are provided but not used in the MLE calculation.",
-                log.output[0],
             )
 
     def test_setup_objective_function(self):
