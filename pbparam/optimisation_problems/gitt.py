@@ -6,7 +6,7 @@ import pbparam
 import pybamm
 
 
-class DataFit(pbparam.BaseOptimisationProblem):
+class GITT(pbparam.BaseOptimisationProblem):
     """
     A class to define an optimisation problem.
 
@@ -17,18 +17,6 @@ class DataFit(pbparam.BaseOptimisationProblem):
     data : :class:`pandas.DataFrame`
          The experimental or reference data to be used in optimisation
          of simulation parameters.
-    parameters : dict
-        The parameters to be optimised. They should be provided as a dictionary where
-        the keys are the names of the variables to be optimised and the values are a
-        tuple with the initial guesses and the lower and upper bounds of the
-        optimisation. If a key is a list of strings then all the variables in the list
-        will take the same value.
-    variables_to_fit : str or list of str (optional)
-        The variable or variables to optimise in the cost function. The default is
-        "Voltage [V]". It can be a string or a list of strings.
-    weights : dict (optional)
-        The custom weights of individual variables. Default is 1 for all variables.
-        It can be int or list of int that has same length with the data.
     cost_function : :class:`pbparam.BaseCostFunction`
         Cost function class to be used in minimisation algorithm. The default
         is Root-Mean Square Error. It can be selected from pre-defined built-in
@@ -41,66 +29,36 @@ class DataFit(pbparam.BaseOptimisationProblem):
         self,
         simulation,
         data,
-        parameters,
-        variables_to_fit=["Voltage [V]"],
         cost_function=pbparam.RMSE(),
-        weights=None,
         solve_options=None,
     ):
         super().__init__(
             model=simulation,
             cost_function=cost_function,
             data=data,
-            parameters=parameters,
-            variables_to_fit=variables_to_fit,
-            weights=weights,
+            parameters={
+                "Negative electrode diffusivity [m2.s-1]": (5e-14, (2.06e-16, 2.06e-12))
+            },
+            variables_to_fit=["Voltage [V]"],
         )
 
         self.collect_parameters(solve_options)
         self.update_simulation_parameters(simulation)
-        self.process_weights()
 
     def objective_function(self, x):
-        """
-        Calculate the cost function given the current values of the parameters
-
-        Parameters
-        ----------
-        x : array-like
-            The current values of the parameters
-
-        Returns
-        -------
-        cost : float
-            The calculated cost of the simulation with the current parameters
-        """
-
-        # Update the parameter values and solve the simulation using PyBaMM
+        # create a dict of input values from the current parameters
         input_dict = {
-            param: self.scalings[i] * x[i] for param, i in self.map_inputs.items()
+            param: self.scalings[i] * x[i]
+            for param, i in self.map_inputs.items()
         }
         t_end = self.data["Time [s]"].iloc[-1]
-        self.solution = self.model.solve([0, t_end], inputs=input_dict)
+        solution = self.model.solve([0, t_end], inputs=input_dict)
 
-        # Get the new y values from the simulation
-        y_sim = [
-            self.solution[v](self.data["Time [s]"])
-            for v in self.variables_to_fit
-        ]
-        y_data = [
-            self.data[v]
-            for v in self.variables_to_fit
-        ]
-        weights = [
-            self.weights[v] 
-            for v in self.variables_optimise
-        ]
-        sd = [
-            x[self.map_inputs[k]]
-            for k in self.cost_function_parameters
-        ]
+        y_sim = [solution[v](self.data["Time [s]"]) for v in self.variables_to_fit]
+        y_data = [self.data[v] for v in self.variables_to_fit]
+        sd = [x[self.map_inputs[k]] for k in self.cost_function_parameters]
 
-        return self.cost_function.evaluate(y_sim, y_data, weights, sd)
+        return self.cost_function.evaluate(y_sim, y_data, sd)
 
     def calculate_solution(self, parameters=None):
         """
@@ -128,14 +86,14 @@ class DataFit(pbparam.BaseOptimisationProblem):
             inputs = {param: parameters[i] for param, i in self.map_inputs.items()}
 
         # Check if the simulation has an attribute "experiment"
-        if getattr(self.model, "experiment", None):
+        if getattr(self.simulation, "experiment", None):
             t_eval = None
         else:
             # Use the final time from the data as t_eval if experiment is not present
             t_eval = [0, self.data["Time [s]"].iloc[-1]]
 
         # Solve the simulation with the given inputs and t_eval
-        solution = self.model.solve(
+        solution = self.simulation.solve(
             t_eval=t_eval, inputs=inputs, **self.solve_options
         )
 
@@ -164,7 +122,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         # create a quick plot
         plot = pybamm.QuickPlot(
             [initial_solution, optimal_solution],
-            output_variables=self.variables_to_fit,
+            output_variables=self.variables_optimise,
             labels=["Initial values", "Optimal values"],
         )
 
@@ -172,7 +130,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         plot.plot(0)
 
         # plot the data on the same plot
-        for ax, var in zip(plot.axes, self.variables_to_fit):
+        for ax, var in zip(plot.axes, self.variables_optimise):
             data = self.data
             ax.plot(
                 data["Time [s]"] / plot.time_scaling_factor,

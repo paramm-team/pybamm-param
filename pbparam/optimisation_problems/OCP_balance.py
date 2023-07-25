@@ -11,57 +11,41 @@ import warnings
 
 class OCPBalance(pbparam.BaseOptimisationProblem):
     """
-    OCP balance optimisation problem class.
-
-    Parameters
-    ----------
-    data_fit : pandas.DataFrame
-        The OCP dataset to fit. This is experimental data that will be shifted and
-        stretched to be same with :class:`data_ref`. Either an array-like object or
-        a list of array-like objects.
-    data_ref : pandas.DataFrame
-        The OCP reference dataset(s). This dataset will be used as reference and
-        :class:`data_fit` will be shifted and stretched to meet this dataset. They can
-        be passed either as an array-like object or a list of array-like objects.
-    cost_function : pbparam.BaseCostFunction, optional
-        Cost function class to be used in minimisation algorithm.
-        The default is Root-Mean Square Error. It can be selected from
-        pre-defined built-in functions or defined explicitly.
-    weights : list of int , optional
-         Custom weights can be defined for cost function as single int
-         or list of int with same length. This is optional and default is 1.
+    OCP balance optimisation problem class. This subclass uses data_fit for the base
+    class 'data' and data_ref for the base class 'model'.
     """
 
-    def __init__(self, data_fit, data_ref, cost_function=pbparam.RMSE(), weights=None):
-        super().__init__()
+    def __init__(self, data_fit, data_ref, weights=None, cost_function=pbparam.RMSE()):
+        """
+        Initialise the optimisation problem.
+        data_fit : list or float
+            id the fitting data, if float recast as list length 1
+        data_ref : list or float
+            is the reference data, if float recast as list length 1
+        cost_function : :class:`pbparam.CostFunction`
+            The cost function to use for the optimisation.
+        """
 
-        # Allocate init variables
-        self.data_fit = data_fit if isinstance(data_fit, list) else [data_fit]
-        self.data_ref = data_ref if isinstance(data_ref, list) else [data_ref]
+        # Check data type of data and model, if not list recast as list
+        if not isinstance(data_fit, (list)):
+            data_fit = [data_fit]
+            data_ref = [data_ref]
 
         # Check both lists have same length
-        if len(self.data_fit) != len(self.data_ref):
+        if len(data_fit) != len(data_ref):
             raise ValueError(
                 "The number of fit and reference datasets must be the same."
             )
 
-        # Check the weights if it's None
-        if weights is None:
-            valid_data_ref = pd.to_numeric(self.data_ref, errors="coerce")
-            weights = [1 / np.nanmean(valid_data_ref)] * len(self.data_ref)
+        super().__init__(
+            cost_function=cost_function,
+            data=data_fit,
+            model=data_ref,
+            weights=weights,
+        )
 
-        # Check if the weights has same lenght
-        if len(weights) == 1:
-            weights *= len(self.data_ref)
-        elif len(weights) != len(self.data_ref):
-            raise ValueError("Weights should have the same length as data_ref.")
-
-        # Give warning if weights are given with MLE
-        if cost_function == pbparam.MLE() and weights is not None:
-            warnings.warn("Weights are provided but not used in the MLE calculation.")
-
-        self.cost_function = cost_function
-        self.weights = weights
+        self.process_and_clean_data()
+        self.process_weights()
 
     def objective_function(self, x):
         """
@@ -77,12 +61,11 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         cost : float
             The cost of the simulation.
         """
-        # Initialize empty lists to store simulated and data values
-        y_sim = []
-        y_data = []
 
         # Iterate over the fit and reference data
-        for fit, ref in zip(self.data_fit, self.data_ref_fun):
+        y_sim = []
+        y_data = []
+        for fit, ref in zip(self.data, self.model_fun):
             # Append simulated values to the y_sim list
             y_sim.append(ref(x[0] + x[1] * fit.iloc[:, 0]))
             # Append data values to the y_data list
@@ -93,29 +76,32 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         # Return the cost of the simulation using the cost function
         return self.cost_function.evaluate(y_sim, y_data, self.weights, sd)
 
-    def setup_objective_function(self):
+    def process_and_clean_data(self):
         """
         Sets up the objective function for optimization.
 
         This function processes the reference data, interpolates it, and
         determines the initial guesses and bounds for the optimization.
         """
-        # Process reference data
-        if all([isinstance(x, pd.DataFrame) for x in self.data_ref]):
-            self.data_ref_fun = []
-            for data in self.data_ref:
+        # Process reference data, check if all elements are array-like
+        if all([
+            isinstance(x, (pd.DataFrame))
+            for x in self.model]
+        ):
+            self.model_fun = []
+            for data in self.model:
                 # Interpolate reference data
                 interp = interpolate.interp1d(
                     data.iloc[:, 0], data.iloc[:, 1], fill_value="extrapolate"
                 )
-                self.data_ref_fun.append(interp)
+                self.model_fun.append(interp)
         else:
-            raise TypeError("data_ref elements must be all array-like objects")
+            raise TypeError("data elements must be all array-like objects")
 
         # Determine initial guesses and bounds
-        concat_data_fit = pd.concat(self.data_fit, axis=0, ignore_index=True)
-        Q_V_max = concat_data_fit.iloc[:, 0].loc[concat_data_fit.iloc[:, 1].idxmax()]
-        Q_V_min = concat_data_fit.iloc[:, 0].loc[concat_data_fit.iloc[:, 1].idxmin()]
+        concat_model = pd.concat(self.data, axis=0, ignore_index=True)
+        Q_V_max = concat_model.iloc[:, 0].loc[concat_model.iloc[:, 1].idxmax()]
+        Q_V_min = concat_model.iloc[:, 0].loc[concat_model.iloc[:, 1].idxmin()]
 
         eps = 0.1  # tolerance
         self.x0 = [
@@ -140,8 +126,8 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         ]
 
         if isinstance(self.cost_function, pbparam.MLE):
-            self.x0 += [1] * len(self.data_fit)
-            self.bounds += [(1e-16, 1e3)] * len(self.data_fit)
+            self.x0 += [1] * len(self.model)
+            self.bounds += [(1e-16, 1e3)] * len(self.model)
 
     def _plot(self, x_optimal):
         """
@@ -162,12 +148,12 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         fig, ax = plt.subplots(1, 1)
 
         label = "Reference"
-        for ref in self.data_ref:
+        for ref in self.data:
             ax.plot(ref.iloc[:, 0], ref.iloc[:, 1], "k-", label=label)
             label = None
 
         label = "Fit"
-        for fit in self.data_fit:
+        for fit in self.model:
             ax.plot(
                 x_optimal[0] + x_optimal[1] * fit.iloc[:, 0],
                 fit.iloc[:, 1],

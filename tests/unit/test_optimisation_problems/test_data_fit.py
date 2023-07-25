@@ -22,8 +22,8 @@ class TestDataFit(unittest.TestCase):
 
         # Test class variables
         self.assertTrue(optimisation_problem.data.empty)
-        self.assertEqual(optimisation_problem.model_parameters, model_parameters)
-        self.assertEqual(optimisation_problem.variables_optimise, ["Voltage [V]"])
+        self.assertEqual(optimisation_problem.parameters, model_parameters)
+        self.assertEqual(optimisation_problem.variables_to_fit, ["Voltage [V]"])
 
         self.assertIsInstance(
             optimisation_problem.parameter_values[
@@ -53,29 +53,29 @@ class TestDataFit(unittest.TestCase):
         )
 
         self.assertIsInstance(
-            optimisation_problem.simulation.parameter_values[
+            optimisation_problem.model.parameter_values[
                 "Negative electrode diffusivity [m2.s-1]"
             ],
             pybamm.InputParameter,
         )
         self.assertIsInstance(
-            optimisation_problem.simulation.parameter_values[
+            optimisation_problem.model.parameter_values[
                 "Total heat transfer coefficient [W.m-2.K-1]"
             ],
             pybamm.InputParameter,
         )
 
-        self.assertIsInstance(optimisation_problem.simulation.model, type(model))
+        self.assertIsInstance(optimisation_problem.model.model, type(model))
 
         # Test variables_to_optimise
         optimisation_problem = pbparam.DataFit(
             sim,
             data,
             model_parameters,
-            variables_optimise=["Voltage [V]", "Cell temperature [K]"],
+            variables_to_fit=["Voltage [V]", "Cell temperature [K]"],
         )
         self.assertEqual(
-            optimisation_problem.variables_optimise,
+            optimisation_problem.variables_to_fit,
             ["Voltage [V]", "Cell temperature [K]"],
         )
         # Test custom_weights
@@ -99,7 +99,7 @@ class TestDataFit(unittest.TestCase):
         )
         for name in parameter_names:
             self.assertIsInstance(
-                optimisation_problem.simulation.parameter_values[name],
+                optimisation_problem.model.parameter_values[name],
                 pybamm.InputParameter,
             )
         self.assertEqual(
@@ -150,12 +150,6 @@ class TestDataFit(unittest.TestCase):
             "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
         }
         optimisation_problem = pbparam.DataFit(sim, data, model_parameters)
-
-        # Check objective_function raises error before setup
-        with self.assertRaisesRegex(
-            NotImplementedError, "objective_function not defined"
-        ):
-            optimisation_problem.objective_function(None)
 
         # Check objective_function returns a number after setup
         optimisation_problem.setup_objective_function()

@@ -79,5 +79,6 @@ variables_optimised = ["Voltage [V]", "X-averaged cell temperature [K]"]
 opt = pbparam.DataFit(simulation, data, param_optimised, variables_optimised)
 optimiser = pbparam.ScipyMinimize(method="Nelder-Mead")
 result = optimiser.optimise(opt)
+
 print(result)
 result.plot()
