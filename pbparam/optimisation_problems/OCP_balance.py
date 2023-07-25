@@ -9,31 +9,19 @@ from scipy import interpolate
 
 class OCPBalance(pbparam.BaseOptimisationProblem):
     """
-    OCP balance optimisation problem class.
-
-    Parameters
-    ----------
-    model : :class:`pandas.DataFrame`
-        The OCP dataset to fit. This is experimental data that will be shifted and
-        stretched to be same with :class:`data`. Either an array-like object or
-        a list of array-like objects.
-    data : :class:`pandas.DataFrame`
-        The OCP reference dataset(s). This dataset will be used as reference and
-        :class:`model` will be shifted and stretched to meet this dataset. They can
-        be passed either as an array-like object or a list of array-like objects.
-    cost_function : :class:`pbparam.BaseCostFunction`
-        Cost function class to be used in minimisation algorithm.
-        The default is Root-Mean Square Error. It can be selected from
-        pre-defined built-in functions or defined explicitly.
+    OCP balance optimisation problem class. This subclass uses data_fit for the base
+    class 'data' and data_ref for the base class 'model'.
     """
 
     def __init__(self, data_fit, data_ref, cost_function=pbparam.RMSE()):
         """
         Initialise the optimisation problem.
-        model : list or float
+        data_fit : list or float
             id the fitting data, if float recast as list length 1
-        data : list or float
+        data_ref : list or float
             is the reference data, if float recast as list length 1
+        cost_function : :class:`pbparam.CostFunction`
+            The cost function to use for the optimisation.
         """
 
         # Check data type of data and model, if not list recast as list
