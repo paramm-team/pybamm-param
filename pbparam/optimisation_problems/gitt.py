@@ -6,7 +6,7 @@ import pbparam
 import pybamm
 
 
-class Gitt(pbparam.BaseOptimisationProblem):
+class GITT(pbparam.BaseOptimisationProblem):
     """
     A class to define an optimisation problem.
 
