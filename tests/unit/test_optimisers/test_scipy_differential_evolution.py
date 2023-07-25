@@ -12,7 +12,7 @@ def parabola(x):
 
 class TestScipyDifferentialEvolution(unittest.TestCase):
     def test_scipy_differential_evolution_init(self):
-        optimiser = pbparam.ScipyDifferentialEvolution()
+        optimiser = pbparam.ScipyDifferentialEvolution(cost_function=pbparam.MLE())
         self.assertEqual(optimiser.name, "SciPy Differential Evolution optimiser")
         self.assertFalse(optimiser.single_variable)
         self.assertTrue(optimiser.global_optimiser)
