@@ -93,7 +93,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         ]
         weights = [
             self.weights[v] 
-            for v in self.variables_optimise
+            for v in self.variables_to_fit
         ]
         sd = [
             x[self.map_inputs[k]]

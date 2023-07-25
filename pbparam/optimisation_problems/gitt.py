@@ -122,7 +122,7 @@ class GITT(pbparam.BaseOptimisationProblem):
         # create a quick plot
         plot = pybamm.QuickPlot(
             [initial_solution, optimal_solution],
-            output_variables=self.variables_optimise,
+            output_variables=self.variables_to_fit,
             labels=["Initial values", "Optimal values"],
         )
 
@@ -130,7 +130,7 @@ class GITT(pbparam.BaseOptimisationProblem):
         plot.plot(0)
 
         # plot the data on the same plot
-        for ax, var in zip(plot.axes, self.variables_optimise):
+        for ax, var in zip(plot.axes, self.variables_to_fit):
             data = self.data
             ax.plot(
                 data["Time [s]"] / plot.time_scaling_factor,

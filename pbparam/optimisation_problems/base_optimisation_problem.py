@@ -210,7 +210,7 @@ class BaseOptimisationProblem:
                 if var not in self.weights:
                     raise ValueError(
                         "Weights dictionary should contain all \
-                        variables in variables_optimise."
+                        variables in variables_to_fit."
                     )
         if self.weights is not None:
             for var, weight in self.weights.items():
@@ -220,7 +220,7 @@ class BaseOptimisationProblem:
                             same as the length of data."
                     )
         # Give warning if weights are given with MLE
-        if isinstance(self.cost_function, pbparam.MLE()) and self.weights is not None:
+        if isinstance(self.cost_function, pbparam.MLE) and self.weights is not None:
             warnings.warn("Weights are provided but not used in the MLE calculation.")
 
     def objective_function(self, x):

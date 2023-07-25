@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 
 import unittest
+import logging
 
 
 class TestDataFit(unittest.TestCase):
@@ -83,7 +84,12 @@ class TestDataFit(unittest.TestCase):
             sim,
             data,
             model_parameters,
-            variables_optimise=["Voltage [V]", "Cell temperature [K]"],
+            variables_to_fit=["Voltage [V]", "Cell temperature [K]"],
+            weights={"Voltage [V]": [1], "Cell temperature [K]": [1]},
+        )
+        self.assertEqual(
+            optimisation_problem.weights,
+            {"Voltage [V]": [1], "Cell temperature [K]": [1]},
         )
 
         # Test multiple model_parameters with same value
@@ -122,20 +128,61 @@ class TestDataFit(unittest.TestCase):
         model_parameters = {
             "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
         }
-        variable_weights = {"Voltage [V]": [1, 2]}
-        optimisation_problem = pbparam.DataFit(
-            sim, data, model_parameters, weights=variable_weights
-        )
 
-        # Check objective_function raises error before setup
-        optimisation_problem.setup_objective_function()
-        # print(variable_weights.keys())
+        variable_weights = {"Voltage [V]": [1, 2]}
         with self.assertRaisesRegex(
             ValueError,
-            "Length of weights[Voltage [V]] should be 1 \
-                or same as the length of data.",
+            "Length of weights",
         ):
-            optimisation_problem.objective_function([1e-15])
+            pbparam.DataFit(sim, data, model_parameters, weights=variable_weights)
+
+    def test_weights_variables_mismatch_data_fit(self):
+        model = pybamm.lithium_ion.SPM()
+        sim = pybamm.Simulation(model)
+        data = pd.DataFrame(
+            {
+                "Time [s]": [0, 1, 2, 3],
+                "Voltage [V]": [3.7, 3.6, 3.5, 3.4],
+            }
+        )
+        model_parameters = {
+            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
+        }
+
+        variable_weights = {"Cell temperature [K]": [1]}
+        with self.assertRaisesRegex(
+            ValueError,
+            "Weights dictionary should contain",
+        ):
+            pbparam.DataFit(sim, data, model_parameters, weights=variable_weights)
+
+    def test_warning_weights_with_MLE(self):
+        model = pybamm.lithium_ion.SPM()
+        sim = pybamm.Simulation(model)
+        data = pd.DataFrame(
+            {
+                "Time [s]": [0, 1, 2, 3],
+                "Voltage [V]": [3.7, 3.6, 3.5, 3.4],
+            }
+        )
+        model_parameters = {
+            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
+        }
+
+        variable_weights = {"Voltage [V]": [1]}
+        cost_function = pbparam.MLE()
+        with self.assertLogs(level=logging.WARNING) as log:
+            pbparam.DataFit(
+                sim,
+                data,
+                model_parameters,
+                cost_function=cost_function,
+                weights=variable_weights,
+            )
+            self.assertIn(
+                "Weights are provided but not used in the MLE calculation.",
+                log.output[0],
+            )
 
     def test_setup_objective_function(self):
         model = pybamm.lithium_ion.SPM()

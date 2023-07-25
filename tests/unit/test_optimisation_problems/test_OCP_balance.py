@@ -5,6 +5,7 @@ import pbparam
 import pandas as pd
 
 import unittest
+import logging
 
 
 class TestOCPBalance(unittest.TestCase):
@@ -94,8 +95,26 @@ class TestOCPBalance(unittest.TestCase):
         with self.assertRaisesRegex(
             ValueError, "Weights should have the same length as data_ref."
         ):
-            pbparam.ScipyMinimize(method="Nelder-Mead").optimise(
-                pbparam.OCPBalance(data_fit, data_ref, weights=weights)
+            pbparam.OCPBalance(data_fit, data_ref, weights=weights)
+
+    def test_warning_weights_with_MLE(self):
+        data_fit = [
+            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [5, 4, 3, 2, 1]}),
+            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [6, 5, 4, 3, 2]}),
+        ]
+        data_ref = [
+            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [5, 4, 3, 2, 1]}),
+            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [6, 5, 4, 3, 2]}),
+        ]
+        weights = {0: [1, 1, 1, 1, 1], 1: [1, 1, 1, 1, 1]}
+        cost_function = pbparam.MLE()
+        with self.assertLogs(level=logging.WARNING) as log:
+            pbparam.OCPBalance(
+                data_fit, data_ref, cost_function=cost_function, weights=weights
+            )
+            self.assertIn(
+                "Weights are provided but not used in the MLE calculation.",
+                log.output[0],
             )
 
     def test_plot(self):

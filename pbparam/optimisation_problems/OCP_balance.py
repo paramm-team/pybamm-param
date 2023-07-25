@@ -6,7 +6,7 @@ import pbparam
 import numpy as np
 import pandas as pd
 from scipy import interpolate
-import warnings
+import logging
 
 
 class OCPBalance(pbparam.BaseOptimisationProblem):
@@ -36,6 +36,9 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             raise ValueError(
                 "The number of fit and reference datasets must be the same."
             )
+        # Give warning if weights are given with MLE
+        if isinstance(cost_function, type(pbparam.MLE())) and weights is not None:
+            logging.warning("Weights are provided but not used in the MLE calculation.")
 
         super().__init__(
             cost_function=cost_function,
