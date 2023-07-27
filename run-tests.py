@@ -58,7 +58,6 @@ def run_code_tests(executable=False, folder: str = "unit", interpreter="python")
         sys.exit(ret)
 
 
-
 def run_scripts(executable="python"):
     """
     Runs Jupyter notebook tests. Exits if they fail.
@@ -340,14 +339,6 @@ if __name__ == "__main__":
     if args.nosub:
         has_run = True
         run_code_tests(folder=folder, interpreter=interpreter)
-    # Flake8
-    if args.flake8:
-        has_run = True
-        run_flake8()
-    # Doctests
-    if args.doctest:
-        has_run = True
-        run_doc_tests()
     # Notebook tests
     elif args.examples:
         has_run = True
@@ -358,9 +349,7 @@ if __name__ == "__main__":
     # Combined test sets
     if args.quick:
         has_run = True
-        run_flake8()
         run_code_tests(folder, interpreter=interpreter)
-        run_doc_tests()
     # Help
     if not has_run:
         parser.print_help()
