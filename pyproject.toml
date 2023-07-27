@@ -29,6 +29,7 @@ dev = [
 docs = [
     "guzzle-sphinx-theme",
     "sphinx>=1.5",
+    "sphinx-rtd-theme",
 ]
 
 [tool.hatch.version]
