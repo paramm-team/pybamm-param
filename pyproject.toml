@@ -22,6 +22,7 @@ dynamic = [
 
 [project.optional-dependencies]
 dev = [
+    "nox",
     "black",
     "flake8>=3",
 ]

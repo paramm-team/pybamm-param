@@ -18,44 +18,56 @@ pip install virtualenv
 ```
 
 ### Linux & MacOS
+
 1. Create a virtual environment (this is strongly recommended to avoid clashes with the dependencies)
-```bash
-virtualenv env
-```
+
+    ```bash
+    virtualenv env
+    ```
 
 2. Activate the virtual environment
-```bash
-source env/bin/activate
-```
-The virtual environment can later be deactivated (if needed) by running
-```bash
-deactivate
-```
 
-3. Install package from Github
-```bash
-pip install git+https://github.com/paramm-team/pybamm-param
-```
+    ```bash
+    source env/bin/activate
+    ```
+
+    The virtual environment can later be deactivated (if needed) by running
+
+    ```bash
+    deactivate
+    ```
+
+3. Install packages into the virtual envronment
+
+    ```bash
+    pip install -e ./[dev,docs]
+    ```
 
 ### Windows
+
 1. Create a virtual environment (this is strongly recommended to avoid clashes with the dependencies)
-```bash
-python -m virtualenv env
-```
+
+    ```bash
+    python -m virtualenv env
+    ```
 
 2. Activate the virtual environment
-```bash
-env\Scripts\activate.bat
-```
-The virtual environment can later be deactivated (if needed) by running
-```bash
-deactivate
-```
+
+    ```bash
+    env\Scripts\activate.bat
+    ```
+
+    The virtual environment can later be deactivated (if needed) by running
+
+    ```bash
+    deactivate
+    ```
 
 3. Install package from Github
-```bash
-pip install git+https://github.com/paramm-team/pybamm-param
-```
+
+    ```bash
+    pip install pip install -e .\\[dev,docs]
+    ```
 
 ## 🛠️ Contributing to pybamm-param
 
