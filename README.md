@@ -13,6 +13,7 @@ This package is provides parameter optimization for PyBaMM (Python Battery Mathe
 ## 🚀 Installing pybamm-param
 
 These installation instructions assume you have Python installed (versions 3.8 to 3.11) and that you have also installed the `virtualenv` package which can be done by running
+
 ```bash
 pip install virtualenv
 ```

@@ -58,30 +58,6 @@ def run_code_tests(executable=False, folder: str = "unit", interpreter="python")
         sys.exit(ret)
 
 
-def run_flake8():
-    """
-    Runs flake8 in a subprocess, exits if it doesn't finish.
-    """
-    print("Running flake8 ... ")
-    sys.stdout.flush()
-    p = subprocess.Popen(["flake8"], stderr=subprocess.PIPE)
-    try:
-        ret = p.wait()
-    except KeyboardInterrupt:
-        try:
-            p.terminate()
-        except OSError:
-            pass
-        p.wait()
-        print("")
-        sys.exit(1)
-    if ret == 0:
-        print("ok")
-    else:
-        print("FAILED")
-        sys.exit(ret)
-
-
 def run_doc_tests():
     """
     Checks if the documentation can be built, runs any doctests (currently not
