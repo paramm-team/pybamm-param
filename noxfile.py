@@ -42,3 +42,17 @@ def unit(session):
 
     session.run("python", "-m", "unittest", "discover", *test_files)
 
+
+@nox.session(python=['3.8', '3.9', '3.10', '3.11'])
+def examples(session):
+    """Run the examples."""
+    session.install('-e', './[dev]')
+
+    # Get the files to test
+    if session.posargs:
+        test_files = session.posargs
+    else:
+        test_files = ["./examples/scripts/"]
+
+    session.run("python", "-m", "unittest", "discover", *test_files)
+
