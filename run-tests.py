@@ -58,29 +58,6 @@ def run_code_tests(executable=False, folder: str = "unit", interpreter="python")
         sys.exit(ret)
 
 
-def run_doc_tests():
-    """
-    Checks if the documentation can be built, runs any doctests (currently not
-    used).
-    """
-    print("Checking if docs can be built.")
-    p = subprocess.Popen(
-        ["sphinx-build", "-b", "doctest", "docs", "docs/build/html", "-W"]
-    )
-    try:
-        ret = p.wait()
-    except KeyboardInterrupt:
-        try:
-            p.terminate()
-        except OSError:
-            pass
-        p.wait()
-        print("")
-        sys.exit(1)
-    if ret != 0:
-        print("FAILED")
-        sys.exit(ret)
-
 
 def run_scripts(executable="python"):
     """

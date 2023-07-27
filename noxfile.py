@@ -7,6 +7,12 @@ def lint(session):
     session.run('flake8', './pbparam/', './tests/')
 
 
+@nox.session
+def sphinx(session):
+    session.install('-e', './[docs]')
+    session.run('sphinx-build', '-b', 'html', 'docs', 'docs/_build/html', '-W')
+
+
 @nox.session(python=['3.8', '3.9', '3.10', '3.11'])
 def integration(session):
     """Run the intergration test suite."""
