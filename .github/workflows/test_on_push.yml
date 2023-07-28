@@ -85,7 +85,7 @@ jobs:
     
     - name: run coverage on latest python version
       if: matrix.os == 'ubuntu-latest'
-      run: nox -p 3.11 -s coverage
+      run: nox -s coverage
 
     - name: Install package
       run: |
