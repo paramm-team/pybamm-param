@@ -62,7 +62,7 @@ def coverage(session):
     """Run the unit test suite with coverage."""
     session.install('-e', './[dev]')
 
-    session.run("coverage", "run", "--rcfile=.coveragerc", "-m", "unittest", "discover", "./tests/")
+    session.run("coverage", "run", "--source=./pbparam", "--rcfile=.coveragerc", "-m", "unittest", "discover", "./tests/")
     session.run("coverage", "combine")
     session.run("coverage", "report", "-m")
     session.run("coverage", "xml")
