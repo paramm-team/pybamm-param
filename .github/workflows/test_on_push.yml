@@ -55,21 +55,21 @@ jobs:
       run: |
         python -m pip install --upgrade pip wheel setuptools
         python -m pip install nox
-
+    
     - name: Run unit tests (except GNU/Linux with Python 3.9)
       if: matrix.os != 'ubuntu-latest' || matrix.python-version != 3.9
-      run: nox -s unit
+      run: nox -p "${{matrix.python-version}}" -s unit
 
     - name: Run integration tests
-      run: nox -s integration
+      run: nox -p "${{matrix.python-version}}" -s integration
 
     - name: Install docs dependencies and run doctests
       if: matrix.os == 'ubuntu-latest'
-      run: nox -s sphinx
+      run: nox -p "${{matrix.python-version}}" -s sphinx
 
     - name: Install dev dependencies and run example tests
       if: matrix.os == 'ubuntu-latest'
-      run: nox -s examples
+      run: nox -p "${{matrix.python-version}}" -s examples
   
   post_job:
     needs: build
@@ -84,8 +84,8 @@ jobs:
         python-version: 3.11
     
     - name: run coverage on latest python version
-      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
-      run: nox -s coverage
+      if: matrix.os == 'ubuntu-latest'
+      run: nox -p 3.11 -s coverage
 
     - name: Install package
       run: |

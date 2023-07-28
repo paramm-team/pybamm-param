@@ -57,7 +57,7 @@ def examples(session):
     session.run("python", "-m", "unittest", "discover", *test_files)
 
 
-@nox.session(python=['3.11'])
+@nox.session()
 def coverage(session):
     """Run the unit test suite with coverage."""
     session.install('-e', './[dev]')
