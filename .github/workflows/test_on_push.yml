@@ -92,6 +92,7 @@ jobs:
         python -m pip install .
 
     - name: Update python requirements file
+      run: |
         python -m pip freeze > requirements.txt
     
     - name: Commit and push changes
