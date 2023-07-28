@@ -63,6 +63,5 @@ def coverage(session):
     session.install('-e', './[dev]')
 
     session.run("coverage", "run", "--source=./pbparam", "--rcfile=.coveragerc", "-m", "unittest", "discover", "./tests/")
-    session.run("coverage", "combine")
     session.run("coverage", "report", "-m")
     session.run("coverage", "xml")
