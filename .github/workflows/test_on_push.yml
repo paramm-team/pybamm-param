@@ -71,9 +71,10 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       run: nox -s examples
   
-  post-job:
-    needs: build, style
+  post_job:
+    needs: build
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v3
 
