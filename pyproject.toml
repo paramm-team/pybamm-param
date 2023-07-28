@@ -32,6 +32,9 @@ docs = [
     "sphinx>=1.5",
     "sphinx-rtd-theme",
 ]
+deploy = [
+    "bump2version"
+]
 
 [tool.hatch.version]
 path = "pbparam/version.py"
