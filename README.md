@@ -12,11 +12,13 @@ This package is provides parameter optimization for PyBaMM (Python Battery Mathe
 
 ## 🚀 Installing pybamm-param
 
-These installation instructions assume you have Python installed (versions 3.8 to 3.11) and that you have also installed the `virtualenv` package which can be done by running
-
 ```bash
 pip install virtualenv
 ```
+
+The module dependencies are listed in `pyproject.toml`, the dependancies which are non optional which are installed with the package.
+
+The optional dependancies are split into `dev` and `docs`. `dev` are used for testing and linting, `docs` are used for building the sphinx documentation.
 
 ### Linux & MacOS
 
