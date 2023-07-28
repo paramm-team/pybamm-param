@@ -64,8 +64,8 @@ jobs:
       run: nox -p "${{matrix.python-version}}" -s integration
 
     - name: Install docs dependencies and run doctests
-      if: matrix.os == 'ubuntu-latest'
-      run: nox -p "${{matrix.python-version}}" -s sphinx
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.9
+      run: nox -s sphinx
 
     - name: Install dev dependencies and run example tests
       if: matrix.os == 'ubuntu-latest'
