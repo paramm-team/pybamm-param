@@ -1,2 +1,4 @@
 pybamm
 matplotlib
+sphinx
+sphinx-rtd-theme

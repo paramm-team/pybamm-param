@@ -9,13 +9,19 @@ import unittest
 
 class TestOCPBalance(unittest.TestCase):
     def test_init(self):
-        optimisation_problem = pbparam.OCPBalance("data_fit", "data_ref")
-        self.assertEqual(optimisation_problem.data_fit, ["data_fit"])
-        self.assertEqual(optimisation_problem.data_ref, ["data_ref"])
+        data_ref = pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [5, 4, 3, 2, 1]})
+        data_fit = pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [5, 4, 3, 2, 1]})
 
-        optimisation_problem = pbparam.OCPBalance(["data_fit"], ["data_ref"])
-        self.assertEqual(optimisation_problem.data_fit, ["data_fit"])
-        self.assertEqual(optimisation_problem.data_ref, ["data_ref"])
+        optimisation_problem = pbparam.OCPBalance(data_fit=data_fit, data_ref=data_ref)
+        self.assertEqual(optimisation_problem.data, [data_fit])
+        self.assertEqual(optimisation_problem.model, [data_ref])
+
+        optimisation_problem = pbparam.OCPBalance(
+            data_fit=[data_fit],
+            data_ref=[data_ref]
+        )
+        self.assertEqual(optimisation_problem.data, [data_fit])
+        self.assertEqual(optimisation_problem.model, [data_ref])
 
         with self.assertRaisesRegex(ValueError, "The number of fit"):
             optimisation_problem = pbparam.OCPBalance(
@@ -34,7 +40,6 @@ class TestOCPBalance(unittest.TestCase):
             pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [6, 5, 4, 3, 2]}),
         ]
         optimisation_problem = pbparam.OCPBalance(data_fit, data_ref)
-        optimisation_problem.setup_objective_function()
 
         # Check bounds are correct
         self.assertEqual(optimisation_problem.x0, [-0.25, 0.25])
@@ -70,9 +75,9 @@ class TestOCPBalance(unittest.TestCase):
         self.assertAlmostEqual(optimisation_problem.objective_function([1.1, -0.2]), 0)
 
         # Test data type error
-        optimisation_problem = pbparam.OCPBalance(["data_fit"], ["data_ref"])
-        with self.assertRaisesRegex(TypeError, "data_ref elements must"):
-            optimisation_problem.setup_objective_function()
+        with self.assertRaisesRegex(TypeError,
+                                    "data elements must be all array-like objects"):
+            optimisation_problem = pbparam.OCPBalance(["data_fit"], ["data_ref"])
 
     def test_plot(self):
         data_ref = [

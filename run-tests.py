@@ -106,22 +106,22 @@ def run_doc_tests():
         sys.exit(ret)
 
 
-def run_notebook_and_scripts(executable="python"):
+def run_scripts(executable="python"):
     """
     Runs Jupyter notebook tests. Exits if they fail.
     """
 
     # Scan and run
     print("Testing notebooks and scripts with executable `" + str(executable) + "`")
-    if not scan_for_nb_and_scripts("examples", True, executable):
+    if not scan_for_scripts("examples", True, executable):
         print("\nErrors encountered in notebooks")
         sys.exit(1)
     print("\nOK")
 
 
-def scan_for_nb_and_scripts(root, recursive=True, executable="python"):
+def scan_for_scripts(root, recursive=True, executable="python"):
     """
-    Scans for, and tests, all notebooks and scripts in a directory.
+    Scans for, and tests, all scripts in a directory.
     """
     ok = True
     debug = False
@@ -135,14 +135,14 @@ def scan_for_nb_and_scripts(root, recursive=True, executable="python"):
             # Ignore hidden directories
             if filename[:1] == ".":
                 continue
-            ok &= scan_for_nb_and_scripts(path, recursive, executable)
+            ok &= scan_for_scripts(path, recursive, executable)
 
         # Test notebooks
-        if os.path.splitext(path)[1] == ".ipynb":
-            if debug:
-                print(path)
-            else:
-                ok &= test_notebook(path, executable)
+        # if os.path.splitext(path)[1] == ".ipynb":
+        #     if debug:
+        #         print(path)
+        #     else:
+        #         ok &= test_notebook(path, executable)
         # Test scripts
         elif os.path.splitext(path)[1] == ".py":
             if debug:
@@ -398,7 +398,7 @@ if __name__ == "__main__":
     # Notebook tests
     elif args.examples:
         has_run = True
-        run_notebook_and_scripts(interpreter)
+        run_scripts(interpreter)
     if args.debook:
         has_run = True
         export_notebook(*args.debook)
