@@ -20,6 +20,7 @@
 
 - Refactor for base_optimisation_problem conformity ([#42](https://github.com/paramm-team/pybamm-param/pull/42))
 - Allow `DataFit` to take `simulation_options` ([#40](https://github.com/paramm-team/pybamm-param/pull/40))
+- Allow weights in the objective function ([#36](https://github.com/paramm-team/pybamm-param/pull/36))
 - Implement maximum likelihood estimation ([#32](https://github.com/paramm-team/pybamm-param/pull/32))
 - Add `__str__` to `OptimisationResult` ([#31](https://github.com/paramm-team/pybamm-param/pull/31))
 - Improve documentation ([#29](https://github.com/paramm-team/pybamm-param/pull/29))
