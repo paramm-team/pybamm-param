@@ -4,8 +4,9 @@
 
 import pbparam
 import pandas as pd
+import numpy as np
 from scipy import interpolate
-import logging
+import warnings
 
 
 class OCPBalance(pbparam.BaseOptimisationProblem):
@@ -35,10 +36,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             raise ValueError(
                 "The number of fit and reference datasets must be the same."
             )
-        # Give warning if weights are given with MLE
-        if isinstance(cost_function, type(pbparam.MLE())) and weights is not None:
-            logging.warning("Weights are provided but not used in the MLE calculation.")
-
+        
         super().__init__(
             cost_function=cost_function,
             data=data_fit,
@@ -47,7 +45,25 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         )
 
         self.process_and_clean_data()
-        self.process_weights()
+        
+        # Process weights manually until we reformat OCPBalance
+        # self.process_weights()
+
+        # Give warning if weights are given with MLE
+        if isinstance(cost_function, pbparam.MLE) and weights is not None:
+            warnings.warn("Weights are provided but not used in the MLE calculation.")
+
+        # Check the weights if it's None
+        if weights is None:
+            valid_data_ref = pd.to_numeric(data_ref, errors="coerce")
+            self.weights = [1 / np.nanmean(valid_data_ref)] * len(data_ref)
+
+        # Check if the weights has same lenght
+        else:
+            if len(weights) == 1:
+                self.weights *= len(data_ref)
+            elif len(weights) != len(data_ref):
+                raise ValueError("Weights should have the same length as data_ref.")
 
     def objective_function(self, x):
         """
