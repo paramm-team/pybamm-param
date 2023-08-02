@@ -36,7 +36,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             raise ValueError(
                 "The number of fit and reference datasets must be the same."
             )
-        
+
         super().__init__(
             cost_function=cost_function,
             data=data_fit,
@@ -45,7 +45,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         )
 
         self.process_and_clean_data()
-        
+
         # Process weights manually until we reformat OCPBalance
         # self.process_weights()
 
@@ -102,10 +102,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         determines the initial guesses and bounds for the optimization.
         """
         # Process reference data, check if all elements are array-like
-        if all([
-            isinstance(x, (pd.DataFrame))
-            for x in self.model]
-        ):
+        if all([isinstance(x, (pd.DataFrame)) for x in self.model]):
             self.model_fun = []
             for data in self.model:
                 # Interpolate reference data
