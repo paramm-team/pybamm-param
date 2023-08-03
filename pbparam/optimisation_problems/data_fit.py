@@ -26,6 +26,9 @@ class DataFit(pbparam.BaseOptimisationProblem):
     variables_to_fit : str or list of str (optional)
         The variable or variables to optimise in the cost function. The default is
         "Voltage [V]". It can be a string or a list of strings.
+    weights : dict (optional)
+        The custom weights of individual variables. Default is 1 for all variables.
+        It can be int or list of int that has same length with the data.
     cost_function : :class:`pbparam.BaseCostFunction`
         Cost function class to be used in minimisation algorithm. The default
         is Root-Mean Square Error. It can be selected from pre-defined built-in
@@ -41,6 +44,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         parameters,
         variables_to_fit=["Voltage [V]"],
         cost_function=pbparam.RMSE(),
+        weights=None,
         solve_options=None,
     ):
         super().__init__(
@@ -48,11 +52,13 @@ class DataFit(pbparam.BaseOptimisationProblem):
             cost_function=cost_function,
             data=data,
             parameters=parameters,
-            variables_to_fit=variables_to_fit
+            variables_to_fit=variables_to_fit,
+            weights=weights,
         )
 
         self.collect_parameters(solve_options)
         self.update_simulation_parameters(simulation)
+        self.process_weights()
 
     def objective_function(self, x):
         """
@@ -77,20 +83,12 @@ class DataFit(pbparam.BaseOptimisationProblem):
         self.solution = self.model.solve([0, t_end], inputs=input_dict)
 
         # Get the new y values from the simulation
-        y_sim = [
-            self.solution[v](self.data["Time [s]"])
-            for v in self.variables_to_fit
-        ]
-        y_data = [
-            self.data[v]
-            for v in self.variables_to_fit
-        ]
-        sd = [
-            x[self.map_inputs[k]]
-            for k in self.cost_function_parameters
-        ]
+        y_sim = [self.solution[v](self.data["Time [s]"]) for v in self.variables_to_fit]
+        y_data = [self.data[v] for v in self.variables_to_fit]
+        weights = [self.weights[v] for v in self.variables_to_fit]
+        sd = [x[self.map_inputs[k]] for k in self.cost_function_parameters]
 
-        return self.cost_function.evaluate(y_sim, y_data, sd)
+        return self.cost_function.evaluate(y_sim, y_data, weights, sd)
 
     def calculate_solution(self, parameters=None):
         """
@@ -125,9 +123,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
             t_eval = [0, self.data["Time [s]"].iloc[-1]]
 
         # Solve the simulation with the given inputs and t_eval
-        solution = self.model.solve(
-            t_eval=t_eval, inputs=inputs, **self.solve_options
-        )
+        solution = self.model.solve(t_eval=t_eval, inputs=inputs, **self.solve_options)
 
         return solution
 
