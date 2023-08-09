@@ -1,10 +1,11 @@
 #
-# Basic GITT Model (temporary)
+# Weppner Huggins Model
 #
 import pybamm
 import numpy as np
 
-class WeppnerHuggins(pybamm.BaseModel):
+
+class WeppnerHuggins(pybamm.lithium_ion.BaseModel):
     """WeppnerHuggins Model for GITT.
 
     Parameters
@@ -23,46 +24,37 @@ class WeppnerHuggins(pybamm.BaseModel):
         ######################
         # Parameters
         ######################
-        d_s = pybamm.Parameter("Diffusion coefficient")
-        i_cell = param.current_density_with_time
-        # Linearised voltage
+        d_s = pybamm.Parameter("EC diffusivity [m2.s-1]")
+        i_app = param.current_density_with_time
         U = pybamm.Parameter("Reference OCP [V]")
         Uprime = pybamm.Parameter("Derivative of the OCP wrt stoichiometry [V]")
         R = pybamm.Parameter("Effective resistance [Ohm]")
         a = pybamm.Parameter("Surface area per unit volume of particles")
-        F = pybamm.Parameter("Faraday constant")
+        F = pybamm.Parameter("Faraday constant [C.mol-1]")
         l_w = pybamm.Parameter("Thickness of the working electrode")
+
         I = param.current_with_time
 
-         ######################
-        # Variables
-        ######################
-        # Variables that depend on time only are created without a domain
-        Q = pybamm.Variable("Discharge capacity [A.h]")
-        # Variables that vary spatially are created with a domain
-        c_s_p = pybamm.Variable(
-            "X-averaged positive particle concentration [mol.m-3]",
-            domain="positive particle",
-        )
         ######################
         # Governing equations
         ######################
-        u_surf = (2/np.pi)*(i_cell/(np.sqrt(d_s*c_s_p)*a*F*l_w))*np.sqrt(t)
+        u_surf = (
+            (2 / np.pi) * (i_app / (pybamm.sqrt(d_s) * a * F * l_w)) * pybamm.sqrt(t)
+        )
+        # Linearised voltage
         V = U + Uprime * u_surf - R * I
         ######################
         # (Some) variables
         ######################
         self.variables = {
-            "Discharge capacity [A.h]": Q,
-            "Positive particle surface "
-            "concentration [mol.m-3]": pybamm.PrimaryBroadcast(
-                c_s_p, "positive electrode"
-            ),
+            "Positive particle surface " "concentration [mol.m-3]": u_surf,
             "Current [A]": I,
             "Voltage [V]": V,
         }
+
     property
-    def default_geometry(self):
+
+    def geometry(self):
         return pybamm.Geometry()
 
     @property

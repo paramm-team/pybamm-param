@@ -24,6 +24,7 @@ from .optimisation_problems.base_optimisation_problem import BaseOptimisationPro
 from .optimisation_problems.data_fit import DataFit
 from .optimisation_problems.OCP_balance import OCPBalance
 from .models.basic_gitt import BasicGITT
+from .models.weppner_huggins import WeppnerHuggins
 
 #
 # Optimisation result
