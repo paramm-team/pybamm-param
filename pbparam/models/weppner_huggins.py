@@ -31,7 +31,7 @@ class WeppnerHuggins(pybamm.lithium_ion.BaseModel):
         R = pybamm.Parameter("Effective resistance [Ohm]")
         epsilon = pybamm.Parameter("Positive electrode active material volume fraction")
         r_particle = pybamm.Parameter("Positive particle radius [m]")
-        a = 3*(epsilon/r_particle)
+        a = 3 * (epsilon / r_particle)
         F = pybamm.Parameter("Faraday constant [C.mol-1]")
         l_w = pybamm.Parameter("Positive electrode thickness [m]")
 
