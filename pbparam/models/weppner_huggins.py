@@ -24,14 +24,16 @@ class WeppnerHuggins(pybamm.lithium_ion.BaseModel):
         ######################
         # Parameters
         ######################
-        d_s = pybamm.Parameter("EC diffusivity [m2.s-1]")
+        d_s = pybamm.Parameter("Positive electrode diffusivity [m2.s-1]")
         i_app = param.current_density_with_time
         U = pybamm.Parameter("Reference OCP [V]")
         Uprime = pybamm.Parameter("Derivative of the OCP wrt stoichiometry [V]")
         R = pybamm.Parameter("Effective resistance [Ohm]")
-        a = pybamm.Parameter("Surface area per unit volume of particles")
+        epsilon = pybamm.Parameter("Positive electrode active material volume fraction")
+        r_particle = pybamm.Parameter("Positive particle radius [m]")
+        a = 3*(epsilon/r_particle)
         F = pybamm.Parameter("Faraday constant [C.mol-1]")
-        l_w = pybamm.Parameter("Thickness of the working electrode")
+        l_w = pybamm.Parameter("Positive electrode thickness [m]")
 
         I = param.current_with_time
 
