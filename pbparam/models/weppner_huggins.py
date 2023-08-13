@@ -28,14 +28,11 @@ class WeppnerHuggins(pybamm.lithium_ion.BaseModel):
         i_app = param.current_density_with_time
         U = pybamm.Parameter("Reference OCP [V]")
         Uprime = pybamm.Parameter("Derivative of the OCP wrt stoichiometry [V]")
-        R = pybamm.Parameter("Effective resistance [Ohm]")
         epsilon = pybamm.Parameter("Positive electrode active material volume fraction")
         r_particle = pybamm.Parameter("Positive particle radius [m]")
         a = 3 * (epsilon / r_particle)
         F = pybamm.Parameter("Faraday constant [C.mol-1]")
         l_w = pybamm.Parameter("Positive electrode thickness [m]")
-
-        I = param.current_with_time
 
         ######################
         # Governing equations
@@ -44,20 +41,18 @@ class WeppnerHuggins(pybamm.lithium_ion.BaseModel):
             (2 / np.pi) * (i_app / (pybamm.sqrt(d_s) * a * F * l_w)) * pybamm.sqrt(t)
         )
         # Linearised voltage
-        V = U + Uprime * u_surf - R * I
+        V = U + Uprime * u_surf
         ######################
         # (Some) variables
         ######################
         self.variables = {
             "Positive particle surface " "concentration [mol.m-3]": u_surf,
-            "Current [A]": I,
             "Voltage [V]": V,
         }
 
-    property
-
-    def geometry(self):
-        return pybamm.Geometry()
+    @property
+    def default_geometry(self):
+        return {}
 
     @property
     def default_submesh_types(self):
