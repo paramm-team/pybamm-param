@@ -98,7 +98,7 @@ class BasicGITT(pybamm.lithium_ion.BaseModel):
         # Linearised voltage
         U = pybamm.Parameter("Reference OCP [V]")
         Uprime = pybamm.Parameter("Derivative of the OCP wrt stoichiometry [V]")
-        R = pybamm.Parameter("Effective resistance [Ohm]")
+        R = pybamm.Parameter("Contact resistance [Ohm]")
         delta_c_s = pybamm.boundary_value(
             c_s_surf_p - pybamm.surf(param.p.prim.c_init), "right"
         )
