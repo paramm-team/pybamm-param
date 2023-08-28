@@ -24,15 +24,26 @@ class WeppnerHuggins(pybamm.lithium_ion.BaseModel):
         ######################
         # Parameters
         ######################
-        d_s = pybamm.Parameter("Positive electrode diffusivity [m2.s-1]")
+        d_s = param.p.prim.D
+        # d_s = pybamm.Parameter("Positive electrode diffusivity [m2.s-1]")
+
         i_app = param.current_density_with_time
+
         U = pybamm.Parameter("Reference OCP [V]")
+
         Uprime = pybamm.Parameter("Derivative of the OCP wrt stoichiometry [V]")
-        epsilon = pybamm.Parameter("Positive electrode active material volume fraction")
-        r_particle = pybamm.Parameter("Positive particle radius [m]")
+
+        epsilon = pybamm.Parameter(
+            "Positive electrode active material volume fraction"
+        )  # param.p.prim.epsilon_s#
+
+        r_particle = pybamm.Parameter("Positive particle radius [m]")  # param.p.prim.R#
+
         a = 3 * (epsilon / r_particle)
-        F = pybamm.Parameter("Faraday constant [C.mol-1]")
-        l_w = pybamm.Parameter("Positive electrode thickness [m]")
+
+        F = param.F  # pybamm.Parameter("Faraday constant [C.mol-1]")
+
+        l_w = param.p.L  # pybamm.Parameter("Positive electrode thickness [m]")
 
         ######################
         # Governing equations
@@ -46,7 +57,9 @@ class WeppnerHuggins(pybamm.lithium_ion.BaseModel):
         # (Some) variables
         ######################
         self.variables = {
-            "Positive particle surface " "concentration [mol.m-3]": u_surf,
+            # "Positive particle surface concentration [mol.m-3]":
+            # pybamm.PrimaryBroadcast(u_surf,"positive electrode"
+            # ),
             "Voltage [V]": V,
         }
 

@@ -37,7 +37,7 @@ class GITT(pbparam.BaseOptimisationProblem):
             cost_function=cost_function,
             data=data,
             parameters={
-                "Negative electrode diffusivity [m2.s-1]": (5e-14, (2.06e-16, 2.06e-12))
+                "Positive electrode diffusivity [m2.s-1]": (5e-14, (2.06e-16, 2.06e-12))
             },
             variables_to_fit=["Voltage [V]"],
         )
