@@ -24,8 +24,8 @@ class WeppnerHuggins(pybamm.lithium_ion.BaseModel):
         ######################
         # Parameters
         ######################
-        d_s = param.p.prim.D
-        # d_s = pybamm.Parameter("Positive electrode diffusivity [m2.s-1]")
+
+        d_s = pybamm.Parameter("Positive electrode diffusivity [m2.s-1]")
 
         i_app = param.current_density_with_time
 
@@ -35,21 +35,21 @@ class WeppnerHuggins(pybamm.lithium_ion.BaseModel):
 
         epsilon = pybamm.Parameter(
             "Positive electrode active material volume fraction"
-        )  # param.p.prim.epsilon_s#
+        )
 
-        r_particle = pybamm.Parameter("Positive particle radius [m]")  # param.p.prim.R#
+        r_particle = pybamm.Parameter("Positive particle radius [m]")
 
         a = 3 * (epsilon / r_particle)
 
-        F = param.F  # pybamm.Parameter("Faraday constant [C.mol-1]")
+        F = param.F
 
-        l_w = param.p.L  # pybamm.Parameter("Positive electrode thickness [m]")
+        l_w = param.p.L
 
         ######################
         # Governing equations
         ######################
         u_surf = (
-            (2 / np.pi) * (i_app / (pybamm.sqrt(d_s) * a * F * l_w)) * pybamm.sqrt(t)
+            (2 / np.pi) * (i_app / ((d_s**0.5) * a * F * l_w)) * (t**0.5)
         )
         # Linearised voltage
         V = U + Uprime * u_surf
@@ -57,9 +57,6 @@ class WeppnerHuggins(pybamm.lithium_ion.BaseModel):
         # (Some) variables
         ######################
         self.variables = {
-            # "Positive particle surface concentration [mol.m-3]":
-            # pybamm.PrimaryBroadcast(u_surf,"positive electrode"
-            # ),
             "Voltage [V]": V,
         }
 
