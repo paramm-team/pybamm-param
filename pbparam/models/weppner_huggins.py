@@ -27,6 +27,8 @@ class WeppnerHuggins(pybamm.lithium_ion.BaseModel):
 
         d_s = pybamm.Parameter("Positive electrode diffusivity [m2.s-1]")
 
+        c_s_max = pybamm.Parameter("Maximum concentration in positive electrode [mol.m-3]")
+
         i_app = param.current_density_with_time
 
         U = pybamm.Parameter("Reference OCP [V]")
@@ -48,7 +50,7 @@ class WeppnerHuggins(pybamm.lithium_ion.BaseModel):
         ######################
         u_surf = (2 / np.pi) * (i_app / ((d_s**0.5) * a * F * l_w)) * (t**0.5)
         # Linearised voltage
-        V = U + Uprime * u_surf
+        V = U + (Uprime * u_surf)/ c_s_max
         ######################
         # (Some) variables
         ######################
