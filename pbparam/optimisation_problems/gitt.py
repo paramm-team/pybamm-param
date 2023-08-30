@@ -37,7 +37,10 @@ class GITT(pbparam.BaseOptimisationProblem):
             cost_function=cost_function,
             data=data,
             parameters={
-                "Positive electrode diffusivity [m2.s-1]": (5e-14, (2.06e-16, 2.06e-12)),
+                "Positive electrode diffusivity [m2.s-1]": (
+                    5e-14,
+                    (2.06e-16, 2.06e-12),
+                ),
                 "Reference OCP [V]": (4.2, (0, 5)),
             },
             variables_to_fit=["Voltage [V]"],
@@ -49,8 +52,7 @@ class GITT(pbparam.BaseOptimisationProblem):
     def objective_function(self, x):
         # create a dict of input values from the current parameters
         input_dict = {
-            param: self.scalings[i] * x[i]
-            for param, i in self.map_inputs.items()
+            param: self.scalings[i] * x[i] for param, i in self.map_inputs.items()
         }
         t_end = self.data["Time [s]"].iloc[-1]
         solution = self.model.solve([0, t_end], inputs=input_dict)
@@ -94,9 +96,7 @@ class GITT(pbparam.BaseOptimisationProblem):
             t_eval = [0, self.data["Time [s]"].iloc[-1]]
 
         # Solve the simulation with the given inputs and t_eval
-        solution = self.model.solve(
-            t_eval=t_eval, inputs=inputs, **self.solve_options
-        )
+        solution = self.model.solve(t_eval=t_eval, inputs=inputs, **self.solve_options)
 
         return solution
 
