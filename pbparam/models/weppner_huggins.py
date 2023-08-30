@@ -25,7 +25,7 @@ class WeppnerHuggins(pybamm.lithium_ion.BaseModel):
         # Parameters
         ######################
 
-        d_s = pybamm.Parameter("Positive electrode diffusivity [m2.s-1]")
+        d_s = param.p.prim.D
 
         i_app = param.current_density_with_time
 
@@ -33,9 +33,7 @@ class WeppnerHuggins(pybamm.lithium_ion.BaseModel):
 
         Uprime = pybamm.Parameter("Derivative of the OCP wrt stoichiometry [V]")
 
-        epsilon = pybamm.Parameter(
-            "Positive electrode active material volume fraction"
-        )
+        epsilon = pybamm.Parameter("Positive electrode active material volume fraction")
 
         r_particle = pybamm.Parameter("Positive particle radius [m]")
 
@@ -48,9 +46,7 @@ class WeppnerHuggins(pybamm.lithium_ion.BaseModel):
         ######################
         # Governing equations
         ######################
-        u_surf = (
-            (2 / np.pi) * (i_app / ((d_s**0.5) * a * F * l_w)) * (t**0.5)
-        )
+        u_surf = (2 / np.pi) * (i_app / ((d_s(1, 1) ** 0.5) * a * F * l_w)) * (t**0.5)
         # Linearised voltage
         V = U + Uprime * u_surf
         ######################
