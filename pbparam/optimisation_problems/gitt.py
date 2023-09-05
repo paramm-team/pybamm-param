@@ -27,13 +27,13 @@ class GITT(pbparam.BaseOptimisationProblem):
 
     def __init__(
         self,
-        simulation,
+        param_dict,
+        model,
         data,
         cost_function=pbparam.RMSE(),
         solve_options=None,
     ):
         super().__init__(
-            model=simulation,
             cost_function=cost_function,
             data=data,
             parameters={
@@ -45,6 +45,9 @@ class GITT(pbparam.BaseOptimisationProblem):
             },
             variables_to_fit=["Voltage [V]"],
         )
+
+        simulation = pybamm.Simulation(model, parameter_values=param_dict)
+        model = simulation
 
         self.collect_parameters(solve_options)
         self.update_simulation_parameters(simulation)
