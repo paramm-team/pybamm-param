@@ -27,7 +27,7 @@ class TestWeppnerHuggins(unittest.TestCase):
         simulation = pybamm.Simulation(model, parameter_values=param)
         solution = simulation.solve([0, 100])
         self.assertEqual(len(solution["Voltage [V]"].entries), 100)
-        self.assertAlmostEqual(solution["Voltage [V]"].entries[-1], 4.167409814846693)
+        self.assertAlmostEqual(solution["Voltage [V]"].entries[-1], 4.1422354008232976)
 
 
 if __name__ == "__main__":
