@@ -64,6 +64,7 @@ class TestOCPBalance(unittest.TestCase):
             pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [1, 2, 3, 4, 5]}),
             pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [2, 3, 4, 5, 6]}),
         ]
+
         optimisation_problem = pbparam.OCPBalance(data_fit, data_ref)
         optimisation_problem.setup_objective_function()
 
@@ -78,6 +79,38 @@ class TestOCPBalance(unittest.TestCase):
         with self.assertRaisesRegex(TypeError,
                                     "data elements must be all array-like objects"):
             optimisation_problem = pbparam.OCPBalance(["data_fit"], ["data_ref"])
+
+    def test_weights_length_mismatch(self):
+        data_fit = [
+            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [5, 4, 3, 2, 1]}),
+            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [6, 5, 4, 3, 2]}),
+        ]
+        data_ref = [
+            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [5, 4, 3, 2, 1]}),
+            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [6, 5, 4, 3, 2]}),
+        ]
+        weights = [1, 2, 3, 4]  # Mismatched weights length
+
+        with self.assertRaisesRegex(
+            ValueError, "Weights should have the same length as data_ref."
+        ):
+            pbparam.OCPBalance(data_fit, data_ref, weights=weights)
+
+    def test_warning_weights_with_MLE(self):
+        data_fit = [
+            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [5, 4, 3, 2, 1]}),
+            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [6, 5, 4, 3, 2]}),
+        ]
+        data_ref = [
+            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [5, 4, 3, 2, 1]}),
+            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [6, 5, 4, 3, 2]}),
+        ]
+        weights = {0: [1, 1, 1, 1, 1], 1: [1, 1, 1, 1, 1]}
+        cost_function = pbparam.MLE()
+        with self.assertWarnsRegex(Warning, "MLE calculation"):
+            pbparam.OCPBalance(
+                data_fit, data_ref, cost_function=cost_function, weights=weights
+            )
 
     def test_plot(self):
         data_ref = [

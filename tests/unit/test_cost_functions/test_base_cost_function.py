@@ -13,7 +13,7 @@ class TestBaseCostFunction(unittest.TestCase):
 
     def test_evaluate(self):
         cost_function = pbparam.BaseCostFunction()
-        self.assertIsNone(cost_function.evaluate(None, None))
+        self.assertIsNone(cost_function.evaluate(None, None, 1))
 
 
 if __name__ == "__main__":

@@ -3,7 +3,9 @@
 #
 
 # import pybamm
+import pbparam
 import numpy as np
+import warnings
 
 
 class BaseOptimisationProblem:
@@ -58,7 +60,8 @@ class BaseOptimisationProblem:
             data=None,
             model=None,
             parameters=None,
-            variables_to_fit=None
+            variables_to_fit=None,
+            weights=None,
     ):
         """
         Initialize the class properties
@@ -103,6 +106,7 @@ class BaseOptimisationProblem:
         self.model = model
         self.parameters = parameters
         self.variables_to_fit = variables_to_fit
+        self.weights = weights
 
         # This should be a requirement to run if defined, if it's not defined in the
         #  subclass it will pass
@@ -193,6 +197,31 @@ class BaseOptimisationProblem:
         # )
         #
         # self.model = new_simulation
+
+    def process_weights(self):
+        if self.weights is None:
+            # No weights provided, initialize with default values
+            self.weights = {
+                var: [1 / np.nanmean(self.data[var])] * len(self.data[var])
+                for var in self.variables_to_fit
+            }
+        else:
+            for var in self.variables_to_fit:
+                if var not in self.weights:
+                    raise ValueError(
+                        "Weights dictionary should contain all \
+                        variables in variables_to_fit."
+                    )
+        if self.weights is not None:
+            for var, weight in self.weights.items():
+                if len(weight) != 1 and len(weight) != len(self.data[var]):
+                    raise ValueError(
+                        f"Length of weights[{var}] should be 1 or \
+                            same as the length of data."
+                    )
+        # Give warning if weights are given with MLE
+        if isinstance(self.cost_function, pbparam.MLE) and self.weights is not None:
+            warnings.warn("Weights are provided but not used in the MLE calculation.")
 
     def objective_function(self, x):
         """

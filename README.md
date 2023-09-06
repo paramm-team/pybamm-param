@@ -12,50 +12,65 @@ This package is provides parameter optimization for PyBaMM (Python Battery Mathe
 
 ## 🚀 Installing pybamm-param
 
-These installation instructions assume you have Python installed (versions 3.8 to 3.11) and that you have also installed the `virtualenv` package which can be done by running
 ```bash
 pip install virtualenv
 ```
 
+The module dependencies are listed in `pyproject.toml`, the dependancies which are non optional which are installed with the package.
+
+The optional dependancies are split into `dev` and `docs`. `dev` are used for testing and linting, `docs` are used for building the sphinx documentation.
+
 ### Linux & MacOS
+
 1. Create a virtual environment (this is strongly recommended to avoid clashes with the dependencies)
-```bash
-virtualenv env
-```
+
+    ```bash
+    virtualenv env
+    ```
 
 2. Activate the virtual environment
-```bash
-source env/bin/activate
-```
-The virtual environment can later be deactivated (if needed) by running
-```bash
-deactivate
-```
 
-3. Install package from Github
-```bash
-pip install git+https://github.com/paramm-team/pybamm-param
-```
+    ```bash
+    source env/bin/activate
+    ```
+
+    The virtual environment can later be deactivated (if needed) by running
+
+    ```bash
+    deactivate
+    ```
+
+3. Install packages into the virtual envronment
+
+    ```bash
+    pip install -e ./[dev,docs]
+    ```
 
 ### Windows
+
 1. Create a virtual environment (this is strongly recommended to avoid clashes with the dependencies)
-```bash
-python -m virtualenv env
-```
+
+    ```bash
+    python -m virtualenv env
+    ```
 
 2. Activate the virtual environment
-```bash
-env\Scripts\activate.bat
-```
-The virtual environment can later be deactivated (if needed) by running
-```bash
-deactivate
-```
+
+    ```bash
+    env\Scripts\activate.bat
+    ```
+
+    The virtual environment can later be deactivated (if needed) by running
+
+    ```bash
+    deactivate
+    ```
 
 3. Install package from Github
-```bash
-pip install git+https://github.com/paramm-team/pybamm-param
-```
+
+    ```bash
+    pip install pip install -e .\\[dev,docs]
+    ```
 
 ## 🛠️ Contributing to pybamm-param
 

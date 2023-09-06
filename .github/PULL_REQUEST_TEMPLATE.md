@@ -12,16 +12,14 @@ Please add a line in the relevant section of [CHANGELOG.md](https://github.com/p
 - [ ] Optimization (back-end change that speeds up the code)
 - [ ] Bug fix (non-breaking change which fixes an issue)
 
+## Key checklist
 
-# Key checklist:
+- [ ] No style issues: `$ python -m nox -s lint`
+- [ ] All tests pass: `$ python -m nox -s unit examples integration`
+- [ ] Coverage is complete `$ python -m nox -s coverage`
+- [ ] The documentation builds: `$ python -m nox -s sphinx`
 
-- [ ] No style issues: `$ flake8`
-- [ ] All tests pass: `$ python run-tests.py --unit`
-- [ ] The documentation builds: `$ cd docs` and then `$ make clean; make html`
-
-You can run all three at once, using `$ python run-tests.py --quick`.
-
-## Further checks:
+## Further checks
 
 - [ ] Code is commented, particularly in hard-to-understand areas
 - [ ] Tests added that prove fix is effective or that feature works

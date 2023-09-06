@@ -4,7 +4,9 @@
 
 import pbparam
 import pandas as pd
+import numpy as np
 from scipy import interpolate
+import warnings
 
 
 class OCPBalance(pbparam.BaseOptimisationProblem):
@@ -13,7 +15,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
     class 'data' and data_ref for the base class 'model'.
     """
 
-    def __init__(self, data_fit, data_ref, cost_function=pbparam.RMSE()):
+    def __init__(self, data_fit, data_ref, weights=None, cost_function=pbparam.RMSE()):
         """
         Initialise the optimisation problem.
         data_fit : list or float
@@ -39,9 +41,29 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             cost_function=cost_function,
             data=data_fit,
             model=data_ref,
+            weights=weights,
         )
 
         self.process_and_clean_data()
+
+        # Process weights manually until we reformat OCPBalance
+        # self.process_weights()
+
+        # Give warning if weights are given with MLE
+        if isinstance(cost_function, pbparam.MLE) and weights is not None:
+            warnings.warn("Weights are provided but not used in the MLE calculation.")
+
+        # Check the weights if it's None
+        if weights is None:
+            valid_data_ref = pd.to_numeric(data_ref, errors="coerce")
+            self.weights = [1 / np.nanmean(valid_data_ref)] * len(data_ref)
+
+        # Check if the weights has same lenght
+        else:
+            if len(weights) == 1:
+                self.weights *= len(data_ref)
+            elif len(weights) != len(data_ref):
+                raise ValueError("Weights should have the same length as data_ref.")
 
     def objective_function(self, x):
         """
@@ -70,7 +92,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         sd = list(x[2:])
 
         # Return the cost of the simulation using the cost function
-        return self.cost_function.evaluate(y_sim, y_data, sd)
+        return self.cost_function.evaluate(y_sim, y_data, self.weights, sd)
 
     def process_and_clean_data(self):
         """
@@ -80,10 +102,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         determines the initial guesses and bounds for the optimization.
         """
         # Process reference data, check if all elements are array-like
-        if all([
-            isinstance(x, (pd.DataFrame))
-            for x in self.model]
-        ):
+        if all([isinstance(x, (pd.DataFrame)) for x in self.model]):
             self.model_fun = []
             for data in self.model:
                 # Interpolate reference data

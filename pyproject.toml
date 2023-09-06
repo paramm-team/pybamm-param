@@ -22,12 +22,18 @@ dynamic = [
 
 [project.optional-dependencies]
 dev = [
+    "nox",
+    "coverage",
     "black",
     "flake8>=3",
 ]
 docs = [
     "guzzle-sphinx-theme",
     "sphinx>=1.5",
+    "sphinx-rtd-theme",
+]
+deploy = [
+    "bump2version"
 ]
 
 [tool.hatch.version]

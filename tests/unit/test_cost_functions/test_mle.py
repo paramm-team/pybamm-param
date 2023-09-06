@@ -19,8 +19,8 @@ class TestMLE(unittest.TestCase):
         y_data = y_sim + np.random.normal(0, 0.1, 4)
 
         self.assertTrue(
-            cost_function.evaluate(y_sim, y_data, 0.1)
-            < cost_function.evaluate(y_sim, y_data, 1)
+            cost_function.evaluate(y_sim, y_data, 1, 0.1)
+            < cost_function.evaluate(y_sim, y_data, 1, 1)
         )
 
     def test_get_parameters(self):
