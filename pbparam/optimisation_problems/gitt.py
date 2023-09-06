@@ -33,7 +33,7 @@ class GITT(pbparam.BaseOptimisationProblem):
         cost_function=pbparam.RMSE(),
         solve_options=None,
     ):
-        param=pybamm.ParameterValues(param_dict)
+        param = pybamm.ParameterValues(param_dict)
         simulation = pybamm.Simulation(gitt_model, parameter_values=param)
         super().__init__(
             model=simulation,
