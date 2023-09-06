@@ -27,17 +27,24 @@ class GITT(pbparam.BaseOptimisationProblem):
 
     def __init__(
         self,
-        simulation,
+        param_dict,
+        gitt_model,
         data,
         cost_function=pbparam.RMSE(),
         solve_options=None,
     ):
+        param = pybamm.ParameterValues(param_dict)
+        simulation = pybamm.Simulation(gitt_model, parameter_values=param)
         super().__init__(
             model=simulation,
             cost_function=cost_function,
             data=data,
             parameters={
-                "Negative electrode diffusivity [m2.s-1]": (5e-14, (2.06e-16, 2.06e-12))
+                "Positive electrode diffusivity [m2.s-1]": (
+                    5e-14,
+                    (2.06e-16, 2.06e-12),
+                ),
+                "Reference OCP [V]": (4.2, (0, 5)),
             },
             variables_to_fit=["Voltage [V]"],
         )
@@ -48,8 +55,7 @@ class GITT(pbparam.BaseOptimisationProblem):
     def objective_function(self, x):
         # create a dict of input values from the current parameters
         input_dict = {
-            param: self.scalings[i] * x[i]
-            for param, i in self.map_inputs.items()
+            param: self.scalings[i] * x[i] for param, i in self.map_inputs.items()
         }
         t_end = self.data["Time [s]"].iloc[-1]
         solution = self.model.solve([0, t_end], inputs=input_dict)
@@ -86,16 +92,14 @@ class GITT(pbparam.BaseOptimisationProblem):
             inputs = {param: parameters[i] for param, i in self.map_inputs.items()}
 
         # Check if the simulation has an attribute "experiment"
-        if getattr(self.simulation, "experiment", None):
+        if getattr(self.model, "experiment", None):
             t_eval = None
         else:
             # Use the final time from the data as t_eval if experiment is not present
             t_eval = [0, self.data["Time [s]"].iloc[-1]]
 
         # Solve the simulation with the given inputs and t_eval
-        solution = self.simulation.solve(
-            t_eval=t_eval, inputs=inputs, **self.solve_options
-        )
+        solution = self.model.solve(t_eval=t_eval, inputs=inputs, **self.solve_options)
 
         return solution
 
@@ -116,6 +120,7 @@ class GITT(pbparam.BaseOptimisationProblem):
         """
 
         # calculate the solution for the initial and optimal parameters
+        #
         initial_solution = self.calculate_solution()
         optimal_solution = self.calculate_solution(x_optimal)
 
