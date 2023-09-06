@@ -19,6 +19,7 @@
 
 ## PRs
 
+- Add `GITT` ([#50](https://github.com/paramm-team/pybamm-param/pull/50))
 - Refactor for base_optimisation_problem conformity ([#42](https://github.com/paramm-team/pybamm-param/pull/42))
 - Allow `DataFit` to take `simulation_options` ([#40](https://github.com/paramm-team/pybamm-param/pull/40))
 - Allow weights in the objective function ([#36](https://github.com/paramm-team/pybamm-param/pull/36))
