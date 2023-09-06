@@ -6,6 +6,7 @@
 
 * Fit PyBaMM simulation to data (`DataFit`)
 * Balance OCP for half cells (`OCPBalance`)
+* Galvanostatic Intermittent Titration Technique (`GITT`)
 
 ### Optimisers
 
