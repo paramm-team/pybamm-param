@@ -1,6 +1,5 @@
 name: release-pybamm-param
 
-# This should 
 on:
   push:
     branches:

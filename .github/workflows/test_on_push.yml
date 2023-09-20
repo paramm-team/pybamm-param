@@ -77,6 +77,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.BOT_ACCESS_TOKEN }}
+    
+    - name: setup git
+      run: |
+        git config --global user.name "gitbot-scrtp"
+        git config --global user.email "resource.rse@warwick.ac.uk"
 
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
