@@ -7,7 +7,7 @@ on:
 
 jobs:
 
-  release:
+  make_release:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,5 +29,5 @@ jobs:
           python -c "import pybamm; assert pybamm.__version__ > {{ github.ref }}"
 
       - name: Release
-      run: |
-        nox -s release
+        run: |
+          nox -s release
