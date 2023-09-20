@@ -108,6 +108,6 @@ jobs:
       with:
         add: coverage.xml requirements.txt
         message: 'Update requirements.txt and coverage.xml'
-        author_name: GitHub Actions
+        author_name: gitbot-scrtp
         author_email: user.email
 
