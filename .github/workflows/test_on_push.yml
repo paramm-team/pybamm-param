@@ -77,6 +77,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.BOT_ACCESS_TOKEN }}
+    
+    - name: setup git
+      run: |
+        git config --global user.name "gitbot-scrtp"
+        git config --global user.email "resource.rse@warwick.ac.uk"
 
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
@@ -96,10 +104,10 @@ jobs:
         python -m pip freeze > requirements.txt
     
     - name: Commit and push changes
-      uses: EndBug/add-and-commit@v7
+      uses: EndBug/add-and-commit@v9
       with:
         add: coverage.xml requirements.txt
-        message: 'Update requirements.txt and coverage.xml'
-        author_name: GitHub Actions
+        message: '[skip actions] Update requirements.txt and coverage.xml'
+        author_name: gitbot-scrtp
         author_email: user.email
 
