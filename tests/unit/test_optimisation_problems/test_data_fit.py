@@ -18,8 +18,12 @@ class TestDataFit(unittest.TestCase):
             "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12)),
             "Total heat transfer coefficient [W.m-2.K-1]": (0, (0, 1000)),
         }
-        optimisation_problem = pbparam.DataFit(sim, data, model_parameters)
-
+        with self.assertWarns(RuntimeWarning):
+            optimisation_problem = pbparam.DataFit(
+                sim,
+                data,
+                model_parameters
+            )
         # Test class variables
         self.assertTrue(optimisation_problem.data.empty)
         self.assertEqual(optimisation_problem.parameters, model_parameters)
@@ -240,7 +244,7 @@ class TestDataFit(unittest.TestCase):
         sol = optimisation_problem.calculate_solution([1e-15])
 
         # Check final time is 3 (from data)
-        self.assertEqual(sol.t[-1], 20)
+        self.assertEqual(sol.t[-1], 20.)
 
         # Check inputs are correct
         self.assertEqual(
@@ -248,7 +252,7 @@ class TestDataFit(unittest.TestCase):
             [{"Negative electrode diffusivity [m2.s-1]": np.array([1e-15])}],
         )
 
-    def test__plot(self):
+    def test_plot(self):
         model = pybamm.lithium_ion.SPM()
         sim = pybamm.Simulation(model)
         data = pd.DataFrame(
