@@ -5,11 +5,12 @@ import pbparam
 import pybamm
 import pandas as pd
 import numpy as np
-
 import unittest
 
+from test_opt_problem import TestOptimisationProblemTemplate
 
-class TestDataFit(unittest.TestCase):
+
+class TestDataFit(TestOptimisationProblemTemplate):
     def test_init(self):
         model = pybamm.lithium_ion.SPM()
         sim = pybamm.Simulation(model)
