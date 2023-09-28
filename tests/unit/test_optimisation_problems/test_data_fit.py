@@ -18,7 +18,7 @@ class TestDataFit(unittest.TestCase):
             "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12)),
             "Total heat transfer coefficient [W.m-2.K-1]": (0, (0, 1000)),
         }
-        # Numpy will raise a 'RuntimeWarning: Mean of empty slice' on line 205 
+        # Numpy will raise a 'RuntimeWarning: Mean of empty slice' on line 205
         # of base_optimisation problem if the data is empty
         with self.assertWarns(RuntimeWarning):
             optimisation_problem = pbparam.DataFit(
