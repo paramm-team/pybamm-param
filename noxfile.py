@@ -1,5 +1,4 @@
 import nox
-import pbparam
 
 
 @nox.session
