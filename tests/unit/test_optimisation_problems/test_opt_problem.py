@@ -39,7 +39,7 @@ class TestOptimisationProblemTemplate(unittest.TestCase):
         self.assertEqual(optimisation_problem.parameters, args['parameters'])
         for key, value in args["parameters"].items():
             self.assertIsInstance(
-                optimisation_problem.parameter_values['key'], 
+                optimisation_problem.parameter_values['key'],
                 pybamm.InputParameter)
         """
         unittest.skip("Not implemented")
