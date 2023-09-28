@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 import unittest
 
-from test_opt_problem import TestOptimisationProblemTemplate
+from .test_opt_problem import TestOptimisationProblemTemplate
 
 
 class TestDataFit(TestOptimisationProblemTemplate):
