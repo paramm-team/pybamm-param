@@ -2,7 +2,7 @@
 # Base optimisation problem class
 #
 
-# import pybamm
+import pybamm
 import pbparam
 import numpy as np
 import warnings
@@ -178,25 +178,29 @@ class BaseOptimisationProblem:
         if hasattr(solver, "integrator_specs"):
             solver.integrator_specs = {}
 
-        #Why cant we do this?
-        self.model.parameter_values = self.parameter_values
-        self.model.solver = solver
+        # Why cant we do this?
+        # self.model.parameter_values = self.parameter_values
+        # self.model.solver = solver
+        # If the simulation has been run then the discretisation already took place
+        # and this would not update the parameters. PyBaMM PR #3267
+        # (https://github.com/pybamm-team/PyBaMM/pull/3267) no longer allows to change
+        # such attributes
 
         # Updating sim params requires recreating the simulation
-        # new_simulation = pybamm.Simulation(
-        #     simulation.model,
-        #     experiment=getattr(simulation, "experiment", None),
-        #     geometry=simulation.geometry,
-        #     parameter_values=self.parameter_values,
-        #     submesh_types=simulation.submesh_types,
-        #     var_pts=simulation.var_pts,
-        #     spatial_methods=simulation.spatial_methods,
-        #     solver=solver,
-        #     output_variables=simulation.output_variables,
-        #     C_rate=getattr(simulation, "C_rate", None),
-        # )
-        #
-        # self.model = new_simulation
+        new_simulation = pybamm.Simulation(
+            simulation.model,
+            experiment=getattr(simulation, "experiment", None),
+            geometry=simulation.geometry,
+            parameter_values=self.parameter_values,
+            submesh_types=simulation.submesh_types,
+            var_pts=simulation.var_pts,
+            spatial_methods=simulation.spatial_methods,
+            solver=solver,
+            output_variables=simulation.output_variables,
+            C_rate=getattr(simulation, "C_rate", None),
+        )
+        
+        self.model = new_simulation
 
     def process_weights(self):
         if self.weights is None:
