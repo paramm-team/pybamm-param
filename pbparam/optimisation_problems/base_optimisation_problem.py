@@ -54,14 +54,14 @@ class BaseOptimisationProblem:
     """
 
     def __init__(
-            self,
-            *args,
-            cost_function=None,
-            data=None,
-            model=None,
-            parameters=None,
-            variables_to_fit=None,
-            weights=None,
+        self,
+        *args,
+        cost_function=None,
+        data=None,
+        model=None,
+        parameters=None,
+        variables_to_fit=None,
+        weights=None,
     ):
         """
         Initialize the class properties
@@ -199,7 +199,7 @@ class BaseOptimisationProblem:
             output_variables=simulation.output_variables,
             C_rate=getattr(simulation, "C_rate", None),
         )
-        
+
         self.model = new_simulation
 
     def process_weights(self):

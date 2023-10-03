@@ -102,14 +102,18 @@ class GITT(pbparam.DataFit):
     #         t_eval = [0, self.data["Time [s]"].iloc[-1]]
 
     #     # Solve the simulation with the given inputs and t_eval
-    #     solution = self.model.solve(t_eval=t_eval, inputs=inputs, **self.solve_options)
+    #     solution = self.model.solve(
+    #         t_eval=t_eval,
+    #         inputs=inputs,
+    #         **self.solve_options
+    #     )
 
     #     return solution
 
     # def _plot(self, x_optimal):
     #     """
-    #     Plot the optimization result. Should be accessed through the OptimizationResult
-    #     plot method.
+    #     Plot the optimization result. Should be accessed through the
+    #     OptimizationResult plot method.
 
     #     Parameters
     #     ----------
