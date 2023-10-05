@@ -53,21 +53,18 @@ class GITT(pbparam.BaseOptimisationProblem):
         self.update_simulation_parameters(simulation)
 
     def objective_function(self, x):
-        results = []
-        for pulse in self.data:
         # create a dict of input values from the current parameters
-            input_dict = {
-                param: self.scalings[i] * x[i] for param, i in self.map_inputs.items()
-            }
-            t_end = pulse["Time [s]"].iloc[-1]
-            solution = self.model.solve([0, t_end], inputs=input_dict)
+        input_dict = {
+            param: self.scalings[i] * x[i] for param, i in self.map_inputs.items()
+        }
+        t_end = self.data["Time [s]"].iloc[-1]
+        solution = self.model.solve([0, t_end], inputs=input_dict)
 
-            y_sim = [solution[v](self.data["Time [s]"]) for v in self.variables_to_fit]
-            y_data = [pulse[v] for v in self.variables_to_fit]
-            sd = [x[self.map_inputs[k]] for k in self.cost_function_parameters]
-            result =self.cost_function.evaluate(y_sim, y_data, sd)
-            results.append(result)
-        return results
+        y_sim = [solution[v](self.data["Time [s]"]) for v in self.variables_to_fit]
+        y_data = [self.data[v] for v in self.variables_to_fit]
+        sd = [x[self.map_inputs[k]] for k in self.cost_function_parameters]
+
+        return self.cost_function.evaluate(y_sim, y_data, sd)
 
     def calculate_solution(self, parameters=None):
         """
