@@ -17,11 +17,11 @@ latexcodec==2.0.1
 matplotlib==3.8.0
 mpmath==1.3.0
 nox==2023.4.22
-numpy==1.26.0
+numpy==1.26.1
 packaging==23.2
 pandas==2.1.1
 pbparam @ file:///home/runner/work/pybamm-param/pybamm-param
-Pillow==10.0.1
+Pillow==10.1.0
 platformdirs==3.11.0
 pybamm==23.5
 pybtex==0.24.0
