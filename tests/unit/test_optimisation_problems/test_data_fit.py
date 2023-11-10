@@ -5,11 +5,12 @@ import pbparam
 import pybamm
 import pandas as pd
 import numpy as np
-
 import unittest
 
+from .test_opt_problem import TestOptimisationProblemTemplate
 
-class TestDataFit(unittest.TestCase):
+
+class TestDataFit(TestOptimisationProblemTemplate):
     def test_init(self):
         model = pybamm.lithium_ion.SPM()
         sim = pybamm.Simulation(model)
@@ -18,13 +19,25 @@ class TestDataFit(unittest.TestCase):
             "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12)),
             "Total heat transfer coefficient [W.m-2.K-1]": (0, (0, 1000)),
         }
-        optimisation_problem = pbparam.DataFit(sim, data, model_parameters)
-
+        # Numpy will raise a 'RuntimeWarning: Mean of empty slice' on line 205
+        # of base_optimisation problem if the data is empty
+        with self.assertWarns(RuntimeWarning):
+            optimisation_problem = pbparam.DataFit(
+                sim,
+                data,
+                model_parameters
+            )
         # Test class variables
+        # Check data is empty, as we have provided a datafram with headers
+        # but no data and data should not be added
         self.assertTrue(optimisation_problem.data.empty)
+        # Check Datafit has initialised with the correct parameters
         self.assertEqual(optimisation_problem.parameters, model_parameters)
+        # Check Datafit has initialised with the correct fitting variable
         self.assertEqual(optimisation_problem.variables_to_fit, ["Voltage [V]"])
 
+        # Check that the optimisation problem passed model_parameters has the correct
+        # pybamm type
         self.assertIsInstance(
             optimisation_problem.parameter_values[
                 "Negative electrode diffusivity [m2.s-1]"
@@ -38,12 +51,15 @@ class TestDataFit(unittest.TestCase):
             pybamm.InputParameter,
         )
 
+        # Check the optimisation problem has the correct values, boutnds, and scalings
         np.testing.assert_array_equal(optimisation_problem.x0, [1.0, 0.0])
         np.testing.assert_array_equal(
             optimisation_problem.bounds, [(0.0412, 412), (0, 1000)]
         )
         np.testing.assert_array_equal(optimisation_problem.scalings, [5e-15, 1.0])
 
+        # Check the optimisation problem inputs are correct
+        # TODO: Make this comment more descriptive
         self.assertEqual(
             optimisation_problem.map_inputs,
             {
@@ -52,6 +68,7 @@ class TestDataFit(unittest.TestCase):
             },
         )
 
+        # Check the optimisation problem has the correct input parameters
         self.assertIsInstance(
             optimisation_problem.model.parameter_values[
                 "Negative electrode diffusivity [m2.s-1]"
@@ -65,6 +82,7 @@ class TestDataFit(unittest.TestCase):
             pybamm.InputParameter,
         )
 
+        # Check the optimisation problem has the correct model type
         self.assertIsInstance(optimisation_problem.model.model, type(model))
 
         # Test variables_to_optimise
@@ -74,6 +92,7 @@ class TestDataFit(unittest.TestCase):
             model_parameters,
             variables_to_fit=["Voltage [V]", "Cell temperature [K]"],
         )
+        # Check Datafit has initialised with the correct fitting variable
         self.assertEqual(
             optimisation_problem.variables_to_fit,
             ["Voltage [V]", "Cell temperature [K]"],
@@ -86,6 +105,7 @@ class TestDataFit(unittest.TestCase):
             variables_to_fit=["Voltage [V]", "Cell temperature [K]"],
             weights={"Voltage [V]": [1], "Cell temperature [K]": [1]},
         )
+        # Check Datafit has initialised with the correct weights
         self.assertEqual(
             optimisation_problem.weights,
             {"Voltage [V]": [1], "Cell temperature [K]": [1]},
@@ -103,10 +123,13 @@ class TestDataFit(unittest.TestCase):
             model_parameters,
         )
         for name in parameter_names:
+            # Check the optimisation problem has the correct input parameters
             self.assertIsInstance(
                 optimisation_problem.model.parameter_values[name],
                 pybamm.InputParameter,
             )
+        # Check the problem has the correct inputs
+        # TODO: Make this comment more descriptive
         self.assertEqual(
             optimisation_problem.map_inputs,
             {
@@ -129,6 +152,7 @@ class TestDataFit(unittest.TestCase):
         }
 
         variable_weights = {"Voltage [V]": [1, 2]}
+        # Check that the length of weights raises an error
         with self.assertRaisesRegex(
             ValueError,
             "Length of weights",
@@ -149,6 +173,8 @@ class TestDataFit(unittest.TestCase):
         }
 
         variable_weights = {"Cell temperature [K]": [1]}
+        # Check that the weights raises an error
+        # TODO: Make this comment more descriptive
         with self.assertRaisesRegex(
             ValueError,
             "Weights dictionary should contain",
@@ -170,6 +196,8 @@ class TestDataFit(unittest.TestCase):
 
         variable_weights = {"Voltage [V]": [1]}
         cost_function = pbparam.MLE()
+        # Check that the class initialises with a warning
+        # TODO: Make this comment more descriptive
         with self.assertWarnsRegex(Warning, "MLE calculation"):
             pbparam.DataFit(
                 sim,
@@ -195,6 +223,7 @@ class TestDataFit(unittest.TestCase):
 
         # Check objective_function returns a number after setup
         optimisation_problem.setup_objective_function()
+        # Check that the objective function does not return None
         self.assertIsNotNone(optimisation_problem.objective_function([1e-15]))
 
     def test_calculate_solution(self):
@@ -240,7 +269,7 @@ class TestDataFit(unittest.TestCase):
         sol = optimisation_problem.calculate_solution([1e-15])
 
         # Check final time is 3 (from data)
-        self.assertEqual(sol.t[-1], 20)
+        self.assertEqual(sol.t[-1], 20.)
 
         # Check inputs are correct
         self.assertEqual(
@@ -248,7 +277,7 @@ class TestDataFit(unittest.TestCase):
             [{"Negative electrode diffusivity [m2.s-1]": np.array([1e-15])}],
         )
 
-    def test__plot(self):
+    def test_plot(self):
         model = pybamm.lithium_ion.SPM()
         sim = pybamm.Simulation(model)
         data = pd.DataFrame(
@@ -264,7 +293,9 @@ class TestDataFit(unittest.TestCase):
 
         plot = optimisation_problem._plot(None)
 
+        # Check plot is a QuickPlot from pybamm
         self.assertIsInstance(plot, pybamm.QuickPlot)
+        # Check plot has the correct labels
         self.assertListEqual(plot.labels, ["Initial values", "Optimal values"])
 
 
