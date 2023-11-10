@@ -25,7 +25,7 @@ The optional dependancies are split into `dev` and `docs`. `dev` are used for te
 1. Create a virtual environment (this is strongly recommended to avoid clashes with the dependencies)
 
     ```bash
-    virtualenv env
+    virtualenv --python="<path to python 3.11>" env
     ```
 
 2. Activate the virtual environment
@@ -69,7 +69,7 @@ The optional dependancies are split into `dev` and `docs`. `dev` are used for te
 3. Install package from Github
 
     ```bash
-    pip install pip install -e .\\[dev,docs]
+    pip install -e .\\[dev,docs]
     ```
 
 ## 🛠️ Contributing to pybamm-param
