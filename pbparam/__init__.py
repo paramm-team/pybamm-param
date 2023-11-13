@@ -16,6 +16,7 @@ from .cost_functions.rmse import RMSE
 from .optimisers.base_optimiser import BaseOptimiser
 from .optimisers.scipy_minimize import ScipyMinimize
 from .optimisers.scipy_differential_evolution import ScipyDifferentialEvolution
+from .optimisers.nlopt_wrapper import Nlopt
 
 #
 # Models

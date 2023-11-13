@@ -15,6 +15,11 @@ authors = [
 dependencies = [
     "matplotlib",
     "pybamm",
+    "numpy",
+    "pandas",
+    "scipy",
+    "cmake",
+    "nlopt",
 ]
 dynamic = [
     "version",
@@ -26,6 +31,7 @@ dev = [
     "coverage",
     "black",
     "flake8>=3",
+    "wheel",
 ]
 docs = [
     "guzzle-sphinx-theme",
