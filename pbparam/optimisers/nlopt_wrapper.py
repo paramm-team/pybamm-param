@@ -28,8 +28,8 @@ class Nlopt(pbparam.BaseOptimiser):
 
     def _run_optimiser(self, optimisation_problem, x0, bounds):
         self.optimisation_problem = copy.deepcopy(optimisation_problem)
-        
-        # this wrapper appends the argument grad to the objective function
+
+        # this wrapper appends the argument 'grad' to the objective function
         # which is not used in this case
         def wrapper(function):
             def inner(*args):
@@ -42,7 +42,7 @@ class Nlopt(pbparam.BaseOptimiser):
         optimiser_dims = len(x0)
         opt = nlopt.opt(self.method, optimiser_dims)
         opt.set_xtol_rel(1e-4)
-       
+
         u_bounds = []
         l_bounds = []
         for ix in range(len(bounds)):
@@ -62,7 +62,7 @@ class Nlopt(pbparam.BaseOptimiser):
             opt.set_min_objective(self.optimisation_problem.objective_function)
         else:
             raise ValueError("Must specify whether to maximise or minimise")
-        
+
         # Initialise timer
         timer = pybamm.Timer()
         raw_result = opt.optimize(x0)
@@ -85,4 +85,3 @@ class Nlopt(pbparam.BaseOptimiser):
         result.solve_time = solve_time
 
         return result
-
