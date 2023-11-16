@@ -1,32 +1,53 @@
 #
-# Tests for the Scipy Differential Evolution Optimiser class
+# This is a minimal example based on the original suggestion to use NLOpt
+# We make a simple dummy optimisation class for easier debugging
 #
+
+import pybamm
+import numpy as np
 import pbparam
-import unittest
+
+model = pybamm.lithium_ion.SPM()
+parameter_values = pybamm.ParameterValues("Chen2020")
+parameter_values.update(
+    {"Current function [A]": pybamm.InputParameter("I")}
+)
+sim = pybamm.Simulation(model, parameter_values=parameter_values)
+sol = sim.solve([0, 3600], inputs={"I": 5})["Terminal voltage [V]"].data
 
 
-class TestProblem(pbparam.BaseOptimisationProblem):
-    def __init__():
-        super().__init__()
+# Turn this into a mini optimisation problem
+class MyOptimisationProblem():
+    def __init__(self, x0, bounds):
+        self.x0 = x0
+        self.bounds = bounds
+        self.scalings = None
 
-    def parabola(x):
-        return x[0] ** 2
+    def objective_function(self, x):
+        output = 2.5 * np.ones(100)
+        new_sol = sim.solve([0, 3600], inputs={"I": x[0]})["Terminal voltage [V]"].data
+        output[:len(new_sol)] = new_sol
+        return sum((output - sol) ** 2)
+
+    def setup_objective_function(self):
+        pass
 
 
-class TestNlopt(unittest.TestCase):
-    def test_nlopt_init(self):
-        optimiser = pbparam.Nlopt('LN_BOBYQA', ['x'])
-        self.assertEqual(optimiser.name, "Nlopt optimiser with LN_BOBYQA method")
-        self.assertFalse(optimiser.single_variable)
-        self.assertFalse(optimiser.global_optimiser)
-        opt_problem = TestProblem()
-        optimiser.optimise(parabola, [1])
+# The init method takes the following 3 lines
+opt_class = pbparam.Nlopt('LN_BOBYQA', 'minimise')
 
 
-if __name__ == "__main__":
-    print("Add -v for more debug output")
-    import sys
+# 3 lines handled in init
+#opt = nlopt.opt(nlopt.LN_BOBYQA, 1)
+#opt = nlopt.opt('LN_BOBYQA', 1)
+#opt.set_xtol_rel(1e-4)
 
-    if "-v" in sys.argv:
-        debug = True
-    unittest.main()
+# the opt problem is set up in the optimise method using one of the extentions to
+# pbparam.base_optimisation_problem
+opt = MyOptimisationProblem([5], [(0, 10)])
+
+
+result = opt_class.optimise(opt)
+
+
+print(result)

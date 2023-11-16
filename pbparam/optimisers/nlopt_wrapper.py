@@ -9,7 +9,7 @@ class Nlopt(pbparam.BaseOptimiser):
     """
     """
 
-    def __init__(self, method, optimiser_dims, optimiser_target='minimise'):
+    def __init__(self, method, optimiser_target='minimise'):
         # Super the init from the base optimiser
         super().__init__()
         # Set the name of the optimiser
@@ -19,7 +19,6 @@ class Nlopt(pbparam.BaseOptimiser):
         self.name = f"Nlopt optimiser with {self.method} method"
         # this could be the wrong place to do this bit but the optimiser needs to
         # be initialised with parameters and method
-        self.opt = nlopt.opt(self.method, optimiser_dims)
         if optimiser_target in ['minimise', 'min', 'minimize']:
             self.minimise = True
             self.maximise = False
@@ -29,8 +28,21 @@ class Nlopt(pbparam.BaseOptimiser):
 
     def _run_optimiser(self, optimisation_problem, x0, bounds):
         self.optimisation_problem = copy.deepcopy(optimisation_problem)
-        # Initialise timer
-        timer = pybamm.Timer()
+        
+        # this wrapper appends the argument grad to the objective function
+        # which is not used in this case
+        def wrapper(function):
+            def inner(*args):
+                result = function(*args[:-1])
+                return np.float64(result)
+            return inner
+
+        self.optimisation_problem.objective_function = \
+            wrapper(self.optimisation_problem.objective_function)
+        optimiser_dims = len(x0)
+        opt = nlopt.opt(self.method, optimiser_dims)
+        opt.set_xtol_rel(1e-4)
+       
         u_bounds = []
         l_bounds = []
         for ix in range(len(bounds)):
@@ -41,17 +53,19 @@ class Nlopt(pbparam.BaseOptimiser):
                 u_bounds.append(bounds[ix][1])
                 l_bounds.append(bounds[ix][0])
 
-        self.opt.set_lower_bounds(l_bounds)
-        self.opt.set_upper_bounds(u_bounds)
+        opt.set_lower_bounds(l_bounds)
+        opt.set_upper_bounds(u_bounds)
 
         if self.maximise:
-            self.opt.set_max_objective(self.optimisation_problem.objective_function)
+            opt.set_max_objective(self.optimisation_problem.objective_function)
         elif self.minimise:
-            self.opt.set_min_objective(self.optimisation_problem.objective_function)
+            opt.set_min_objective(self.optimisation_problem.objective_function)
         else:
             raise ValueError("Must specify whether to maximise or minimise")
-
-        raw_result = self.opt.optimize(x0)
+        
+        # Initialise timer
+        timer = pybamm.Timer()
+        raw_result = opt.optimize(x0)
         solve_time = timer.time()
 
         # Scale the result back to the original scale
@@ -62,11 +76,11 @@ class Nlopt(pbparam.BaseOptimiser):
         # Parse the result into a pbparam.OptimisationResult object
         result = pbparam.OptimisationResult(
             scaled_result,
-            self.opt.last_optimize_result(),
-            raw_result.message,
-            self.opt.last_optimum_value(),
+            opt.last_optimize_result(),
             None,
-            self.optimisation_problem,
+            opt.last_optimum_value(),
+            None,
+            optimisation_problem,
         )
         result.solve_time = solve_time
 
