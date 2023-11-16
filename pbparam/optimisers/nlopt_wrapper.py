@@ -30,7 +30,8 @@ class Nlopt(pbparam.BaseOptimiser):
         self.optimisation_problem = copy.deepcopy(optimisation_problem)
 
         # this wrapper appends the argument 'grad' to the objective function
-        # which is not used in this case
+        # which is not used in this case it also casts the result to np.float64
+        # which is required by nlopt
         def wrapper(function):
             def inner(*args):
                 result = function(*args[:-1])
