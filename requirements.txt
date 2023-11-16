@@ -3,12 +3,13 @@ argcomplete==3.1.6
 autograd==1.6.2
 bpx==0.3.1
 casadi==3.6.4
+cmake==3.27.7
 colorlog==6.7.0
 contourpy==1.2.0
 cycler==0.12.1
 distlib==0.3.7
 filelock==3.13.1
-fonttools==4.44.0
+fonttools==4.44.3
 future==0.18.3
 imageio==2.32.0
 importlib-metadata==6.8.0
@@ -16,6 +17,7 @@ kiwisolver==1.4.5
 latexcodec==2.0.1
 matplotlib==3.8.1
 mpmath==1.3.0
+nlopt==2.7.1
 nox==2023.4.22
 numpy==1.26.2
 packaging==23.2
