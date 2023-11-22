@@ -179,7 +179,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         label = "Fit"
         for fit in self.model:
             ax.plot(
-                x_optimal[0] + x_optimal[1] * fit.iloc[:, 0],
+                (fit.iloc[:, 0]-x_optimal[0]) / x_optimal[1],
                 fit.iloc[:, 1],
                 linestyle="--",
                 color="C0",
