@@ -12,7 +12,7 @@ Deprecated==1.2.14
 dill==0.3.7
 distlib==0.3.7
 filelock==3.13.1
-fonttools==4.45.0
+fonttools==4.45.1
 future==0.18.3
 grapheme==0.6.0
 kiwisolver==1.4.5
@@ -25,7 +25,7 @@ pbparam @ file:///home/runner/work/pybamm-param/pybamm-param
 Pillow==10.1.0
 platformdirs==4.0.0
 pybamm==23.9
-pymoo==0.6.1
+pymoo==0.6.1.1
 pyparsing==3.1.1
 python-dateutil==2.8.2
 pytz==2023.3.post1
