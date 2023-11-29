@@ -124,10 +124,8 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         concat_model = pd.concat(self.data, axis=0, ignore_index=True)
         Q_V_max = concat_model.iloc[:, 0].loc[concat_model.iloc[:, 1].idxmax()]
         Q_V_min = concat_model.iloc[:, 0].loc[concat_model.iloc[:, 1].idxmin()]
-        print(self.data)
-        print(concat_model)
-        print(Q_V_min)
-        print(Q_V_max)
+        print("Q_V_max is ",Q_V_max)
+        print("Q_V_min is ", Q_V_min)
         eps = 0.1  # tolerance
         self.x0 = [
             -Q_V_max / (Q_V_min - Q_V_max),
