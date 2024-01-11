@@ -116,10 +116,11 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
                 interp = interpolate.interp1d(
                     data.iloc[:, 0], data.iloc[:, 1], fill_value="extrapolate"
                 )
+                print(interp)
                 self.model_fun.append(interp)
         else:
             raise TypeError("data elements must be all array-like objects")
-
+        print(self.model_fun)
         # Determine initial guesses and bounds
         concat_model = pd.concat(self.data, axis=0, ignore_index=True)
         Q_V_max = concat_model.iloc[:, 0].loc[concat_model.iloc[:, 1].idxmax()]
