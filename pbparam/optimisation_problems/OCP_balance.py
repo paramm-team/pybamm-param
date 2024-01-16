@@ -116,41 +116,41 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
                 interp = interpolate.interp1d(
                     data.iloc[:, 0], data.iloc[:, 1], fill_value="extrapolate"
                 )
-                print(interp)
                 self.model_fun.append(interp)
         else:
             raise TypeError("data elements must be all array-like objects")
-        print(self.model_fun)
+
         # Determine initial guesses and bounds
         concat_model = pd.concat(self.data, axis=0, ignore_index=True)
         Q_V_max = concat_model.iloc[:, 0].loc[concat_model.iloc[:, 1].idxmax()]
         Q_V_min = concat_model.iloc[:, 0].loc[concat_model.iloc[:, 1].idxmin()]
-        print("Q_V_max is ",Q_V_max)
-        print("Q_V_min is ", Q_V_min)
-        eps = 0.1  # tolerance
+
+        # eps = 0.1  # tolerance
         self.x0 = [
             -Q_V_max / (Q_V_min - Q_V_max),
             1 / (Q_V_min - Q_V_max),
         ]
-        if Q_V_min - Q_V_max > 0:
-            ideal_bounds = [
-                (-(1 + eps) * Q_V_max / (Q_V_min - Q_V_max), 1 + eps),
-                (-eps, (1 + eps) / (Q_V_min - Q_V_max)),
-            ]
-        else:
-            ideal_bounds = [
-                (-eps, (1 + eps) * Q_V_max / (Q_V_max - Q_V_min)),
-                (-(1 + eps) / (Q_V_max - Q_V_min), eps),
-            ]
+        # if Q_V_min - Q_V_max > 0:
+        #     ideal_bounds = [
+        #         (-(1 + eps) * Q_V_max / (Q_V_min - Q_V_max), 1 + eps),
+        #         (-eps, (1 + eps) / (Q_V_min - Q_V_max)),
+        #     ]
+        # else:
+        #     ideal_bounds = [
+        #         (-eps, (1 + eps) * Q_V_max / (Q_V_max - Q_V_min)),
+        #         (-(1 + eps) / (Q_V_max - Q_V_min), eps),
+        #     ]
 
-        self.bounds = [
-            (min(x - 1e-6, bound[0]), max(x + 1e-6, bound[1]))
-            for x, bound in zip(self.x0, ideal_bounds)
-        ]
+        # self.bounds = [
+        #     (min(x - 1e-6, bound[0]), max(x + 1e-6, bound[1]))
+        #     for x, bound in zip(self.x0, ideal_bounds)
+        # ]
+        self.bounds = [(-100,100), (-100, 100)]
 
         if isinstance(self.cost_function, pbparam.MLE):
             self.x0 += [1] * len(self.model)
-            self.bounds += [(1e-16, 1e3)] * len(self.model)
+            # self.bounds += [(1e-16, 1e3)] * len(self.model)
+            self.bounds = [(-100,100), (-100, 100), (-100, 100), (-100, 100)]
 
     def _plot(self, x_optimal):
         """
