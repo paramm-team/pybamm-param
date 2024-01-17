@@ -60,10 +60,14 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             # Iterate over each DataFrame in data_ref
             for data_frame in data_ref:
                 # Convert 'Voltage [V]' column to numeric
-                column_to_numeric = pd.to_numeric(data_frame['Voltage [V]'], errors="coerce")
+                column_to_numeric = pd.to_numeric(
+                    data_frame["Voltage [V]"], errors="coerce"
+                )
                 # Append the processed Series to valid_data_ref
                 valid_data_ref.append(column_to_numeric)
-            self.weights = [1 / np.nanmean(series) for series in valid_data_ref]* len(data_ref)
+            self.weights = [1 / np.nanmean(series) for series in valid_data_ref] * len(
+                data_ref
+            )
 
         # Check if the weights has same lenght
         else:
@@ -145,12 +149,12 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         #     (min(x - 1e-6, bound[0]), max(x + 1e-6, bound[1]))
         #     for x, bound in zip(self.x0, ideal_bounds)
         # ]
-        self.bounds = [(-100,100), (-100, 100)]
+        self.bounds = [(-100, 100), (-100, 100)]
 
         if isinstance(self.cost_function, pbparam.MLE):
             self.x0 += [1] * len(self.model)
             # self.bounds += [(1e-16, 1e3)] * len(self.model)
-            self.bounds = [(-100,100), (-100, 100), (-100, 100), (-100, 100)]
+            self.bounds = [(-100, 100), (-100, 100), (-100, 100), (-100, 100)]
 
     def _plot(self, x_optimal):
         """
@@ -178,7 +182,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         label = "Fit"
         for fit in self.model:
             ax.plot(
-                (fit.iloc[:, 0]-x_optimal[0]) / x_optimal[1],
+                (fit.iloc[:, 0] - x_optimal[0]) / x_optimal[1],
                 fit.iloc[:, 1],
                 linestyle="--",
                 color="C0",
