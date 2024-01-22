@@ -154,7 +154,12 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         if isinstance(self.cost_function, pbparam.MLE):
             self.x0 += [1] * len(self.model)
             # self.bounds += [(1e-16, 1e3)] * len(self.model)
-            self.bounds = [(-100000, 100000), (-100000, 100000), (-1000, 1000), (-1000, 1000)]
+            self.bounds = [
+                (-100000, 100000),
+                (-100000, 100000),
+                (-1000, 1000),
+                (-1000, 1000)
+            ]
 
     def _plot(self, x_optimal):
         """
