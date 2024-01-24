@@ -49,8 +49,8 @@ class TestOCPBalance(unittest.TestCase):
 
         # Check bounds are correct
         self.assertEqual(optimisation_problem.x0, [-0.25, 0.25])
-        self.assertEqual(optimisation_problem.bounds, [(-100000, 100000),
-                                                       (-100000, 100000)])
+        self.assertEqual(optimisation_problem.bounds, [(-1000, 1000),
+                                                       (-1000, 1000)])
 
         # Check cost function is zero at theoretical optimal
         self.assertAlmostEqual(optimisation_problem.objective_function([-0.1, 0.2]), 0)
@@ -63,8 +63,8 @@ class TestOCPBalance(unittest.TestCase):
         self.assertEqual(optimisation_problem.x0, [-0.25, 0.25, 1, 1])
         self.assertEqual(
             optimisation_problem.bounds,
-            [(-100000, 100000), (-100000, 100000),
-             (-100000, 100000), (-100000, 100000)],
+            [(-1000, 1000), (-1000, 1000),
+             (-1000, 1000), (-1000, 1000)],
         )
 
         # Test increasing fit data
@@ -78,8 +78,8 @@ class TestOCPBalance(unittest.TestCase):
 
         # Check bounds are correct
         self.assertEqual(optimisation_problem.x0, [1.25, -0.25])
-        self.assertEqual(optimisation_problem.bounds, [(-100000, 100000),
-                                                       (-100000, 100000)])
+        self.assertEqual(optimisation_problem.bounds, [(-1000, 1000),
+                                                       (-1000, 1000)])
 
         # Check cost function is zero at theoretical optimal
         self.assertAlmostEqual(optimisation_problem.objective_function([1.1, -0.2]), 0)

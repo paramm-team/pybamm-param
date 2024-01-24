@@ -149,16 +149,16 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         #     (min(x - 1e-6, bound[0]), max(x + 1e-6, bound[1]))
         #     for x, bound in zip(self.x0, ideal_bounds)
         # ]
-        self.bounds = [(-100000, 100000), (-100000, 100000)]
+        self.bounds = [(-1000, 1000), (-1000, 1000)]
 
         if isinstance(self.cost_function, pbparam.MLE):
             self.x0 += [1] * len(self.model)
             # self.bounds += [(1e-16, 1e3)] * len(self.model)
             self.bounds = [
-                (-100000, 100000),
-                (-100000, 100000),
-                (-100000, 100000),
-                (-100000, 100000),
+                (-1000, 1000),
+                (-1000, 1000),
+                (-1000, 1000),
+                (-1000, 1000),
             ]
 
     def _plot(self, x_optimal):
