@@ -63,7 +63,8 @@ class TestOCPBalance(unittest.TestCase):
         self.assertEqual(optimisation_problem.x0, [-0.25, 0.25, 1, 1])
         self.assertEqual(
             optimisation_problem.bounds,
-            [(-100000, 100000), (-100000, 100000), (-100000, 100000), (-100000, 100000)],
+            [(-100000, 100000), (-100000, 100000),
+             (-100000, 100000), (-100000, 100000)],
         )
 
         # Test increasing fit data

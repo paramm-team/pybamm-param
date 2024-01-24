@@ -158,7 +158,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
                 (-100000, 100000),
                 (-100000, 100000),
                 (-100000, 100000),
-                (-100000, 100000)
+                (-100000, 100000),
             ]
 
     def _plot(self, x_optimal):
