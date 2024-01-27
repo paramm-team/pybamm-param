@@ -1,7 +1,7 @@
 anytree==2.12.1
 argcomplete==3.2.2
 casadi==3.6.4
-colorlog==6.8.0
+colorlog==6.8.2
 contourpy==1.2.0
 cycler==0.12.1
 distlib==0.3.8
