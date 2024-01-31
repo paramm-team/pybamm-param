@@ -9,8 +9,10 @@ import unittest
 
 class TestOCPBalance(unittest.TestCase):
     def test_init(self):
-        data_ref = pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [5, 4, 3, 2, 1]})
-        data_fit = pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [5, 4, 3, 2, 1]})
+        data_ref = pd.DataFrame({'Voltage [V]': [0.1, 0.3, 0.5, 0.7, 0.9],
+                                 'Time [s]': [5, 4, 3, 2, 1]})
+        data_fit = pd.DataFrame({'Voltage [V]': [1, 2, 3, 4, 5],
+                                 'Time [s]': [5, 4, 3, 2, 1]})
 
         optimisation_problem = pbparam.OCPBalance(data_fit=data_fit, data_ref=data_ref)
         self.assertEqual(optimisation_problem.data, [data_fit])
@@ -30,20 +32,25 @@ class TestOCPBalance(unittest.TestCase):
 
     def test_setup_objective_function(self):
         data_ref = [
-            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [5, 4, 3, 2, 1]}),
-            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [6, 5, 4, 3, 2]}),
+            pd.DataFrame({'Voltage [V]': [0.1, 0.3, 0.5, 0.7, 0.9],
+                          'Time [s]': [5, 4, 3, 2, 1]}),
+            pd.DataFrame({'Voltage [V]': [0.1, 0.3, 0.5, 0.7, 0.9],
+                          'Time [s]': [6, 5, 4, 3, 2]}),
         ]
 
         # Test decreasing fit data
         data_fit = [
-            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [5, 4, 3, 2, 1]}),
-            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [6, 5, 4, 3, 2]}),
+            pd.DataFrame({'Voltage [V]': [1, 2, 3, 4, 5],
+                          'Time [s]': [5, 4, 3, 2, 1]}),
+            pd.DataFrame({'Voltage [V]': [1, 2, 3, 4, 5],
+                          'Time [s]': [6, 5, 4, 3, 2]}),
         ]
         optimisation_problem = pbparam.OCPBalance(data_fit, data_ref)
 
         # Check bounds are correct
         self.assertEqual(optimisation_problem.x0, [-0.25, 0.25])
-        self.assertEqual(optimisation_problem.bounds, [(-0.275, 1.1), (-0.1, 0.275)])
+        self.assertEqual(optimisation_problem.bounds, [(-1000, 1000),
+                                                       (-1000, 1000)])
 
         # Check cost function is zero at theoretical optimal
         self.assertAlmostEqual(optimisation_problem.objective_function([-0.1, 0.2]), 0)
@@ -56,13 +63,14 @@ class TestOCPBalance(unittest.TestCase):
         self.assertEqual(optimisation_problem.x0, [-0.25, 0.25, 1, 1])
         self.assertEqual(
             optimisation_problem.bounds,
-            [(-0.275, 1.1), (-0.1, 0.275), (1e-16, 1e3), (1e-16, 1e3)],
+            [(-1000, 1000), (-1000, 1000),
+             (-1000, 1000), (-1000, 1000)],
         )
 
         # Test increasing fit data
         data_fit = [
-            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [1, 2, 3, 4, 5]}),
-            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [2, 3, 4, 5, 6]}),
+            pd.DataFrame({'Voltage [V]': [1, 2, 3, 4, 5], 'Time [s]': [1, 2, 3, 4, 5]}),
+            pd.DataFrame({'Voltage [V]': [1, 2, 3, 4, 5], 'Time [s]': [2, 3, 4, 5, 6]}),
         ]
 
         optimisation_problem = pbparam.OCPBalance(data_fit, data_ref)
@@ -70,7 +78,8 @@ class TestOCPBalance(unittest.TestCase):
 
         # Check bounds are correct
         self.assertEqual(optimisation_problem.x0, [1.25, -0.25])
-        self.assertEqual(optimisation_problem.bounds, [(-0.1, 1.375), (-0.275, 0.1)])
+        self.assertEqual(optimisation_problem.bounds, [(-1000, 1000),
+                                                       (-1000, 1000)])
 
         # Check cost function is zero at theoretical optimal
         self.assertAlmostEqual(optimisation_problem.objective_function([1.1, -0.2]), 0)
@@ -82,12 +91,16 @@ class TestOCPBalance(unittest.TestCase):
 
     def test_weights_length_mismatch(self):
         data_fit = [
-            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [5, 4, 3, 2, 1]}),
-            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [6, 5, 4, 3, 2]}),
+            pd.DataFrame({'Voltage [V]': [1, 2, 3, 4, 5],
+                          'Time [s]': [5, 4, 3, 2, 1]}),
+            pd.DataFrame({'Voltage [V]': [1, 2, 3, 4, 5],
+                          'Time [s]': [6, 5, 4, 3, 2]}),
         ]
         data_ref = [
-            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [5, 4, 3, 2, 1]}),
-            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [6, 5, 4, 3, 2]}),
+            pd.DataFrame({'Voltage [V]': [0.1, 0.3, 0.5, 0.7, 0.9],
+                          'Time [s]': [5, 4, 3, 2, 1]}),
+            pd.DataFrame({'Voltage [V]': [0.1, 0.3, 0.5, 0.7, 0.9],
+                          'Time [s]': [6, 5, 4, 3, 2]}),
         ]
         weights = [1, 2, 3, 4]  # Mismatched weights length
 
@@ -98,14 +111,18 @@ class TestOCPBalance(unittest.TestCase):
 
     def test_warning_weights_with_MLE(self):
         data_fit = [
-            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [5, 4, 3, 2, 1]}),
-            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [6, 5, 4, 3, 2]}),
+            pd.DataFrame({'Voltage [V]': [1, 2, 3, 4, 5],
+                          'Time [s]': [5, 4, 3, 2, 1]}),
+            pd.DataFrame({'Voltage [V]': [1, 2, 3, 4, 5],
+                          'Time [s]': [6, 5, 4, 3, 2]}),
         ]
         data_ref = [
-            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [5, 4, 3, 2, 1]}),
-            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [6, 5, 4, 3, 2]}),
+            pd.DataFrame({'Voltage [V]': [0.1, 0.3, 0.5, 0.7, 0.9],
+                          'Time [s]': [5, 4, 3, 2, 1]}),
+            pd.DataFrame({'Voltage [V]': [0.1, 0.3, 0.5, 0.7, 0.9],
+                          'Time [s]': [6, 5, 4, 3, 2]}),
         ]
-        weights = {0: [1, 1, 1, 1, 1], 1: [1, 1, 1, 1, 1]}
+        weights = {'Voltage [V]': [1, 1, 1, 1, 1], 'Time [s]': [1, 1, 1, 1, 1]}
         cost_function = pbparam.MLE()
         with self.assertWarnsRegex(Warning, "MLE calculation"):
             pbparam.OCPBalance(
@@ -114,12 +131,16 @@ class TestOCPBalance(unittest.TestCase):
 
     def test_plot(self):
         data_ref = [
-            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [5, 4, 3, 2, 1]}),
-            pd.DataFrame({0: [0.1, 0.3, 0.5, 0.7, 0.9], 1: [6, 5, 4, 3, 2]}),
+            pd.DataFrame({'Voltage [V]': [0.1, 0.3, 0.5, 0.7, 0.9],
+                          'Time [s]': [5, 4, 3, 2, 1]}),
+            pd.DataFrame({'Voltage [V]': [0.1, 0.3, 0.5, 0.7, 0.9],
+                          'Time [s]': [6, 5, 4, 3, 2]}),
         ]
         data_fit = [
-            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [5, 4, 3, 2, 1]}),
-            pd.DataFrame({0: [1, 2, 3, 4, 5], 1: [6, 5, 4, 3, 2]}),
+            pd.DataFrame({'Voltage [V]': [1, 2, 3, 4, 5],
+                          'Time [s]': [5, 4, 3, 2, 1]}),
+            pd.DataFrame({'Voltage [V]': [1, 2, 3, 4, 5],
+                          'Time [s]': [6, 5, 4, 3, 2]}),
         ]
         optimisation_problem = pbparam.OCPBalance(data_fit, data_ref)
 
