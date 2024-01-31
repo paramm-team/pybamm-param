@@ -25,11 +25,14 @@ class OptimisationResult(object):
         The optimisation problem that was used for the optimization.
     """
 
-    def __init__(self, x, success, message, fun, raw_result, optimisation_problem):
+    def __init__(
+        self, x, scaled_result, success, message, fun, raw_result, optimisation_problem
+    ):
         """
         Initialize the OptimisationResult class
         """
         self.x = x
+        self.scaled_result = scaled_result
         self.success = success
         self.message = message
         self.fun = fun
@@ -40,12 +43,12 @@ class OptimisationResult(object):
         self.solve_time = None
 
     def __str__(self):
-        str = f'''
+        str = f"""
              Optimal values: {self.x}
         Cost function value: {self.fun}
                  Solve time: {self.solve_time}
                     Message: {self.message}
-        '''
+        """
 
         return str
 
@@ -65,7 +68,7 @@ class OptimisationResult(object):
         """
         import matplotlib.pyplot as plt
 
-        plot = self.optimisation_problem._plot(self.x)
+        plot = self.optimisation_problem._plot(self.scaled_result)
 
         if not testing:  # pragma: no cover
             plt.show()

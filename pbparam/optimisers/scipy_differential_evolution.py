@@ -65,7 +65,15 @@ class ScipyDifferentialEvolution(pbparam.BaseOptimiser):
         else:
             scaled_result = np.multiply(raw_result.x, optimisation_problem.scalings)
 
+        result_dict = {
+            key: value
+            for key, value in zip(
+                self.optimisation_problem.parameters.keys(), scaled_result
+            )
+        }
+
         result = pbparam.OptimisationResult(
+            result_dict,
             scaled_result,
             raw_result.success,
             raw_result.message,

@@ -50,7 +50,9 @@ class WeppnerHuggins(pybamm.lithium_ion.BaseModel):
         ######################
         # Governing equations
         ######################
-        u_surf = (2 / (np.pi**0.5)) * (i_app / ((d_s**0.5) * a * F * l_w)) * (t**0.5)
+        u_surf = (
+            (2 / (np.pi**0.5)) * (i_app / ((d_s**0.5) * a * F * l_w)) * (t**0.5)
+        )
         # Linearised voltage
         V = U + (Uprime * u_surf) / c_s_max
         ######################
