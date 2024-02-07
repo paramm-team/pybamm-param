@@ -41,10 +41,12 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             cost_function=cost_function,
             data=data_fit,
             model=data_ref,
+            parameters={"Shift": 0, "Stretch": 0},
             weights=weights,
         )
 
         self.process_and_clean_data()
+        self.input_dict = None
 
         # Process weights manually until we reformat OCPBalance
         # self.process_weights()
@@ -91,6 +93,8 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             The cost of the simulation.
         """
 
+        self.create_input_dict(x)
+
         # Iterate over the fit and reference data
         y_sim = []
         y_data = []
@@ -104,6 +108,26 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
 
         # Return the cost of the simulation using the cost function
         return self.cost_function.evaluate(y_sim, y_data, self.weights, sd)
+
+    def create_input_dict(self, x):
+            """
+            Create input_dict based on the fitting parameters.
+
+            Parameters
+            ----------
+            x : list
+                List of fitting parameters.
+
+            Returns
+            -------
+            input_dict : dict
+                Dictionary of input parameters for the simulation.
+            """
+
+            input_dict = {
+                param: self.scalings[i] * x[i] for param, i in self.map_inputs.items()
+            }
+            return input_dict
 
     def process_and_clean_data(self):
         """

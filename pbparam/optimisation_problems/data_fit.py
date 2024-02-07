@@ -59,6 +59,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         self.collect_parameters(solve_options)
         self.update_simulation_parameters(simulation)
         self.process_weights()
+        self.input_dict = None
 
     def objective_function(self, x):
         """
@@ -87,6 +88,7 @@ class DataFit(pbparam.BaseOptimisationProblem):
         y_data = [self.data[v] for v in self.variables_to_fit]
         weights = [self.weights[v] for v in self.variables_to_fit]
         sd = [x[self.map_inputs[k]] for k in self.cost_function_parameters]
+        self.input_dict = input_dict  # Store input_dict
 
         return self.cost_function.evaluate(y_sim, y_data, weights, sd)
 

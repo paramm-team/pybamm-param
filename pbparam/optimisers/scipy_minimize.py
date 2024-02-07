@@ -106,7 +106,7 @@ class ScipyMinimize(pbparam.BaseOptimiser):
         result_dict = {
             key: value
             for key, value in zip(
-                self.optimisation_problem.parameters.keys(), scaled_result
+                self.optimisation_problem.input_dict.keys(), scaled_result
             )
         }
 
