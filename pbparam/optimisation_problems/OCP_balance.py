@@ -55,8 +55,19 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
 
         # Check the weights if it's None
         if weights is None:
-            valid_data_ref = pd.to_numeric(data_ref, errors="coerce")
-            self.weights = [1 / np.nanmean(valid_data_ref)] * len(data_ref)
+            # Initialize an empty list to store processed reference data
+            valid_data_ref = []
+            # Iterate over each DataFrame in data_ref
+            for data_frame in data_ref:
+                # Convert 'Voltage [V]' column to numeric
+                column_to_numeric = pd.to_numeric(
+                    data_frame["Voltage [V]"], errors="coerce"
+                )
+                # Append the processed Series to valid_data_ref
+                valid_data_ref.append(column_to_numeric)
+            self.weights = [1 / np.nanmean(series) for series in valid_data_ref] * len(
+                data_ref
+            )
 
         # Check if the weights has same lenght
         else:
@@ -102,7 +113,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         determines the initial guesses and bounds for the optimization.
         """
         # Process reference data, check if all elements are array-like
-        if all([isinstance(x, (pd.DataFrame)) for x in self.model]):
+        if all([isinstance(x, pd.DataFrame) for x in self.model]):
             self.model_fun = []
             for data in self.model:
                 # Interpolate reference data
@@ -118,31 +129,37 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         Q_V_max = concat_model.iloc[:, 0].loc[concat_model.iloc[:, 1].idxmax()]
         Q_V_min = concat_model.iloc[:, 0].loc[concat_model.iloc[:, 1].idxmin()]
 
-        eps = 0.1  # tolerance
+        # eps = 0.1  # tolerance
         self.x0 = [
             -Q_V_max / (Q_V_min - Q_V_max),
             1 / (Q_V_min - Q_V_max),
         ]
+        # if Q_V_min - Q_V_max > 0:
+        #     ideal_bounds = [
+        #         (-(1 + eps) * Q_V_max / (Q_V_min - Q_V_max), 1 + eps),
+        #         (-eps, (1 + eps) / (Q_V_min - Q_V_max)),
+        #     ]
+        # else:
+        #     ideal_bounds = [
+        #         (-eps, (1 + eps) * Q_V_max / (Q_V_max - Q_V_min)),
+        #         (-(1 + eps) / (Q_V_max - Q_V_min), eps),
+        #     ]
 
-        if Q_V_min - Q_V_max > 0:
-            ideal_bounds = [
-                (-(1 + eps) * Q_V_max / (Q_V_min - Q_V_max), 1 + eps),
-                (-eps, (1 + eps) / (Q_V_min - Q_V_max)),
-            ]
-        else:
-            ideal_bounds = [
-                (-eps, (1 + eps) * Q_V_max / (Q_V_max - Q_V_min)),
-                (-(1 + eps) / (Q_V_max - Q_V_min), eps),
-            ]
-
-        self.bounds = [
-            (min(x - 1e-6, bound[0]), max(x + 1e-6, bound[1]))
-            for x, bound in zip(self.x0, ideal_bounds)
-        ]
+        # self.bounds = [
+        #     (min(x - 1e-6, bound[0]), max(x + 1e-6, bound[1]))
+        #     for x, bound in zip(self.x0, ideal_bounds)
+        # ]
+        self.bounds = [(-1000, 1000), (-1000, 1000)]
 
         if isinstance(self.cost_function, pbparam.MLE):
             self.x0 += [1] * len(self.model)
-            self.bounds += [(1e-16, 1e3)] * len(self.model)
+            # self.bounds += [(1e-16, 1e3)] * len(self.model)
+            self.bounds = [
+                (-1000, 1000),
+                (-1000, 1000),
+                (-1000, 1000),
+                (-1000, 1000),
+            ]
 
     def _plot(self, x_optimal):
         """
@@ -170,7 +187,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
         label = "Fit"
         for fit in self.model:
             ax.plot(
-                x_optimal[0] + x_optimal[1] * fit.iloc[:, 0],
+                (fit.iloc[:, 0] - x_optimal[0]) / x_optimal[1],
                 fit.iloc[:, 1],
                 linestyle="--",
                 color="C0",
