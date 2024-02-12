@@ -39,15 +39,15 @@ class OptimisationResult(object):
         # Initialise time
         self.solve_time = None
         self.result_dict = {
-            key: value
-            for key, value in zip(
-                self.optimisation_problem.map_inputs.keys(), x
-            )
+            key: x[value]
+            for key, value in self.optimisation_problem.map_inputs.items()
         }
+        self.initial_parameters = self.optimisation_problem.parameters
 
     def __str__(self):
         str = f'''
              Optimal values: {self.result_dict}
+             Initial values: {self.initial_parameters}
         Cost function value: {self.fun}
                  Solve time: {self.solve_time}
                     Message: {self.message}

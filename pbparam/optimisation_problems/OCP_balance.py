@@ -44,6 +44,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             weights=weights,
         )
 
+        #self.collect_parameters(solve_options)
         self.process_and_clean_data()
 
         # Process weights manually until we reformat OCPBalance
@@ -75,6 +76,7 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
                 self.weights *= len(data_ref)
             elif len(weights) != len(data_ref):
                 raise ValueError("Weights should have the same length as data_ref.")
+        self.map_inputs = {"Shift": 0, "Stretch": 1}
 
     def objective_function(self, x):
         """
