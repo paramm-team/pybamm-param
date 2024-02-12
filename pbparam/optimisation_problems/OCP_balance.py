@@ -44,7 +44,6 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             weights=weights,
         )
 
-        #self.collect_parameters(solve_options)
         self.process_and_clean_data()
 
         # Process weights manually until we reformat OCPBalance
