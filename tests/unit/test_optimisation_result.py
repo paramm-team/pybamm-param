@@ -41,8 +41,8 @@ class TestOptimisationResult(unittest.TestCase):
 
         self.assertEqual(
             optimisation_result.__str__(),
-            "\n             Optimal values: result_dict\n        Initial values: initial_parameters"
-            "\n                 Cost function value: fun\n          Solve time: None"
+            "\n  Optimal values: result_dict\n   Initial values: initial_parameters"
+            "\n   Cost function value: fun\n          Solve time: None"
             "\n        Message: message",
         )
 
@@ -54,9 +54,7 @@ class TestOptimisationResult(unittest.TestCase):
             "message",
             "fun",
             "raw_result",
-            pbparam.BaseOptimisationProblem(
-                cost_function=pbparam.MLE()
-            ),
+            pbparam.BaseOptimisationProblem(cost_function=pbparam.MLE()),
         )
 
         plot = optimisation_result.plot(testing=True)
