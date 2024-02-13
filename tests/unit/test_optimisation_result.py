@@ -17,6 +17,8 @@ class TestOptimisationResult(unittest.TestCase):
             "optimisation_problem",
         )
         self.assertEqual(optimisation_result.x, "x")
+        self.assertEqual(optimisation_result.result_dict, "result_dict")
+        self.assertEqual(optimisation_result.initial_parameters, "initial_parameters")
         self.assertEqual(optimisation_result.success, "success")
         self.assertEqual(optimisation_result.message, "message")
         self.assertEqual(optimisation_result.fun, "fun")
@@ -28,7 +30,8 @@ class TestOptimisationResult(unittest.TestCase):
 
     def test_str(self):
         optimisation_result = pbparam.OptimisationResult(
-            "x",
+            "result_dict",
+            "initial_parameters",
             "success",
             "message",
             "fun",
@@ -38,14 +41,15 @@ class TestOptimisationResult(unittest.TestCase):
 
         self.assertEqual(
             optimisation_result.__str__(),
-            "\n             Optimal values: x\n        Cost function value: fun"
-            "\n                 Solve time: None\n                    Message: message"
-            "\n        ",
+            "\n             Optimal values: result_dict\n        Initial values: initial_parameters"
+            "\n                 Cost function value: fun\n          Solve time: None"
+            "\n        Message: message",
         )
 
     def test_plot(self):
         optimisation_result = pbparam.OptimisationResult(
-            "x",
+            "result_dict",
+            "initial_values",
             "success",
             "message",
             "fun",
