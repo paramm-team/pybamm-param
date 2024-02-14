@@ -3,9 +3,16 @@
 #
 import pbparam
 import numpy as np
+import multiprocessing
+from multiprocessing.pool import ThreadPool
+from pymoo.core.problem import StarmapParallelization
 from pymoo.optimize import minimize
 from pymoo.core.problem import Problem
 from pymoo.algorithms.moo.nsga2 import NSGA2
+from pymoo.algorithms.soo.nonconvex.nelder import NelderMead
+from pymoo.algorithms.soo.nonconvex.pso import PSO
+from pymoo.algorithms.soo.nonconvex.cmaes import CMAES
+from pymoo.algorithms.soo.nonconvex.de import DE
 import pybamm
 import copy
 
@@ -43,9 +50,9 @@ class PymooMinimize(pbparam.BaseOptimiser):
         Type of solver. https://pymoo.org/algorithms/list.html#nb-algorithms-list
     """
 
-    def __init__(self, method=NSGA2):
+    def __init__(self, method=PSO):
         super().__init__()
-        self.method = NSGA2()
+        self.method = PSO()
         self.name = f"PyMoo Minimize optimiser with {method} method"
         self.single_variable = False
         self.global_optimiser = False
@@ -77,9 +84,19 @@ class PymooMinimize(pbparam.BaseOptimiser):
         # Initialise timer
         timer = pybamm.Timer()
 
+        # # initialize the thread pool and create the runner
+        # n_proccess = 4
+        # pool = multiprocessing.Pool(n_proccess)
+        # runner = StarmapParallelization(pool.starmap)
+        # initialize the thread pool and create the runner
+        n_threads = 4
+        pool = ThreadPool(n_threads)
+        runner = StarmapParallelization(pool.starmap)
+
         raw_result = minimize(
             self.objective_function,
             self.method,
+            elementwise_runner=runner
         )
         solve_time = timer.time()
 
@@ -94,6 +111,7 @@ class PymooMinimize(pbparam.BaseOptimiser):
             raw_result.message,
             raw_result.f,
             raw_result,
+            self.name,
             self.optimisation_problem,
         )
 

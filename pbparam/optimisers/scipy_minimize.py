@@ -109,6 +109,7 @@ class ScipyMinimize(pbparam.BaseOptimiser):
             raw_result.message,
             raw_result.fun,
             raw_result,
+            self.name,
             self.optimisation_problem,
         )
 

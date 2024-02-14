@@ -25,7 +25,7 @@ class OptimisationResult(object):
         The optimisation problem that was used for the optimization.
     """
 
-    def __init__(self, x, success, message, fun, raw_result, optimisation_problem):
+    def __init__(self, x, success, message, fun, raw_result, solver_name, optimisation_problem):
         """
         Initialize the OptimisationResult class
         """
@@ -34,6 +34,7 @@ class OptimisationResult(object):
         self.message = message
         self.fun = fun
         self.raw_result = raw_result
+        self.solver_name = solver_name
         self.optimisation_problem = copy.deepcopy(optimisation_problem)
 
         # Initialise time
@@ -43,6 +44,7 @@ class OptimisationResult(object):
         str = f'''
              Optimal values: {self.x}
         Cost function value: {self.fun}
+                Solver name: {self.solver_name}
                  Solve time: {self.solve_time}
                     Message: {self.message}
         '''
