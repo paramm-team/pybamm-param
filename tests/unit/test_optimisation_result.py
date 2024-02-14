@@ -8,48 +8,51 @@ import unittest
 
 class TestOptimisationResult(unittest.TestCase):
     def test_optimisation_result_init(self):
+        opt = pbparam.BaseOptimisationProblem(cost_function=pbparam.RMSE())
         optimisation_result = pbparam.OptimisationResult(
             "x",
             "success",
             "message",
             "fun",
             "raw_result",
-            "optimisation_problem",
+            opt,
         )
         self.assertEqual(optimisation_result.x, "x")
-        self.assertEqual(optimisation_result.result_dict, "result_dict")
-        self.assertEqual(optimisation_result.initial_parameters, "initial_parameters")
+        self.assertEqual(optimisation_result.result_dict, {})
+        self.assertEqual(optimisation_result.initial_parameters, None)
         self.assertEqual(optimisation_result.success, "success")
         self.assertEqual(optimisation_result.message, "message")
         self.assertEqual(optimisation_result.fun, "fun")
         self.assertEqual(optimisation_result.raw_result, "raw_result")
-        self.assertEqual(
-            optimisation_result.optimisation_problem, "optimisation_problem"
+        self.assertIsInstance(
+            optimisation_result.optimisation_problem, pbparam.BaseOptimisationProblem
         )
         self.assertIsNone(optimisation_result.solve_time)
 
     def test_str(self):
+        opt = pbparam.BaseOptimisationProblem(cost_function=pbparam.RMSE())
         optimisation_result = pbparam.OptimisationResult(
             "result_dict",
-            "initial_parameters",
             "success",
             "message",
             "fun",
             "raw_result",
-            "optimisation_problem",
+            opt,
         )
 
         self.assertEqual(
             optimisation_result.__str__(),
-            "\n  Optimal values: result_dict\n   Initial values: initial_parameters"
-            "\n   Cost function value: fun\n          Solve time: None"
-            "\n        Message: message",
+            "\n             Optimal values: {}"
+            "\n             Initial values: None"
+            "\n        Cost function value: fun"
+            "\n                 Solve time: None"
+            "\n                    Message: message"
+            "\n        ",
         )
 
     def test_plot(self):
         optimisation_result = pbparam.OptimisationResult(
             "result_dict",
-            "initial_values",
             "success",
             "message",
             "fun",
