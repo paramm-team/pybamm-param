@@ -3,6 +3,7 @@
 #
 
 import copy
+import numpy as np
 
 
 class OptimisationResult(object):
@@ -44,12 +45,24 @@ class OptimisationResult(object):
         self.result_dict = {
             key: x[value] for key, value in self.optimisation_problem.map_inputs.items()
         }
+
+        # Rescale initial guesses & bounds if needed
+        if self.optimisation_problem.scalings is None:
+            x0 = self.optimisation_problem.x0
+            bounds = self.optimisation_problem.bounds
+        else:
+            x0 = np.multiply(self.optimisation_problem.x0, self.optimisation_problem.scalings)
+            bounds = []
+            for bound, scaling in zip(self.optimisation_problem.bounds, self.optimisation_problem.scalings):
+                bounds.append([bound[0] * scaling, bound[1] * scaling])
+
+        # Assemble initial guess dictionaries
         self.initial_guess = {
-            key: self.optimisation_problem.x0[value]
+            key: x0[value]
             for key, value in self.optimisation_problem.map_inputs.items()
         }
         self.bounds = {
-            key: self.optimisation_problem.bounds[value]
+            key: bounds[value]
             for key, value in self.optimisation_problem.map_inputs.items()
         }
 
