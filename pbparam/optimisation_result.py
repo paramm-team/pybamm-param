@@ -38,14 +38,27 @@ class OptimisationResult(object):
 
         # Initialise time
         self.solve_time = None
+        self.result_dict = {
+            key: x[value] for key, value in self.optimisation_problem.map_inputs.items()
+        }
+        self.initial_guess = {
+            key: self.optimisation_problem.x0[value]
+            for key, value in self.optimisation_problem.map_inputs.items()
+        }
+        self.bounds = {
+            key: self.optimisation_problem.bounds[value]
+            for key, value in self.optimisation_problem.map_inputs.items()
+        }
 
     def __str__(self):
-        str = f'''
-             Optimal values: {self.x}
+        str = f"""
+             Optimal values: {self.result_dict}
+             Initial values: {self.initial_guess}
+                  Optimiser: {self.optimisation_problem.cost_function.name}
         Cost function value: {self.fun}
                  Solve time: {self.solve_time}
                     Message: {self.message}
-        '''
+        """
 
         return str
 

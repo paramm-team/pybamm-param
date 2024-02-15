@@ -107,6 +107,7 @@ class BaseOptimisationProblem:
         self.parameters = parameters
         self.variables_to_fit = variables_to_fit
         self.weights = weights
+        self.map_inputs = {}
 
         # This should be a requirement to run if defined, if it's not defined in the
         #  subclass it will pass
