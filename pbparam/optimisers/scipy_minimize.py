@@ -84,12 +84,10 @@ class ScipyMinimize(pbparam.BaseOptimiser):
         result : :class:`pbparam.OptimisationResult`
             The result of the optimization.
         """
-        self.optimisation_problem = copy.deepcopy(optimisation_problem)
-        # Initialise timer
         timer = pybamm.Timer()
 
         raw_result = minimize(
-            self.optimisation_problem.objective_function,
+            optimisation_problem.objective_function,
             x0,
             method=self.method,
             bounds=bounds,
@@ -109,7 +107,7 @@ class ScipyMinimize(pbparam.BaseOptimiser):
             raw_result.message,
             raw_result.fun,
             raw_result,
-            self.optimisation_problem,
+            optimisation_problem,
             self.name,
         )
 
