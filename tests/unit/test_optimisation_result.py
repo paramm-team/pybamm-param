@@ -44,10 +44,10 @@ class TestOptimisationResult(unittest.TestCase):
             optimisation_result.__str__(),
             "\n             Optimal values: {}"
             "\n             Initial values: None"
+            "\n                  Optimiser: Root Mean Square Error"
             "\n        Cost function value: fun"
             "\n                 Solve time: None"
-            "\n                    Message: message"
-            "\n        ",
+            "\n                    Message: message\n        ",
         )
 
     def test_plot(self):
