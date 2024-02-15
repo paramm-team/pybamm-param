@@ -72,6 +72,7 @@ class ScipyDifferentialEvolution(pbparam.BaseOptimiser):
             raw_result.fun,
             raw_result,
             optimisation_problem,
+            self.name
         )
         result.solve_time = solve_time
         return result

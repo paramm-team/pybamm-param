@@ -110,6 +110,7 @@ class ScipyMinimize(pbparam.BaseOptimiser):
             raw_result.fun,
             raw_result,
             self.optimisation_problem,
+            self.name,
         )
 
         result.solve_time = solve_time

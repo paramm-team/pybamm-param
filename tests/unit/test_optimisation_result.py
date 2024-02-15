@@ -16,6 +16,7 @@ class TestOptimisationResult(unittest.TestCase):
             "fun",
             "raw_result",
             opt,
+            "optimiser_name"
         )
         self.assertEqual(optimisation_result.x, "x")
         self.assertEqual(optimisation_result.result_dict, {})
@@ -28,6 +29,7 @@ class TestOptimisationResult(unittest.TestCase):
         self.assertIsInstance(
             optimisation_result.optimisation_problem, pbparam.BaseOptimisationProblem
         )
+        self.assertEqual(optimisation_result.optimiser_name, "optimiser_name")
         self.assertIsNone(optimisation_result.solve_time)
 
     def test_str(self):
@@ -39,13 +41,14 @@ class TestOptimisationResult(unittest.TestCase):
             "fun",
             "raw_result",
             opt,
+            "optimiser_name"
         )
 
         self.assertEqual(
             optimisation_result.__str__(),
             "\n             Optimal values: {}"
             "\n             Initial values: {}"
-            "\n                  Optimiser: Root Mean Square Error"
+            "\n                  Optimiser: optimiser_name"
             "\n        Cost function value: fun"
             "\n                 Solve time: None"
             "\n                    Message: message"
@@ -60,6 +63,7 @@ class TestOptimisationResult(unittest.TestCase):
             "fun",
             "raw_result",
             pbparam.BaseOptimisationProblem(cost_function=pbparam.MLE()),
+            "optimiser_name"
         )
 
         plot = optimisation_result.plot(testing=True)
