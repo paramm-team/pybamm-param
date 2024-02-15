@@ -19,7 +19,8 @@ class TestOptimisationResult(unittest.TestCase):
         )
         self.assertEqual(optimisation_result.x, "x")
         self.assertEqual(optimisation_result.result_dict, {})
-        self.assertEqual(optimisation_result.initial_parameters, None)
+        self.assertEqual(optimisation_result.initial_guess, {})
+        self.assertEqual(optimisation_result.bounds, {})
         self.assertEqual(optimisation_result.success, "success")
         self.assertEqual(optimisation_result.message, "message")
         self.assertEqual(optimisation_result.fun, "fun")
@@ -43,11 +44,12 @@ class TestOptimisationResult(unittest.TestCase):
         self.assertEqual(
             optimisation_result.__str__(),
             "\n             Optimal values: {}"
-            "\n             Initial values: None"
+            "\n             Initial values: {}"
             "\n                  Optimiser: Root Mean Square Error"
             "\n        Cost function value: fun"
             "\n                 Solve time: None"
-            "\n                    Message: message\n        ",
+            "\n                    Message: message"
+            "\n        ",
         )
 
     def test_plot(self):
