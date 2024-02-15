@@ -5,7 +5,6 @@ import pbparam
 import numpy as np
 from scipy.optimize import minimize
 import pybamm
-import copy
 
 
 class ScipyMinimize(pbparam.BaseOptimiser):

@@ -51,9 +51,13 @@ class OptimisationResult(object):
             x0 = self.optimisation_problem.x0
             bounds = self.optimisation_problem.bounds
         else:
-            x0 = np.multiply(self.optimisation_problem.x0, self.optimisation_problem.scalings)
+            x0 = np.multiply(
+                self.optimisation_problem.x0, self.optimisation_problem.scalings
+            )
             bounds = []
-            for bound, scaling in zip(self.optimisation_problem.bounds, self.optimisation_problem.scalings):
+            for bound, scaling in zip(
+                self.optimisation_problem.bounds, self.optimisation_problem.scalings
+            ):
                 bounds.append([bound[0] * scaling, bound[1] * scaling])
 
         # Assemble initial guess dictionaries
