@@ -25,7 +25,9 @@ class OptimisationResult(object):
         The optimisation problem that was used for the optimization.
     """
 
-    def __init__(self, x, success, message, fun, raw_result, optimisation_problem, optimiser_name):
+    def __init__(
+        self, x, success, message, fun, raw_result, optimisation_problem, optimiser_name
+    ):
         """
         Initialize the OptimisationResult class
         """
