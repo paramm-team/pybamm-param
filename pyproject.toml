@@ -10,7 +10,10 @@ description = "A package for optimising parameters in PyBaMM. Under development.
 readme = "README.md"
 license = "BSD-3-Clause"
 authors = [
-    { name = "Ferran Brosa Planella, Muhammed Sogut, W. Dhammika Widanage", email = "Ferran.Brosa-Planella@warwick.ac.uk" },
+    { name = "Ferran Brosa Planella", email = "Ferran.Brosa-Planella@warwick.ac.uk" },
+    { name = "Muhammed Sogut" },
+    { name = "W. Dhammika Widanage" },
+    { name = "Philip Grylls" },
 ]
 dependencies = [
     "matplotlib",
