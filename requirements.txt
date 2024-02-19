@@ -6,11 +6,11 @@ contourpy==1.2.0
 cycler==0.12.1
 distlib==0.3.8
 filelock==3.13.1
-fonttools==4.47.2
+fonttools==4.49.0
 kiwisolver==1.4.5
-matplotlib==3.8.2
+matplotlib==3.8.3
 nox==2023.4.22
-numpy==1.26.3
+numpy==1.26.4
 packaging==23.2
 pandas==2.2.0
 pbparam @ file:///home/runner/work/pybamm-param/pybamm-param
@@ -19,9 +19,9 @@ platformdirs==4.2.0
 pybamm==24.1
 pyparsing==3.1.1
 python-dateutil==2.8.2
-pytz==2023.4
+pytz==2024.1
 scipy==1.12.0
 six==1.16.0
-tzdata==2023.4
+tzdata==2024.1
 virtualenv==20.25.0
 xarray==2024.1.1
