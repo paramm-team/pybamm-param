@@ -6,11 +6,24 @@
 [![codecov](https://codecov.io/gh/paramm-team/pybamm-param/branch/main/graph/badge.svg?token=CMFXMUU1SJ)](https://codecov.io/gh/paramm-team/pybamm-param)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-**WARNING:** this package is still under development.
+**WARNING:** this package is still under development and significant API changes might take please in the upcoming releases.
 
 This package is provides parameter optimization for PyBaMM (Python Battery Mathematical Modelling) using different optimization techniques. Examples on how to run this package can be found in the [examples folder](./examples)
 
 ## 🚀 Installing pybamm-param
+
+### Using pip
+The recommended way to install pybamm-param is by installing the latest release from PyPI. This can be done running
+```bash
+pip install pbparam
+```
+We strongly recommend using virtual environments, see more detailed instructions below (steps 1 and 2).
+
+### Install from source
+
+Another option is to install from source. This is not recommended, unless you want to make edits to the code.
+
+The first step is to install `virtualenv` in order to create virtual environments
 
 ```bash
 pip install virtualenv
@@ -18,9 +31,9 @@ pip install virtualenv
 
 The module dependencies are listed in `pyproject.toml`, the dependancies which are non optional which are installed with the package.
 
-The optional dependancies are split into `dev` and `docs`. `dev` are used for testing and linting, `docs` are used for building the sphinx documentation.
+The optional dependancies are split into `dev` and `docs`. `dev` are used for testing and linting, `docs` are used for building the sphinx documentation. 
 
-### Linux & MacOS
+#### Linux & MacOS
 
 1. Create a virtual environment (this is strongly recommended to avoid clashes with the dependencies)
 
@@ -46,7 +59,7 @@ The optional dependancies are split into `dev` and `docs`. `dev` are used for te
     pip install -e ./[dev,docs]
     ```
 
-### Windows
+#### Windows
 
 1. Create a virtual environment (this is strongly recommended to avoid clashes with the dependencies)
 
