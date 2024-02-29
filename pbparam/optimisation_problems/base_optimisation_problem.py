@@ -42,6 +42,9 @@ class BaseOptimisationProblem:
         optimisation.
     variables_to_fit : str or list of str
         The variable or variables to optimise in the cost function.
+    weights : dict
+        The custom weights of individual variables. Default is 1 for all variables.
+        It can be int or list of int that has same length with the data.
 
     Properties (non user settable defined in constructor)
     -----------------------------------------------------
@@ -84,6 +87,8 @@ class BaseOptimisationProblem:
             Parameters object containing the parameters to be fitted
         variables_to_fit : str or list of str (optional)
             List of variables to be optimised in the cost function.
+        weights : dict (optional)
+            The weights of the variables_to_fit as a list.
         """
 
         if len(args) > 0:

@@ -24,6 +24,9 @@ class OCPBalance(pbparam.BaseOptimisationProblem):
             is the reference data, if float recast as list length 1
         cost_function : :class:`pbparam.CostFunction`
             The cost function to use for the optimisation.
+        weights : dict
+            The custom weights of individual variables. Default is 1 for all variables.
+            It can be int or list of int that has same length with the data.
         """
 
         # Check data type of data and model, if not list recast as list
