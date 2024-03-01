@@ -12,7 +12,7 @@ matplotlib==3.8.3
 nox==2023.4.22
 numpy==1.26.4
 packaging==23.2
-pandas==2.2.0
+pandas==2.2.1
 pbparam @ file:///home/runner/work/pybamm-param/pybamm-param
 pillow==10.2.0
 platformdirs==4.2.0
@@ -23,5 +23,5 @@ pytz==2024.1
 scipy==1.12.0
 six==1.16.0
 tzdata==2024.1
-virtualenv==20.25.0
+virtualenv==20.25.1
 xarray==2024.2.0
