@@ -1,5 +1,6 @@
 # [Unreleased](https://github.com/paramm-team/pybamm-param/)
 
+# [v0.1](https://github.com/paramm-team/pybamm-param/tree/v0.1)
 ## Features
 
 ### Optimisation problems
