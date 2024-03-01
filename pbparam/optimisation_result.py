@@ -24,6 +24,8 @@ class OptimisationResult(object):
         The raw result of the optimisation.
     optimisation_problem : object
         The optimisation problem that was used for the optimization.
+    optimiser_name : str
+        The optimiser name used in the optimisation.
     """
 
     def __init__(

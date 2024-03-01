@@ -29,7 +29,7 @@ class BaseCostFunction:
             predicted values
         y_data: array-like
             actual values
-        weights: array-like
+        weights: dict, optional
             weights of the parameters
         sd : float, optional
             standard deviation of error, not all cost function need it.

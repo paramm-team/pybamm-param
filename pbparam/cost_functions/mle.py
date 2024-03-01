@@ -18,6 +18,11 @@ class MLE(pbparam.BaseCostFunction):
             contains simulation data points
     y_data : array or list
             contains reference data points
+    weights: dict, optional
+            weights of the parameters
+    sd : float, optional
+            standard deviation of error, not all cost function need it.
+
     Returns
     -------
     MLE : array
