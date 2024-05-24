@@ -44,6 +44,7 @@
         "type": "Organization",
         "name": "University of Warwick"
     },
+    "identifier": " DOI: 10.5281/zenodo.11282638",
     "keywords": [
         "parameter estimation",
         "battery modelling",
