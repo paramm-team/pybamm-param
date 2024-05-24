@@ -74,28 +74,3 @@ def coverage(session):
     )
     session.run("coverage", "report", "-m")
     session.run("coverage", "xml")
-
-
-# Directly from https://nox.thea.codes/en/stable/cookbook.html
-
-
-@nox.session()
-def release(session) -> None:
-    """
-    Kicks off an automated release process by creating and pushing a new tag.
-
-    Invokes bump2version with the posarg setting the version.
-
-    Usage:
-    $ nox -s release
-    """
-
-    session.install("bump2version", "./[deploy]")
-
-    version = pbparam.__version__
-    session.log(f"Bumping the {version!r} version")
-    session.run("bump2version", version)
-
-    session.log("Pushing the new tag")
-    session.run("git", "push", external=True)
-    session.run("git", "push", "--tags", external=True)
