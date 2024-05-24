@@ -74,5 +74,3 @@ def coverage(session):
     )
     session.run("coverage", "report", "-m")
     session.run("coverage", "xml")
-
-

@@ -1,6 +1,6 @@
 [build-system]
 requires = [
-    "hatchling>=1.6.0",
+    "hatchling>=1.9.0",
 ]
 build-backend = "hatchling.build"
 
@@ -15,9 +15,12 @@ authors = [
     { name = "W. Dhammika Widanage" },
     { name = "Philip Grylls" },
 ]
+requires-python = ">=3.8"
 dependencies = [
-    "matplotlib",
-    "pybamm",
+    "matplotlib>=3.7",
+    "scipy>=1.11",
+    "pybamm>=23.1",
+    
 ]
 dynamic = [
     "version",
@@ -29,6 +32,8 @@ dev = [
     "coverage",
     "black",
     "flake8>=3",
+    "twine",
+    "build",
 ]
 docs = [
     "guzzle-sphinx-theme",
