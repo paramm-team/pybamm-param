@@ -88,3 +88,9 @@ The optional dependancies are split into `dev` and `docs`. `dev` are used for te
 ## 🛠️ Contributing to pybamm-param
 
 If you'd like to help us develop pybamm-param by adding new methods, writing documentation, or fixing embarrassing bugs, please have a look at these [guidelines](https://github.com/paramm-team/pybamm-param/blob/main/CONTRIBUTING.md) first.
+
+## FAIRS
+We are working towards conformity with the FAIRS software standards for reseach software.
+The following items should help detail contributions to and ways to work with this software:
+### Codemeta
+https://github.com/paramm-team/pybamm-param/blob/develop/codemeta.json
