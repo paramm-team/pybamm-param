@@ -92,5 +92,15 @@ If you'd like to help us develop pybamm-param by adding new methods, writing doc
 ## FAIRS
 We are working towards conformity with the FAIRS software standards for reseach software.
 The following items should help detail contributions to and ways to work with this software:
+
 ### Codemeta
 https://github.com/paramm-team/pybamm-param/blob/develop/codemeta.json
+
+### Contributors
+#### Active
+Ferran Brosa Planella, [github.com/brosaplanella](https://github.com/brosaplanella)
+Philip John Grylls, [github.com/pipgrylls](https://github.com/pipgrylls)
+
+#### Inactive or past
+Muhammed Nedim Sogut, [github.com/muhammedsogut](https://github.com/muhammedsogut)
+Alexandru Pascu, [github.com/AlexandruPascu](https://github.com/AlexandruPascu)
