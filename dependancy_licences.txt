@@ -1,0 +1,133 @@
++-------------------------------+-------------------------------------------------------------------------------------------------------------------+
+|            Package            |                                                      License                                                      |
++-------------------------------+-------------------------------------------------------------------------------------------------------------------+
+|           about-time          |                                                        MIT                                                        |
+|           alabaster           |                                                 License not found                                                 |
+|         alive-progress        |                                                        MIT                                                        |
+|            anytree            |                                                     Apache-2.0                                                    |
+|            appnope            |                                                        BSD                                                        |
+|          argcomplete          |                                              Apache Software License                                              |
+|           asttokens           |                                                     Apache 2.0                                                    |
+|            autograd           |                                                        MIT                                                        |
+|             Babel             |                                                    BSD-3-Clause                                                   |
+|             black             |                                                        MIT                                                        |
+|              bpx              |                                                 License not found                                                 |
+|             build             |                                                 License not found                                                 |
+|             casadi            |                              GNU Lesser General Public License v3 or later (LGPLv3+)                              |
+|            certifi            |                                                      MPL-2.0                                                      |
+|       charset-normalizer      |                                                        MIT                                                        |
+|             click             |                                                    BSD-3-Clause                                                   |
+|              cma              |                                                        BSD                                                        |
+|             cmake             |                                                     Apache 2.0                                                    |
+|            colorlog           |                                                    MIT License                                                    |
+|              comm             |                         BSD 3-Clause License: Multi-line license found, first line shown.                         |
+|           contourpy           |                         BSD 3-Clause License: Multi-line license found, first line shown.                         |
+|            coverage           |                                                     Apache-2.0                                                    |
+|             cycler            |                Copyright (c) 2015, matplotlib project: Multi-line license found, first line shown.                |
+|            debugpy            |                                                        MIT                                                        |
+|           decorator           |                                                  new BSD License                                                  |
+|           Deprecated          |                                                        MIT                                                        |
+|              dill             |                                                    BSD-3-Clause                                                   |
+|            distlib            |                                                      PSF-2.0                                                      |
+|            docutils           |                            public domain, Python, 2-Clause BSD, GPL 3 (see COPYING.txt)                           |
+|           executing           |                                                        MIT                                                        |
+|            filelock           |                                                 License not found                                                 |
+|             flake8            |                                                        MIT                                                        |
+|           fonttools           |                                                        MIT                                                        |
+|             future            |                                                        MIT                                                        |
+|            grapheme           |                                                        MIT                                                        |
+|      guzzle-sphinx-theme      |                                                 License not found                                                 |
+|              idna             |                                                 License not found                                                 |
+|            imageio            |                                                    BSD-2-Clause                                                   |
+|           imagesize           |                                                        MIT                                                        |
+|       importlib-metadata      |                                                 License not found                                                 |
+|           ipykernel           |                         BSD 3-Clause License: Multi-line license found, first line shown.                         |
+|            ipython            |                                                    BSD-3-Clause                                                   |
+|           ipywidgets          |                                                BSD 3-Clause License                                               |
+|         jaraco.classes        |                                                 License not found                                                 |
+|              jedi             |                                                        MIT                                                        |
+|             Jinja2            |                                                    BSD-3-Clause                                                   |
+|         jupyter_client        |                         BSD 3-Clause License: Multi-line license found, first line shown.                         |
+|          jupyter_core         |                         BSD 3-Clause License: Multi-line license found, first line shown.                         |
+|       jupyterlab-widgets      |                                                    BSD-3-Clause                                                   |
+|            keyring            |                                                 License not found                                                 |
+|           kiwisolver          |                       =========================: Multi-line license found, first line shown.                      |
+|           latexcodec          |                                                        MIT                                                        |
+|         markdown-it-py        |                                                 License not found                                                 |
+|           MarkupSafe          |                                                    BSD-3-Clause                                                   |
+|           matplotlib          |                                                        PSF                                                        |
+|       matplotlib-inline       |                                                    BSD 3-Clause                                                   |
+|             mccabe            |                                                   Expat license                                                   |
+|             mdurl             |                                                 License not found                                                 |
+|         more-itertools        |                                                 License not found                                                 |
+|             mpmath            |                                                        BSD                                                        |
+|        mypy-extensions        |                                                    MIT License                                                    |
+|          nest-asyncio         |                                                        BSD                                                        |
+|              nh3              |                                                        MIT                                                        |
+|             nlopt             |                                                        MIT                                                        |
+|              nox              |                                                     Apache-2.0                                                    |
+|             numpy             |              Copyright (c) 2005-2023, NumPy Developers.: Multi-line license found, first line shown.              |
+|           packaging           |                                                 License not found                                                 |
+|             pandas            |                         BSD 3-Clause License: Multi-line license found, first line shown.                         |
+|             parso             |                                                        MIT                                                        |
+|            pathspec           |                                                 License not found                                                 |
+|            pbparam            |                                                 License not found                                                 |
+|            pexpect            |                                                    ISC license                                                    |
+|             Pillow            |                                                        HPND                                                       |
+|              pip              |                                                        MIT                                                        |
+|            pkginfo            |                                                        MIT                                                        |
+|          platformdirs         |                                                 License not found                                                 |
+|          prettytable          |                                                   BSD (3 clause)                                                  |
+|         prompt-toolkit        |                                                 License not found                                                 |
+|             psutil            |                                                    BSD-3-Clause                                                   |
+|           ptyprocess          |                                                      UNKNOWN                                                      |
+|           pure-eval           |                                                        MIT                                                        |
+|             pybamm            |               Copyright (c) 2018-2024, the PyBaMM team.: Multi-line license found, first line shown.              |
+|             pybtex            |                                                        MIT                                                        |
+|          pycodestyle          |                                                        MIT                                                        |
+|            pydantic           |                                                        MIT                                                        |
+|            pyflakes           |                                                        MIT                                                        |
+|            Pygments           |                                                    BSD-2-Clause                                                   |
+|             pymoo             |                                                 Apache License 2.0                                                |
+|           pyparsing           |                                                 License not found                                                 |
+|        pyproject_hooks        |                                                 License not found                                                 |
+|        python-dateutil        |                                                    Dual License                                                   |
+|              pytz             |                                                        MIT                                                        |
+|             PyYAML            |                                                        MIT                                                        |
+|             pyzmq             |                                                      LGPL+BSD                                                     |
+|        readme-renderer        |                                            Apache License, Version 2.0                                            |
+|            requests           |                                                     Apache 2.0                                                    |
+|       requests-toolbelt       |                                                     Apache 2.0                                                    |
+|            rfc3986            |                                                     Apache 2.0                                                    |
+|              rich             |                                                        MIT                                                        |
+|           scikit-fem          |                                                    BSD-3-Clause                                                   |
+|             scipy             | Copyright (c) 2001-2002 Enthought, Inc. 2003-2023, SciPy Developers.: Multi-line license found, first line shown. |
+|           setuptools          |                                                 License not found                                                 |
+|              six              |                                                        MIT                                                        |
+|        snowballstemmer        |                                                    BSD-3-Clause                                                   |
+|             Sphinx            |                                                 License not found                                                 |
+|        sphinx-rtd-theme       |                                                        MIT                                                        |
+|    sphinxcontrib-applehelp    |                                                 License not found                                                 |
+|     sphinxcontrib-devhelp     |                                                 License not found                                                 |
+|     sphinxcontrib-htmlhelp    |                                                 License not found                                                 |
+|      sphinxcontrib-jquery     |                                                 License not found                                                 |
+|      sphinxcontrib-jsmath     |                                                        BSD                                                        |
+|      sphinxcontrib-qthelp     |                                                 License not found                                                 |
+| sphinxcontrib-serializinghtml |                                                 License not found                                                 |
+|           stack-data          |                                                        MIT                                                        |
+|             sympy             |                                                        BSD                                                        |
+|            tornado            |                                                     Apache-2.0                                                    |
+|              tqdm             |                                                  MPL-2.0 AND MIT                                                  |
+|           traitlets           |                         BSD 3-Clause License: Multi-line license found, first line shown.                         |
+|             twine             |                                                 License not found                                                 |
+|       typing_extensions       |                                                 License not found                                                 |
+|             tzdata            |                                                     Apache-2.0                                                    |
+|            urllib3            |                                                 License not found                                                 |
+|           virtualenv          |                                                 License not found                                                 |
+|            wcwidth            |                                                        MIT                                                        |
+|             wheel             |                                                 License not found                                                 |
+|       widgetsnbextension      |                                                BSD 3-Clause License                                               |
+|             wrapt             |                                                        BSD                                                        |
+|             xarray            |                                                     Apache-2.0                                                    |
+|              zipp             |                                                 License not found                                                 |
++-------------------------------+-------------------------------------------------------------------------------------------------------------------+

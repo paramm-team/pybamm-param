@@ -89,18 +89,40 @@ The optional dependancies are split into `dev` and `docs`. `dev` are used for te
 
 If you'd like to help us develop pybamm-param by adding new methods, writing documentation, or fixing embarrassing bugs, please have a look at these [guidelines](https://github.com/paramm-team/pybamm-param/blob/main/CONTRIBUTING.md) first.
 
+## Notes
+
+### requirements.txt
+
+This is not intended for modification or use installing dependencies, it is a result of a git runner to ensure full package information is included on all pushes. Strict requirements are found in pyproject.toml
+
+### coverage.xml
+
+This is produced during a git run and not intended to be modified directly
+
 ## FAIRS
-We are working towards conformity with the FAIRS software standards for reseach software.
+
+We are working towards conformity with the FAIRS software standards for research software.
 The following items should help detail contributions to and ways to work with this software:
 
 ### Codemeta
+
 https://github.com/paramm-team/pybamm-param/blob/develop/codemeta.json
 
 ### Contributors
+
 #### Active
+
 Ferran Brosa Planella, [github.com/brosaplanella](https://github.com/brosaplanella)
 Philip John Grylls, [github.com/pipgrylls](https://github.com/pipgrylls)
 
 #### Inactive or past
+
 Muhammed Nedim Sogut, [github.com/muhammedsogut](https://github.com/muhammedsogut)
 Alexandru Pascu, [github.com/AlexandruPascu](https://github.com/AlexandruPascu)
+
+### Other Information
+domain:
+funder:
+programming language: Python
+keywords: battery modelling, optimization,
+date created:
