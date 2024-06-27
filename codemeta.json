@@ -20,7 +20,7 @@
             "roleName": "PI"
         },
         {
-            "id": "https://orcid.org/my-orcid?orcid=0000-0001-9677-5852",
+            "id": "https://orcid.org/0000-0001-9677-5852",
             "type": "Person",
             "affiliation": {
                 "type": "Organization",
@@ -32,7 +32,7 @@
         },
         {
             "type": "Role",
-            "schema:author": "https://orcid.org/my-orcid?orcid=0000-0001-9677-5852",
+            "schema:author": "https://orcid.org/000-0001-9677-5852",
             "roleName": "RSE"
         }
     ],
@@ -44,6 +44,7 @@
         "type": "Organization",
         "name": "University of Warwick"
     },
+    "identifier": " DOI: 10.5281/zenodo.11282637",
     "keywords": [
         "parameter estimation",
         "battery modelling",
