@@ -99,9 +99,10 @@ jobs:
     - name: run coverage on latest python version
       run: nox -s coverage 
 
-    - name: Update python requirements file
+    - name: Update python requirements file and get license information for dependencies
       run: |
         python -m pip freeze > requirements.txt
+        python get_dep_licenses.py > dependancy_licenses.txt
     
     - name: Commit and push changes
       uses: EndBug/add-and-commit@v9
