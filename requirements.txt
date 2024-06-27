@@ -1,16 +1,16 @@
 anytree==2.12.1
-argcomplete==3.3.0
+argcomplete==3.4.0
 casadi==3.6.5
 colorlog==6.8.2
 contourpy==1.2.1
 cycler==0.12.1
 distlib==0.3.8
-filelock==3.14.0
+filelock==3.15.4
 fonttools==4.53.0
 kiwisolver==1.4.5
 matplotlib==3.9.0
 nox==2024.4.15
-numpy==1.26.4
+numpy==2.0.0
 packaging==24.1
 pandas==2.2.2
 pbparam @ file:///home/runner/work/pybamm-param/pybamm-param
@@ -20,8 +20,8 @@ pybamm==24.1
 pyparsing==3.1.2
 python-dateutil==2.9.0.post0
 pytz==2024.1
-scipy==1.13.1
+scipy==1.14.0
 six==1.16.0
 tzdata==2024.1
-virtualenv==20.26.2
-xarray==2024.5.0
+virtualenv==20.26.3
+xarray==2024.6.0
