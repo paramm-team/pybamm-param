@@ -13,10 +13,13 @@ This package is provides parameter optimization for PyBaMM (Python Battery Mathe
 ## 🚀 Installing pybamm-param
 
 ### Using pip
+
 The recommended way to install pybamm-param is by installing the latest release from PyPI. This can be done running
+
 ```bash
 pip install pbparam
 ```
+
 We strongly recommend using virtual environments, see more detailed instructions below (steps 1 and 2).
 
 ### Install from source
@@ -31,7 +34,7 @@ pip install virtualenv
 
 The module dependencies are listed in `pyproject.toml`, the dependancies which are non optional which are installed with the package.
 
-The optional dependancies are split into `dev` and `docs`. `dev` are used for testing and linting, `docs` are used for building the sphinx documentation. 
+The optional dependancies are split into `dev` and `docs`. `dev` are used for testing and linting, `docs` are used for building the sphinx documentation.
 
 #### Linux & MacOS
 
@@ -121,6 +124,7 @@ Muhammed Nedim Sogut, [github.com/muhammedsogut](https://github.com/muhammedsogu
 Alexandru Pascu, [github.com/AlexandruPascu](https://github.com/AlexandruPascu)
 
 ### Other Information
+
 domain:
 funder:
 programming language: Python
