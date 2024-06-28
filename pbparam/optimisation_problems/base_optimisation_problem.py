@@ -28,7 +28,7 @@ class BaseOptimisationProblem:
     model : :class:`pybamm.Simulation` (or pandas.DataFrame)
         The object to be used in optimisation of simulation parameters.
     data : :class:`pandas.DataFrame`
-        The experimental or reference data to be used in optimisation
+        The experimental or reference data to be used in optimization
         of simulation parameters.
 
     Parameters (optional)

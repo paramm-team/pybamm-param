@@ -60,6 +60,7 @@ API documentation
    source/optimisation_problems/index
    source/optimisers/index
    source/optimisation_result
+   source/models/index
 
 Indices and tables
 ==================
