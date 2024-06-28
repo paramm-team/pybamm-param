@@ -61,6 +61,7 @@ API documentation
    source/optimisers/index
    source/optimisation_result
    source/models/index
+   source/data_formats/index
 
 Indices and tables
 ==================
