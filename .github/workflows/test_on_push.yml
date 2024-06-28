@@ -102,12 +102,13 @@ jobs:
     - name: Update python requirements file and get license information for dependencies
       run: |
         python -m pip freeze > requirements.txt
+        python -m pip install prettytable
         python get_dep_licenses.py > dependancy_licenses.txt
     
     - name: Commit and push changes
       uses: EndBug/add-and-commit@v9
       with:
-        add: coverage.xml requirements.txt
+        add: coverage.xml requirements.txt dependancy_licenses.txt
         message: '[skip actions] Update requirements.txt and coverage.xml'
         author_name: gitbot-scrtp
         author_email: user.email
