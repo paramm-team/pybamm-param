@@ -1,0 +1,36 @@
++-----------------+-------------------------------------------------------------------------------------------------------------------+
+|     Package     |                                                      License                                                      |
++-----------------+-------------------------------------------------------------------------------------------------------------------+
+|     anytree     |                                                     Apache-2.0                                                    |
+|   argcomplete   |                                              Apache Software License                                              |
+|      casadi     |                              GNU Lesser General Public License v3 or later (LGPLv3+)                              |
+|     colorlog    |                                                    MIT License                                                    |
+|    contourpy    |                         BSD 3-Clause License: Multi-line license found, first line shown.                         |
+|      cycler     |                Copyright (c) 2015, matplotlib project: Multi-line license found, first line shown.                |
+|     distlib     |                                                      PSF-2.0                                                      |
+|     filelock    |                                                 License not found                                                 |
+|    fonttools    |                                                        MIT                                                        |
+|    kiwisolver   |                       =========================: Multi-line license found, first line shown.                      |
+|    matplotlib   |       License agreement for matplotlib versions 1.3.0 and later: Multi-line license found, first line shown.      |
+|       nox       |                                                     Apache-2.0                                                    |
+|      numpy      |              Copyright (c) 2005-2024, NumPy Developers.: Multi-line license found, first line shown.              |
+|    packaging    |                                                 License not found                                                 |
+|      pandas     |                         BSD 3-Clause License: Multi-line license found, first line shown.                         |
+|     pbparam     |                                                 License not found                                                 |
+|      pillow     |                                                        HPND                                                       |
+|       pip       |                                                        MIT                                                        |
+|   platformdirs  |                                                 License not found                                                 |
+|   prettytable   |                                                   BSD (3 clause)                                                  |
+|      pybamm     |               Copyright (c) 2018-2024, the PyBaMM team.: Multi-line license found, first line shown.              |
+|    pyparsing    |                                                 License not found                                                 |
+| python-dateutil |                                                    Dual License                                                   |
+|       pytz      |                                                        MIT                                                        |
+|      scipy      | Copyright (c) 2001-2002 Enthought, Inc. 2003-2024, SciPy Developers.: Multi-line license found, first line shown. |
+|    setuptools   |                                                 License not found                                                 |
+|       six       |                                                        MIT                                                        |
+|      tzdata     |                                                     Apache-2.0                                                    |
+|    virtualenv   |                                                 License not found                                                 |
+|     wcwidth     |                                                        MIT                                                        |
+|      wheel      |                                                 License not found                                                 |
+|      xarray     |                                                     Apache-2.0                                                    |
++-----------------+-------------------------------------------------------------------------------------------------------------------+

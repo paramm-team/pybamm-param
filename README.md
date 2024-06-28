@@ -13,10 +13,13 @@ This package is provides parameter optimization for PyBaMM (Python Battery Mathe
 ## 🚀 Installing pybamm-param
 
 ### Using pip
+
 The recommended way to install pybamm-param is by installing the latest release from PyPI. This can be done running
+
 ```bash
 pip install pbparam
 ```
+
 We strongly recommend using virtual environments, see more detailed instructions below (steps 1 and 2).
 
 ### Install from source
@@ -31,7 +34,7 @@ pip install virtualenv
 
 The module dependencies are listed in `pyproject.toml`, the dependancies which are non optional which are installed with the package.
 
-The optional dependancies are split into `dev` and `docs`. `dev` are used for testing and linting, `docs` are used for building the sphinx documentation. 
+The optional dependancies are split into `dev` and `docs`. `dev` are used for testing and linting, `docs` are used for building the sphinx documentation.
 
 #### Linux & MacOS
 
@@ -89,18 +92,41 @@ The optional dependancies are split into `dev` and `docs`. `dev` are used for te
 
 If you'd like to help us develop pybamm-param by adding new methods, writing documentation, or fixing embarrassing bugs, please have a look at these [guidelines](https://github.com/paramm-team/pybamm-param/blob/main/CONTRIBUTING.md) first.
 
+## Notes
+
+### requirements.txt
+
+This is not intended for modification or use installing dependencies, it is a result of a git runner to ensure full package information is included on all pushes. Strict requirements are found in pyproject.toml
+
+### coverage.xml
+
+This is produced during a git run and not intended to be modified directly
+
 ## FAIRS
-We are working towards conformity with the FAIRS software standards for reseach software.
+
+We are working towards conformity with the FAIRS software standards for research software.
 The following items should help detail contributions to and ways to work with this software:
 
 ### Codemeta
+
 https://github.com/paramm-team/pybamm-param/blob/develop/codemeta.json
 
 ### Contributors
+
 #### Active
+
 Ferran Brosa Planella, [github.com/brosaplanella](https://github.com/brosaplanella)
 Philip John Grylls, [github.com/pipgrylls](https://github.com/pipgrylls)
 
 #### Inactive or past
+
 Muhammed Nedim Sogut, [github.com/muhammedsogut](https://github.com/muhammedsogut)
 Alexandru Pascu, [github.com/AlexandruPascu](https://github.com/AlexandruPascu)
+
+### Other Information
+
+domain:
+funder:
+programming language: Python
+keywords: battery modelling, optimization,
+date created:
