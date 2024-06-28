@@ -74,6 +74,7 @@ jobs:
   post_job:
     needs: build
     runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master'
 
     steps:
     - uses: actions/checkout@v3
