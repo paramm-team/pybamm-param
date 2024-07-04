@@ -86,7 +86,7 @@
     ],
     "codeRepository": "https://github.com/paramm-team/pybamm-param",
     "dateModified": "2024-03-01",
-    "description": "Parameter optimisation for PyBaMM.",
+    "description": "pybamm-param is a tool to fit PyBaMM models to experimental data in order to determine the model parameter values. pybamm-param provides helper classes to handle the most common parameterisation problems, and allows the users to easily mix combine cost functions and optimisers to suit their needs.",
     "downloadUrl": "https://github.com/paramm-team/pybamm-param/archive/refs/tags/v0.1.tar.gz",
     "funder": {
         "type": "Organization",

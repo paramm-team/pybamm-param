@@ -1,14 +1,15 @@
 # pybamm-param: PyBaMM Parameter Optimization Tool
-
 [![pybamm-param](https://github.com/paramm-team/pybamm-param/actions/workflows/test_on_push.yml/badge.svg?branch=main)](https://github.com/paramm-team/pybamm-param/actions/workflows/test_on_push.yml)
 [![Documentation Status](https://readthedocs.org/projects/pybamm-param/badge/?version=latest)](https://pybamm-param.readthedocs.io/en/latest/?badge=latest)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paramm-team)
 [![codecov](https://codecov.io/gh/paramm-team/pybamm-param/branch/main/graph/badge.svg?token=CMFXMUU1SJ)](https://codecov.io/gh/paramm-team/pybamm-param)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![DOI:10.5281/zenodo.11282637](https://zenodo.org/badge/DOI/10.5281/zenodo.11282638.svg)](https://doi.org/10.5281/zenodo.11282638)
-**WARNING:** this package is still under development and significant API changes might take please in the upcoming releases.
 
-This package is provides parameter optimization for PyBaMM (Python Battery Mathematical Modelling) using different optimization techniques. Examples on how to run this package can be found in the [examples folder](./examples)
+> [!WARNING]  
+> This package is still under development and significant API changes might take please in the upcoming releases.
+
+pybamm-param is a tool to fit [PyBaMM](https://www.pybamm.org) models to experimental data in order to determine the model parameter values. pybamm-param provides helper classes to handle the most common parameterisation problems, and allows the users to easily mix combine cost functions and optimisers to suit their needs. Examples on how to run this package can be found in the [examples folder](./examples)
 
 ## 🚀 Installing pybamm-param
 
@@ -108,20 +109,20 @@ We are working towards conformity with the FAIRS software standards for research
 The following items should help detail contributions to and ways to work with this software:
 
 ### Codemeta
-
-https://github.com/paramm-team/pybamm-param/blob/develop/codemeta.json
+The metadate is available in machine-readable format in the [codemeta.json](https://github.com/paramm-team/pybamm-param/blob/develop/codemeta.json) file.
 
 ### Contributors
 
 #### Active
 
-Ferran Brosa Planella, [github.com/brosaplanella](https://github.com/brosaplanella)
-Philip John Grylls, [github.com/pipgrylls](https://github.com/pipgrylls)
+- [Ferran Brosa Planella](https://github.com/brosaplanella)
+- [Philip John Grylls](https://github.com/pipgrylls)
 
 #### Inactive or past
 
-Muhammed Nedim Sogut, [github.com/muhammedsogut](https://github.com/muhammedsogut)
-Alexandru Pascu, [github.com/AlexandruPascu](https://github.com/AlexandruPascu)
+- [Dhammika Widanalage](https://github.com/WDWidanage)
+- [Muhammed Nedim Sogut](https://github.com/muhammedsogut)
+- [Alexandru Pascu](https://github.com/AlexandruPascu)
 
 ### Other Information
 
