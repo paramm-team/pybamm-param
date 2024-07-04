@@ -32,13 +32,61 @@
         },
         {
             "type": "Role",
-            "schema:author": "https://orcid.org/000-0001-9677-5852",
+            "schema:author": "https://orcid.org/0000-0001-9677-5852",
             "roleName": "RSE"
+        },
+        {
+            "id": "https://orcid.org/0000-0003-0428-2554",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "WMG, University of Warwick"
+            },
+            "email": "Dhammika.Widanalage@warwick.ac.uk",
+            "familyName": "Widanage",
+            "givenName": "W Dhammika"
+        },
+        {
+            "type": "Role",
+            "schema:author": "https://orcid.org/0000-0003-0428-2554",
+            "roleName": "Co-I"
+        },
+        {
+            "id": "https://orcid.org/0000-0001-6934-8855",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "WMG, University of Warwick"
+            },
+            "email": "m.sogut@warwick.ac.uk",
+            "familyName": "Sogut",
+            "givenName": "Muhammed"
+        },
+        {
+            "type": "Role",
+            "schema:author": "https://orcid.org/0000-0001-6934-8855",
+            "roleName": "Lead developer"
+        },
+        {
+            "id": "_:author_5",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "WMG, University of Warwick"
+            },
+            "email": "alexandru.pascu@warwick.ac.uk",
+            "familyName": "Pascu",
+            "givenName": "Alexandru"
+        },
+        {
+            "type": "Role",
+            "schema:author": "_:author_5",
+            "roleName": "Developer"
         }
     ],
     "codeRepository": "https://github.com/paramm-team/pybamm-param",
     "dateModified": "2024-03-01",
-    "description": "Parameter optimisation for PyBaMM.",
+    "description": "pybamm-param is a tool to fit PyBaMM models to experimental data in order to determine the model parameter values. pybamm-param provides helper classes to handle the most common parameterisation problems, and allows the users to easily mix combine cost functions and optimisers to suit their needs.",
     "downloadUrl": "https://github.com/paramm-team/pybamm-param/archive/refs/tags/v0.1.tar.gz",
     "funder": {
         "type": "Organization",
