@@ -32,8 +32,56 @@
         },
         {
             "type": "Role",
-            "schema:author": "https://orcid.org/000-0001-9677-5852",
+            "schema:author": "https://orcid.org/0000-0001-9677-5852",
             "roleName": "RSE"
+        },
+        {
+            "id": "https://orcid.org/0000-0003-0428-2554",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "WMG, University of Warwick"
+            },
+            "email": "Dhammika.Widanalage@warwick.ac.uk",
+            "familyName": "Widanage",
+            "givenName": "W Dhammika"
+        },
+        {
+            "type": "Role",
+            "schema:author": "https://orcid.org/0000-0003-0428-2554",
+            "roleName": "Co-I"
+        },
+        {
+            "id": "https://orcid.org/0000-0001-6934-8855",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "WMG, University of Warwick"
+            },
+            "email": "m.sogut@warwick.ac.uk",
+            "familyName": "Sogut",
+            "givenName": "Muhammed"
+        },
+        {
+            "type": "Role",
+            "schema:author": "https://orcid.org/0000-0001-6934-8855",
+            "roleName": "Lead developer"
+        },
+        {
+            "id": "_:author_5",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "WMG, University of Warwick"
+            },
+            "email": "alexandru.pascu@warwick.ac.uk",
+            "familyName": "Pascu",
+            "givenName": "Alexandru"
+        },
+        {
+            "type": "Role",
+            "schema:author": "_:author_5",
+            "roleName": "Developer"
         }
     ],
     "codeRepository": "https://github.com/paramm-team/pybamm-param",
