@@ -126,8 +126,7 @@ The metadate is available in machine-readable format in the [codemeta.json](http
 
 ### Other Information
 
-domain:
-funder:
-programming language: Python
-keywords: battery modelling, optimization,
-date created:
+- Funder: The development of pybamm-param has been supported by the University of Warwick [EPSRC Impact Acceleration Account](https://warwick.ac.uk/services/ris/research-funding-opportunities/epsrciaa_22-25).
+- Programming language: Python
+- Keywords: parameter estimation, battery modelling, continuum models, Doyle-Fuller-Newman model, Single Particle Model, lithium-ion batteries.
+- Date created: 01/03/2024 (first release - v0.1)
