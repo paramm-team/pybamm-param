@@ -3,7 +3,7 @@ import pybamm
 import pandas as pd
 
 
-def scipy_diff_example():
+def scipy_diff_example(suppress_plot=False):
     model = pybamm.lithium_ion.SPMe()
     parameter_values = pybamm.ParameterValues("Chen2020")
 
@@ -42,15 +42,10 @@ def scipy_diff_example():
     result = optimiser.optimise(opt)
 
     print(result)
-
-    result.plot()
+    if not suppress_plot:
+        result.plot()
 
 
 # Run the example
 if __name__ == "__main__":
-    scipy_diff_example()
-
-
-# Make the example discoverable by the test runner
-def test_scipy_diff_example():
     scipy_diff_example()

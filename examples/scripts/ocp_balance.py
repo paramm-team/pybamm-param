@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 
-def ocp_example():
+def ocp_example(suppress_plot=False):
     # Change working directory to import data
     os.chdir(
         os.path.join(
@@ -27,7 +27,8 @@ def ocp_example():
     result = optimiser.optimise(ocp_balance)
 
     print(result)
-    result.plot()
+    if not suppress_plot:
+        result.plot()
 
     cathode_half_lit = pd.read_csv("cathode_OCP_2_lit.csv")
     cathode_half_delit = pd.read_csv("cathode_OCP_2_delit.csv")
@@ -42,14 +43,10 @@ def ocp_example():
     result = optimiser.optimise(ocp_balance)
 
     print(result)
-    result.plot()
+    if not suppress_plot:
+        result.plot()
 
 
 # Run the example
 if __name__ == "__main__":
-    ocp_example()
-
-
-# Make the example discoverable by the test runner
-def test_ocp_example():
     ocp_example()

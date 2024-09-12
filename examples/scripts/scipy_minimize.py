@@ -2,7 +2,8 @@ import pbparam
 import pybamm
 import pandas as pd
 
-def scipy_min_example():
+
+def scipy_min_example(suppress_plot=False):
     model = pybamm.lithium_ion.SPMe()
     parameter_values = pybamm.ParameterValues("Chen2020")
 
@@ -39,15 +40,10 @@ def scipy_min_example():
     result = optimiser.optimise(opt)
 
     print(result)
-
-    result.plot()
+    if not suppress_plot:
+        result.plot()
 
 
 # Run the example
 if __name__ == "__main__":
-    scipy_min_example()
-
-
-# Make the example discoverable by the test runner
-def test_scipy_min_example():
     scipy_min_example()

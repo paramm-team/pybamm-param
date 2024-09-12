@@ -3,7 +3,8 @@ import pybamm
 import pbparam
 import pandas as pd
 
-def mvf_example():
+
+def mvf_example(suppress_plot=False):
     # Change working directory to import data
     os.chdir(
         os.path.join(
@@ -29,7 +30,6 @@ def mvf_example():
         return (
             m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
         )
-
 
     model = pybamm.lithium_ion.SPMe(
         options={
@@ -82,14 +82,10 @@ def mvf_example():
     result = optimiser.optimise(opt)
 
     print(result)
-    result.plot()
+    if not suppress_plot:
+        result.plot()
 
 
 # Run the example
 if __name__ == '__main__':
-    mvf_example()
-
-
-# Make the example discoverable by the test runner
-def test_mvf_example():
     mvf_example()

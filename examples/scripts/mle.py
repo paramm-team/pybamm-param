@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def mle_example():
+def mle_example(suppress_plot=False):
 
     model = pybamm.lithium_ion.SPMe()
     parameter_values = pybamm.ParameterValues("Chen2020")
@@ -50,18 +50,14 @@ def mle_example():
         results.append(result)
         predicted_stds.append(result.x[-1])
 
-    plt.plot(stds, stds, "k--")
-    plt.scatter(stds, predicted_stds)
-    plt.xlabel("True standard deviation")
-    plt.ylabel("Predicted standard deviation")
-    plt.show()
+    if not suppress_plot:
+        plt.plot(stds, stds, "k--")
+        plt.scatter(stds, predicted_stds)
+        plt.xlabel("True standard deviation")
+        plt.ylabel("Predicted standard deviation")
+        plt.show()
 
 
 # Run the example
 if __name__ == '__main__':
-    mle_example()
-
-
-# Make the example discoverable by the test runner
-def test_mle_example():
     mle_example()
