@@ -15,11 +15,11 @@ authors = [
     { name = "W. Dhammika Widanage" },
     { name = "Philip Grylls" },
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.9, <3.13"
 dependencies = [
     "matplotlib>=3.7",
     "scipy>=1.10.1",
-    "pybamm>=23.1",
+    "pybamm>=24.9",
     
 ]
 dynamic = [
