@@ -4,51 +4,64 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-model = pybamm.lithium_ion.SPMe()
-parameter_values = pybamm.ParameterValues("Chen2020")
 
-sim0 = pybamm.Simulation(model, parameter_values=parameter_values)
-sol = sim0.solve([0, 3600])
+def mle_example():
 
-V = sol["Voltage [V]"].entries
+    model = pybamm.lithium_ion.SPMe()
+    parameter_values = pybamm.ParameterValues("Chen2020")
 
-stds = [1e-1, 5e-2, 1e-2, 5e-3, 1e-3]
-results = []
-predicted_stds = []
+    sim0 = pybamm.Simulation(model, parameter_values=parameter_values)
+    sol = sim0.solve([0, 3600])
 
-for std in stds:
-    data = pd.DataFrame(
-        {
-            "Time [s]": sol["Time [s]"].entries,
-            "Voltage [V]": V + np.random.normal(0, std, size=V.size),
-        }
-    )
+    V = sol["Voltage [V]"].entries
 
-    sim = pybamm.Simulation(model, parameter_values=parameter_values)
+    stds = [1e-1, 5e-2, 1e-2, 5e-3, 1e-3]
+    results = []
+    predicted_stds = []
 
-    opt = pbparam.DataFit(
-        sim,
-        data,
-        {
-            "Negative particle diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12)),
-        },
-        cost_function=pbparam.MLE(),
-    )
+    for std in stds:
+        data = pd.DataFrame(
+            {
+                "Time [s]": sol["Time [s]"].entries,
+                "Voltage [V]": V + np.random.normal(0, std, size=V.size),
+            }
+        )
 
-    optimiser = pbparam.ScipyDifferentialEvolution(
-        extra_options={
-            "workers": 4,
-            "polish": True,
-            "updating": "deferred",
-            "disp": True,
-        }
-    )
-    result = optimiser.optimise(opt)
-    results.append(result)
-    predicted_stds.append(result.x[-1])
+        sim = pybamm.Simulation(model, parameter_values=parameter_values)
 
-plt.plot(stds, stds, "k--")
-plt.scatter(stds, predicted_stds)
-plt.xlabel("True standard deviation")
-plt.ylabel("Predicted standard deviation")
-plt.show()
+        opt = pbparam.DataFit(
+            sim,
+            data,
+            {
+                "Negative particle diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12)),
+            },
+            cost_function=pbparam.MLE(),
+        )
+
+        optimiser = pbparam.ScipyDifferentialEvolution(
+            extra_options={
+                "workers": 4,
+                "polish": True,
+                "updating": "deferred",
+                "disp": True,
+            }
+        )
+        result = optimiser.optimise(opt)
+        results.append(result)
+        predicted_stds.append(result.x[-1])
+
+    plt.plot(stds, stds, "k--")
+    plt.scatter(stds, predicted_stds)
+    plt.xlabel("True standard deviation")
+    plt.ylabel("Predicted standard deviation")
+    plt.show()
+
+
+# Run the example
+if __name__ == '__main__':
+    mle_example()
+
+
+# Make the example discoverable by the test runner
+def test_mle_example():
+    mle_example()
