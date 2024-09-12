@@ -16,7 +16,7 @@ class TestDataFit(TestOptimisationProblemTemplate):
         sim = pybamm.Simulation(model)
         data = pd.DataFrame(columns=["Voltage [V]", "Cell temperature [K]"])
         model_parameters = {
-            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12)),
+            "Negative particle diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12)),
             "Total heat transfer coefficient [W.m-2.K-1]": (0, (0, 1000)),
         }
         # Numpy will raise a 'RuntimeWarning: Mean of empty slice' on line 205
@@ -40,7 +40,7 @@ class TestDataFit(TestOptimisationProblemTemplate):
         # pybamm type
         self.assertIsInstance(
             optimisation_problem.parameter_values[
-                "Negative electrode diffusivity [m2.s-1]"
+                "Negative particle diffusivity [m2.s-1]"
             ],
             pybamm.InputParameter,
         )
@@ -63,7 +63,7 @@ class TestDataFit(TestOptimisationProblemTemplate):
         self.assertEqual(
             optimisation_problem.map_inputs,
             {
-                "Negative electrode diffusivity [m2.s-1]": 0,
+                "Negative particle diffusivity [m2.s-1]": 0,
                 "Total heat transfer coefficient [W.m-2.K-1]": 1,
             },
         )
@@ -71,7 +71,7 @@ class TestDataFit(TestOptimisationProblemTemplate):
         # Check the optimisation problem has the correct input parameters
         self.assertIsInstance(
             optimisation_problem.model.parameter_values[
-                "Negative electrode diffusivity [m2.s-1]"
+                "Negative particle diffusivity [m2.s-1]"
             ],
             pybamm.InputParameter,
         )
@@ -113,7 +113,7 @@ class TestDataFit(TestOptimisationProblemTemplate):
 
         # Test multiple model_parameters with same value
         parameter_names = (
-            "Negative electrode diffusivity [m2.s-1]",
+            "Negative particle diffusivity [m2.s-1]",
             "Positive electrode diffusivity [m2.s-1]",
         )
         model_parameters = {parameter_names: (5e-15, (2.06e-16, 2.06e-12))}
@@ -133,7 +133,7 @@ class TestDataFit(TestOptimisationProblemTemplate):
         self.assertEqual(
             optimisation_problem.map_inputs,
             {
-                "Negative electrode diffusivity [m2.s-1]": 0,
+                "Negative particle diffusivity [m2.s-1]": 0,
                 "Positive electrode diffusivity [m2.s-1]": 0,
             },
         )
@@ -148,7 +148,7 @@ class TestDataFit(TestOptimisationProblemTemplate):
             }
         )
         model_parameters = {
-            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
+            "Negative particle diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
         }
 
         variable_weights = {"Voltage [V]": [1, 2]}
@@ -169,7 +169,7 @@ class TestDataFit(TestOptimisationProblemTemplate):
             }
         )
         model_parameters = {
-            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
+            "Negative particle diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
         }
 
         variable_weights = {"Cell temperature [K]": [1]}
@@ -191,7 +191,7 @@ class TestDataFit(TestOptimisationProblemTemplate):
             }
         )
         model_parameters = {
-            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
+            "Negative particle diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
         }
 
         variable_weights = {"Voltage [V]": [1]}
@@ -217,7 +217,7 @@ class TestDataFit(TestOptimisationProblemTemplate):
             }
         )
         model_parameters = {
-            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
+            "Negative particle diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
         }
         optimisation_problem = pbparam.DataFit(sim, data, model_parameters)
 
@@ -237,7 +237,7 @@ class TestDataFit(TestOptimisationProblemTemplate):
             }
         )
         model_parameters = {
-            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
+            "Negative particle diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
         }
         optimisation_problem = pbparam.DataFit(sim, data, model_parameters)
         sol = optimisation_problem.calculate_solution()
@@ -248,7 +248,7 @@ class TestDataFit(TestOptimisationProblemTemplate):
         # Check inputs are correct
         self.assertEqual(
             sol.all_inputs,
-            [{"Negative electrode diffusivity [m2.s-1]": np.array([5e-15])}],
+            [{"Negative particle diffusivity [m2.s-1]": np.array([5e-15])}],
         )
 
         # Test with experiment & passing parameter values
@@ -263,7 +263,7 @@ class TestDataFit(TestOptimisationProblemTemplate):
             }
         )
         model_parameters = {
-            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
+            "Negative particle diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
         }
         optimisation_problem = pbparam.DataFit(sim, data, model_parameters)
         sol = optimisation_problem.calculate_solution([1e-15])
@@ -274,7 +274,7 @@ class TestDataFit(TestOptimisationProblemTemplate):
         # Check inputs are correct
         self.assertEqual(
             sol.all_inputs,
-            [{"Negative electrode diffusivity [m2.s-1]": np.array([1e-15])}],
+            [{"Negative particle diffusivity [m2.s-1]": np.array([1e-15])}],
         )
 
     def test_plot(self):
@@ -287,7 +287,7 @@ class TestDataFit(TestOptimisationProblemTemplate):
             }
         )
         model_parameters = {
-            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
+            "Negative particle diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12))
         }
         optimisation_problem = pbparam.DataFit(sim, data, model_parameters)
 
