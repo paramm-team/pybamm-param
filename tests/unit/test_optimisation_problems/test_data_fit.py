@@ -114,7 +114,7 @@ class TestDataFit(TestOptimisationProblemTemplate):
         # Test multiple model_parameters with same value
         parameter_names = (
             "Negative particle diffusivity [m2.s-1]",
-            "Positive electrode diffusivity [m2.s-1]",
+            "Positive particle diffusivity [m2.s-1]",
         )
         model_parameters = {parameter_names: (5e-15, (2.06e-16, 2.06e-12))}
         optimisation_problem = pbparam.DataFit(
@@ -134,7 +134,7 @@ class TestDataFit(TestOptimisationProblemTemplate):
             optimisation_problem.map_inputs,
             {
                 "Negative particle diffusivity [m2.s-1]": 0,
-                "Positive electrode diffusivity [m2.s-1]": 0,
+                "Positive particle diffusivity [m2.s-1]": 0,
             },
         )
 

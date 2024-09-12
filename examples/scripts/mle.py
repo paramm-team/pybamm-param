@@ -30,7 +30,7 @@ for std in stds:
         sim,
         data,
         {
-            "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12)),
+            "Negative particle diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12)),
         },
         cost_function=pbparam.MLE(),
     )

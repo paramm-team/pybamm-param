@@ -21,7 +21,7 @@ opt = pbparam.DataFit(
     sim,
     data,
     {
-        "Negative electrode diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12)),
+        "Negative particle diffusivity [m2.s-1]": (5e-15, (2.06e-16, 2.06e-12)),
         # "Total heat transfer coefficient [W.m-2.K-1]": (20, (0.1, 1000)),
         # (
         #     "Positive current collector specific heat capacity [J.kg-1.K-1]",

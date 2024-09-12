@@ -61,7 +61,7 @@ simulation = pybamm.Simulation(
     experiment=experiment,
 )
 param_optimised = {
-    "Negative electrode diffusivity [m2.s-1]": (5e-14, (2.06e-16, 2.06e-12)),
+    "Negative particle diffusivity [m2.s-1]": (5e-14, (2.06e-16, 2.06e-12)),
     # "Negative electrode reaction coefficient": (
     #     6.48e-7,
     #     (2.18589831e-9, 2.18589831e-5),
