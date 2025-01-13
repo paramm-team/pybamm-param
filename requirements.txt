@@ -16,7 +16,7 @@ pandas==2.2.2
 pbparam @ file:///home/runner/work/pybamm-param/pybamm-param
 pillow==10.4.0
 platformdirs==4.2.2
-pybamm==24.1
+pybamm==24.9.0
 pyparsing==3.1.2
 python-dateutil==2.9.0.post0
 pytz==2024.1
