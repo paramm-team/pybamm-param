@@ -39,7 +39,7 @@ class GITT(pbparam.DataFit):
             cost_function=cost_function,
             data=data,
             parameters={
-                "Positive electrode diffusivity [m2.s-1]": (
+                "Positive particle diffusivity [m2.s-1]": (
                     5e-14,
                     (2.06e-16, 2.06e-12),
                 ),

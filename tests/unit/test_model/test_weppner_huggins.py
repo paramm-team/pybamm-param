@@ -20,7 +20,7 @@ class TestWeppnerHuggins(unittest.TestCase):
                 "Reference OCP [V]": 4.2,
                 "Derivative of the OCP wrt stoichiometry [V]": -1,
                 "Effective resistance [Ohm]": 0.1,
-                "Positive electrode diffusivity [m2.s-1]": 4e-15
+                "Positive particle diffusivity [m2.s-1]": 4e-15
             },
             check_already_exists=False,
         )
