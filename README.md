@@ -6,8 +6,9 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![DOI:10.5281/zenodo.11282637](https://zenodo.org/badge/DOI/10.5281/zenodo.11282638.svg)](https://doi.org/10.5281/zenodo.11282638)
 
-> [!WARNING]  
-> This package is still under development and significant API changes might take please in the upcoming releases.
+> [!IMPORTANT]
+> All the functionality in pybamm-param is now available in [PyBOP](https://github.com/pybop-team/PyBOP), which will be the focus of future development. We recommend new users to use PyBOP instead of pybamm-param.
+
 
 pybamm-param is a tool to fit [PyBaMM](https://www.pybamm.org) models to experimental data in order to determine the model parameter values. pybamm-param provides helper classes to handle the most common parameterisation problems, and allows the users to easily mix combine cost functions and optimisers to suit their needs. Examples on how to run this package can be found in the [examples folder](./examples)
 
@@ -109,7 +110,7 @@ We are working towards conformity with the FAIRS software standards for research
 The following items should help detail contributions to and ways to work with this software:
 
 ### Codemeta
-The metadate is available in machine-readable format in the [codemeta.json](https://github.com/paramm-team/pybamm-param/blob/develop/codemeta.json) file.
+The metadata is available in machine-readable format in the [codemeta.json](https://github.com/paramm-team/pybamm-param/blob/develop/codemeta.json) file.
 
 ### Contributors
 
