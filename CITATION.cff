@@ -1,12 +1,20 @@
 cff-version: 0.0.0
 message: "If you use this software, please cite it as below."
 authors:
-  - family-names: Borosa-Planella
+  - family-names: Brosa Planella
     given-names: Ferran
     orcid: "https://orcid.org/0000-0001-6363-2812"
   - family-names: Grylls
     given-names: Philip
     orcid: "https://orcid.org/0000-0001-9677-5852"
+  - family-names: Widanage
+    given-names: W Dhammika
+    orcid: "https://orcid.org/0000-0003-0428-2554"
+  - family-names: Sogut
+    given-names: Muhammed
+    orcid: "https://orcid.org/0000-0001-6934-8855"
+  - family-names: Pascu
+    given-names: Alexandru
 title: "PyBaMM Param"
 version: "v0.1.1"
 identifiers:
