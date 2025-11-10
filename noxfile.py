@@ -15,7 +15,7 @@ def sphinx(session):
     session.run("sphinx-build", "-b", "html", "docs", "docs/_build/html", "-W")
 
 
-@nox.session(python=["3.8", "3.9", "3.10", "3.11"])
+@nox.session(python=["3.9", "3.10", "3.11", "3.12"])
 def integration(session):
     """Run the intergration test suite."""
     session.install("-e", "./[dev]")
@@ -29,7 +29,7 @@ def integration(session):
     session.run("python", "-m", "unittest", "discover", *test_files)
 
 
-@nox.session(python=["3.8", "3.9", "3.10", "3.11"])
+@nox.session(python=["3.9", "3.10", "3.11", "3.12"])
 def unit(session):
     """Run the unit test suite."""
     session.install("-e", "./[dev]")
@@ -43,7 +43,7 @@ def unit(session):
     session.run("python", "-m", "unittest", "discover", *test_files)
 
 
-@nox.session(python=["3.8", "3.9", "3.10", "3.11"])
+@nox.session(python=["3.9", "3.10", "3.11", "3.12"])
 def examples(session):
     """Run the examples."""
     session.install("-e", "./[dev]")
